@@ -1,6 +1,6 @@
-package comp1110.ass2;
+package comp1110.ass2.Building;
 
-public class Knight extends Building implements Assess{
+public class Knight extends Building implements Assess {
     enum ExchangingResource{
         BRICK,
         LUMBER,
@@ -10,15 +10,15 @@ public class Knight extends Building implements Assess{
         UNDETERMINED;
     }
 
-    public static ExchangingResource exchangable_thing;
+    public static ExchangingResource exchangableThing;
     public static boolean disposable_status;
-    public static Knight last_knight;
-    public Knight(int point, int[] source_required, ExchangingResource exchangable_thing,
-                  Knight last_knight) {
+    public static Knight lastKnight;
+    public Knight(int point, int[] source_required, ExchangingResource exchangableThing,
+                  Knight lastKnight) {
         super(point, source_required);
-        this.exchangable_thing = exchangable_thing;
+        this.exchangableThing = exchangableThing;
         this.disposable_status = false;
-        this.last_knight = last_knight;
+        this.lastKnight = lastKnight;
     }
 
     /**
@@ -27,7 +27,7 @@ public class Knight extends Building implements Assess{
      */
     @Override
     public boolean isBuildingAssess() {
-        if(this.last_knight.getStatus()) {
+        if(this.lastKnight.getStatus()) {
             return true;
         }else{
             return false;

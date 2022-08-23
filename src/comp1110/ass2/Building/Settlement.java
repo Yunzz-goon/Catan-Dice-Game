@@ -1,0 +1,26 @@
+package comp1110.ass2.Building;
+
+public class Settlement extends Building implements Assess {
+    public static Road adjacentRoad;
+    public static Settlement lastSettlement;
+
+    public Settlement(int point, int[] source_required, Road adjacentRoad,
+                      Settlement lastSettlement) {
+        super(point, source_required);
+        this.adjacentRoad = adjacentRoad;
+        this.lastSettlement = lastSettlement;
+    }
+
+    /**
+     * judge whether the settlement could access
+     * @return the result of juding whether the Knight could access
+     */
+    @Override
+    public boolean isBuildingAssess() {
+        if (this.lastSettlement.getStatus() && adjacentRoad.getStatus()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}

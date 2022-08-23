@@ -1,13 +1,13 @@
-package comp1110.ass2;
+package comp1110.ass2.Building;
 
 public class Building {
     public static int point;
-    public static boolean building_status;
-    public static int[] source_required;
-    public Building(int point, int[] source_required) {
+    public static boolean buildingStatus;
+    public static int[] sourceRequired;
+    public Building(int point, int[] sourceRequired) {
         this.point = point;
-        this.source_required = source_required;
-        this.building_status = false;
+        this.sourceRequired = sourceRequired;
+        this.buildingStatus = false;
     }
 
     /**
@@ -17,7 +17,7 @@ public class Building {
      * @param status the status that we want to set for the building
      */
     public void setStatus(boolean status){
-        this.building_status = status;
+        this.buildingStatus = status;
     }
 
     /**
@@ -25,7 +25,7 @@ public class Building {
      * @return return the status of the building
      */
     public boolean getStatus(){
-        return this.building_status;
+        return this.buildingStatus;
     }
 
     /**
@@ -42,6 +42,6 @@ public class Building {
      * @return return the required source of building the building
      */
     public int[] getRequiredSource(){
-        return this.source_required;
+        return this.sourceRequired;
     }
 }

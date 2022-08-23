@@ -1,11 +1,11 @@
-package comp1110.ass2;
+package comp1110.ass2.Building;
 
 public class Road extends Building implements Assess {
-    public static Road last_road;
+    public static Road lastRoad;
 
-    public Road(int point, int[] source_required, Road last_road) {
+    public Road(int point, int[] source_required, Road lastRoad) {
         super(point, source_required);
-        this.last_road = last_road;
+        this.lastRoad = lastRoad;
     }
 
     /**
@@ -14,7 +14,7 @@ public class Road extends Building implements Assess {
      */
     @Override
     public boolean isBuildingAssess(){
-        if (this.last_road.building_status){
+        if (this.lastRoad.buildingStatus){
             return true;
         }else{
             return false;
