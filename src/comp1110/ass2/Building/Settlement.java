@@ -13,7 +13,7 @@ public class Settlement extends Building implements Assess {
 
     /**
      * judge whether the settlement could access
-     * @return the result of juding whether the Knight could access
+     * @return the result of judging whether the Knight could access
      */
     @Override
     public boolean isBuildingAssess() {
