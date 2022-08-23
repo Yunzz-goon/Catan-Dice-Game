@@ -1,5 +1,7 @@
 package comp1110.ass2.Player;
 
+import java.util.Random;
+
 public class Dice
 {
     private int dice1;
@@ -15,6 +17,8 @@ public class Dice
     private int dice4Count;
     private int dice5Count;
     private int dice6Count;
+
+    public Random random = new Random();
 
 
     public Dice()
@@ -32,12 +36,12 @@ public class Dice
      */
     public void rollAll()
     {
-        dice1 = (int) (Math.random() * 6 + 1);
-        dice2 = (int) (Math.random() * 6 + 1);
-        dice3 = (int) (Math.random() * 6 + 1);
-        dice4 = (int) (Math.random() * 6 + 1);
-        dice5 = (int) (Math.random() * 6 + 1);
-        dice6 = (int) (Math.random() * 6 + 1);
+        dice1 = random.nextInt(6) + 1;
+        dice2 = random.nextInt(6) + 1;
+        dice3 = random.nextInt(6) + 1;
+        dice4 = random.nextInt(6) + 1;
+        dice5 = random.nextInt(6) + 1;
+        dice6 = random.nextInt(6) + 1;
     }
 
     /**
@@ -48,12 +52,13 @@ public class Dice
      */
     public void rollSpecific(int diceNumber)
     {
-        switch (diceNumber) {
+        switch (diceNumber)
+        {
             case 1 ->
-            {
+             {
                 if (dice1Count < 3)
                 {
-                    dice1 = (int) (Math.random() * 6 + 1);
+                    dice1 = random.nextInt(6) + 1;
                     dice1Count++;
                 }
             }
@@ -61,7 +66,7 @@ public class Dice
             {
                 if (dice2Count < 3)
                 {
-                    dice2 = (int) (Math.random() * 6 + 1);
+                    dice2 = random.nextInt(6) + 1;
                     dice2Count++;
                 }
             }
@@ -69,7 +74,7 @@ public class Dice
             {
                 if (dice3Count < 3)
                 {
-                    dice3 = (int) (Math.random() * 6 + 1);
+                    dice3 = random.nextInt(6) + 1;
                     dice3Count++;
                 }
             }
@@ -77,7 +82,7 @@ public class Dice
             {
                 if (dice4Count < 3)
                 {
-                    dice4 = (int) (Math.random() * 6 + 1);
+                    dice4 = random.nextInt(6) + 1;
                     dice4Count++;
                 }
             }
@@ -85,7 +90,7 @@ public class Dice
             {
                 if (dice5Count < 3)
                 {
-                    dice5 = (int) (Math.random() * 6 + 1);
+                    dice5 = random.nextInt(6) + 1;
                     dice5Count++;
                 }
             }
@@ -93,7 +98,7 @@ public class Dice
             {
                 if (dice6Count < 3)
                 {
-                    dice6 = (int) (Math.random() * 6 + 1);
+                    dice6 = random.nextInt(6) + 1;
                     dice6Count++;
                 }
             }
