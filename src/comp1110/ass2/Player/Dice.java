@@ -57,6 +57,46 @@ public class Dice
                     dice1Count++;
                 }
             }
+            case 2 ->
+            {
+                if (dice2Count < 3)
+                {
+                    dice2 = (int) (Math.random() * 6 + 1);
+                    dice2Count++;
+                }
+            }
+            case 3 ->
+            {
+                if (dice3Count < 3)
+                {
+                    dice3 = (int) (Math.random() * 6 + 1);
+                    dice3Count++;
+                }
+            }
+            case 4 ->
+            {
+                if (dice4Count < 3)
+                {
+                    dice4 = (int) (Math.random() * 6 + 1);
+                    dice4Count++;
+                }
+            }
+            case 5 ->
+            {
+                if (dice5Count < 3)
+                {
+                    dice5 = (int) (Math.random() * 6 + 1);
+                    dice5Count++;
+                }
+            }
+            case 6 ->
+            {
+                if (dice6Count < 3)
+                {
+                    dice6 = (int) (Math.random() * 6 + 1);
+                    dice6Count++;
+                }
+            }
         }
     }
 

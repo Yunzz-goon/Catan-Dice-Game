@@ -6,12 +6,11 @@ public class PlayerResources
 
     /**
     * given a die and the resource it shows, add that resource to the player's resources
-    * @param diceNumber which die was rolled (a number between 1 and 6)
-    * @param resource the resource shown on the face of the die
+    * @param diceNumbers the numbers rolled by the dice class
      */
-    public void setResourcesFromDice(Resource resource, int diceNumber)
+    public void setResourcesFromDice(int[] diceNumbers)
     {
-        resources[diceNumber - 1] = resource;
+
     }
 
     public Resource[] getResources()
