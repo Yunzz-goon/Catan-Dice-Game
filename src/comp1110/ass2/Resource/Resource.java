@@ -1,12 +1,30 @@
 package comp1110.ass2.Resource;
 
-public abstract class Resource
+public class Resource
 {
-    // Assigning numerical ID's to each resource
-    public static final int ORE    = 1;
-    public static final int GRAIN  = 2;
-    public static final int WOOL   = 3;
-    public static final int LUMBER = 4;
-    public static final int BRICK  = 5;
-    public static final int GOLD   = 6;
+    public final static int GOLD_ID = 1;
+    public final static int GRAIN_ID = 2;
+    public final static int LUMBER_ID = 3;
+    public final static int WOOL_ID = 4;
+    public final static int ORE_ID = 5;
+    public final static int BRICK_ID = 6;
+
+    private int resourceID;
+    private ResourceType resourceType;
+
+    public Resource(int resourceID, ResourceType resourceType)
+    {
+        this.resourceID = resourceID;
+        this.resourceType = resourceType;
+    }
+
+    public int getResourceID()
+    {
+        return resourceID;
+    }
+
+    public ResourceType getResourceType()
+    {
+        return resourceType;
+    }
 }

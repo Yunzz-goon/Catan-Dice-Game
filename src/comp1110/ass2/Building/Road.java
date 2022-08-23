@@ -14,7 +14,7 @@ public class Road extends Building implements Assess {
      */
     @Override
     public boolean isBuildingAssess(){
-        if (this.lastRoad.buildingStatus){
+        if (this.lastRoad.getStatus()){
             return true;
         }else{
             return false;

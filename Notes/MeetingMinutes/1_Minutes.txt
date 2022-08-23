@@ -1,0 +1,4 @@
+Created an overall plan / structure for how the program will be laid out on the whiteboard.
+Divided up the work for DXC.
+Created a class framework for the program - divided the program up into packages, each package houses a
+key aspect of the game, such as the resources, the gui and the player.
