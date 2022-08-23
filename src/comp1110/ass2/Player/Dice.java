@@ -2,12 +2,12 @@ package comp1110.ass2.Player;
 
 public class Dice
 {
-    int dice1;
-    int dice2;
-    int dice3;
-    int dice4;
-    int dice5;
-    int dice6;
+    private int dice1;
+    private int dice2;
+    private int dice3;
+    private int dice4;
+    private int dice5;
+    private int dice6;
 
     public Dice()
     {
@@ -38,6 +38,11 @@ public class Dice
             case 5 -> dice5 = (int) (Math.random() * 6 + 1);
             case 6 -> dice6 = (int) (Math.random() * 6 + 1);
         }
+    }
+
+    public int[] getDiceArray()
+    {
+        return new int[]{dice1, dice2, dice3, dice4, dice5, dice6};
     }
 
 }
