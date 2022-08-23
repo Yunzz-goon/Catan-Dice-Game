@@ -3,7 +3,7 @@
 For each task or sub-task, record who is responsible, the deadline, and
 any dependencies.
 
-Use the entries below as an example.
+The weekly meeting time is Tuesday at 2:00pm 
 
 ## Week 4
 
