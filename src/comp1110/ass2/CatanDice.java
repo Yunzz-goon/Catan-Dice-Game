@@ -102,7 +102,7 @@ public class CatanDice {
      * Check if a player action (build, trade or swap) is executable in the
      * given board and resource state.
      *
-     * @param action: String representatiion of the action to check.
+     * @param action: String representation of the action to check.
      * @param board_state: The string representation of the board state.
      * @param resource_state: The available resources.
      * @return true iff the action is applicable, false otherwise.
@@ -117,7 +117,7 @@ public class CatanDice {
      * Check if the specified sequence of player actions is executable
      * from the given board and resource state.
      *
-     * @param actions: The sequence of (string representatins of) actions.
+     * @param actions: The sequence of (string representations of) actions.
      * @param board_state: The string representation of the board state.
      * @param resource_state: The available resources.
      * @return true iff the action sequence is executable, false otherwise.
@@ -155,7 +155,7 @@ public class CatanDice {
     /**
      * Generate a plan (sequence of player actions) to build the target
      * structure from the given board and resource state. The plan may
-     * include trades and swaps, as well as bulding other structures if
+     * include trades and swaps, as well as building other structures if
      * needed to reach the target structure or to satisfy the build order
      * constraints.
      *
