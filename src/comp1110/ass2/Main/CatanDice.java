@@ -14,68 +14,68 @@ public class CatanDice {
      */
     public static boolean isBoardStateWellFormed(String board_state)
     {
-        boolean flag = true; // flag to check if the string is well formed
+        boolean flag = true; // flag to check if the string is well-formed
         if (board_state.equals("")) return true;
         String[] boardStateArray = board_state.split(",");
-        String reference = "RSCKJ";
-        for (String element : boardStateArray)
+        for (String state : boardStateArray)
         {
-            String firstCharString = String.valueOf(element.charAt(0));
-            // if the first character is not in the reference string, return false
-            if (!reference.contains(firstCharString))
+            if (!isStateWellFormed(state)) flag = false;
+        }
+        return flag;
+    }
+
+    public static boolean isStateWellFormed (String state)
+    {
+        boolean flag = true;
+        if (state.equals("")) return true;
+        else
+        {
+            String reference = "RSCKJ";
+            char firstChar = state.charAt(0);
+            if (!reference.contains(String.valueOf(firstChar))) flag = false;
+            String numberString = state.substring(1);
+            try
+            {
+                int endNumber = Integer.parseInt(numberString);
+                switch (firstChar)
+                {
+                    case 'R':
+                        if (endNumber < 0 || endNumber > 15)
+                        {
+                            flag = false;
+                            break;
+                        }
+                        break;
+                    case 'S':
+                        if (endNumber != 3 && endNumber != 4 && endNumber != 5 && endNumber != 7 && endNumber != 9 && endNumber != 11)
+                        {
+                            flag = false;
+                            break;
+                        }
+                        break;
+                    case 'C':
+                        if (endNumber != 7 && endNumber != 12 && endNumber != 20 && endNumber != 30)
+                        {
+                            flag = false;
+                            break;
+                        }
+                        break;
+                    case 'J':
+                    case 'K':
+                        if (endNumber < 1 || endNumber > 6)
+                        {
+                            flag = false;
+                            break;
+                        }
+                        break;
+                }
+            }
+            catch (NumberFormatException e)
             {
                 flag = false;
-                break;
             }
-            else
-            {
-                String numberString = element.substring(1);
-                try
-                {
-                    int endNumber = Integer.parseInt(numberString);
-                    char firstChar = firstCharString.charAt(0);
-                    switch (firstChar)
-                    {
-                        case 'R':
-                            if (endNumber < 0 || endNumber > 15)
-                            {
-                                flag = false;
-                                break;
-                            }
-                            break;
-                        case 'S':
-                            if (endNumber != 3 && endNumber != 4 && endNumber != 5 && endNumber != 7 && endNumber != 9 && endNumber != 11)
-                            {
-                                flag = false;
-                                break;
-                            }
-                            break;
-                        case 'C':
-                            if (endNumber != 7 && endNumber != 12 && endNumber != 20 && endNumber != 30)
-                            {
-                                flag = false;
-                                break;
-                            }
-                            break;
-                        case 'J':
-                        case 'K':
-                            if (endNumber < 1 || endNumber > 6)
-                            {
-                                flag = false;
-                                break;
-                            }
-                            break;
-                    }
-                }
-                catch (NumberFormatException e)
-                    {
-                        flag = false;
-                        break;
-                    }
-            }
-
         }
-        return flag; // FIXME Task 3
+        return flag;
     }
 
     /**
@@ -87,6 +87,14 @@ public class CatanDice {
      */
     public static boolean isActionWellFormed(String action)
     {
+        /*
+        * Conditions for a well formed action:
+        * 1. The action must be one of the following: build, trade, swap
+        * 2. The action must be followed by a space
+        * 3. If the action is a build, it must be followed by a valid board state
+        *    Else if the action is a trade, it must be followed by a number between 0 and 5 inclusive
+        *    Else if the action is a swap, it must be followed by two numbers separated by a space, each number between 0 and 5 inclusive
+         */
 	    return false; // FIXME: Task #4
     }
 
