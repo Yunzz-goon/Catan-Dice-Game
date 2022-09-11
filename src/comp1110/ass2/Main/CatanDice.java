@@ -12,8 +12,70 @@ public class CatanDice {
      * @return true iff the string is a well-formed representation of
      *         a board state, false otherwise.
      */
-    public static boolean isBoardStateWellFormed(String board_state) {
-	 return false; // FIXME: Task #3
+    public static boolean isBoardStateWellFormed(String board_state)
+    {
+        boolean flag = true; // flag to check if the string is well formed
+        if (board_state.equals("")) return true;
+        String[] boardStateArray = board_state.split(",");
+        String reference = "RSCKJ";
+        for (String element : boardStateArray)
+        {
+            String firstCharString = String.valueOf(element.charAt(0));
+            // if the first character is not in the reference string, return false
+            if (!reference.contains(firstCharString))
+            {
+                flag = false;
+                break;
+            }
+            else
+            {
+                String numberString = element.substring(1);
+                try
+                {
+                    int endNumber = Integer.parseInt(numberString);
+                    char firstChar = firstCharString.charAt(0);
+                    switch (firstChar)
+                    {
+                        case 'R':
+                            if (endNumber < 0 || endNumber > 15)
+                            {
+                                flag = false;
+                                break;
+                            }
+                            break;
+                        case 'S':
+                            if (endNumber != 3 && endNumber != 4 && endNumber != 5 && endNumber != 7 && endNumber != 9 && endNumber != 11)
+                            {
+                                flag = false;
+                                break;
+                            }
+                            break;
+                        case 'C':
+                            if (endNumber != 7 && endNumber != 12 && endNumber != 20 && endNumber != 30)
+                            {
+                                flag = false;
+                                break;
+                            }
+                            break;
+                        case 'J':
+                        case 'K':
+                            if (endNumber < 1 || endNumber > 6)
+                            {
+                                flag = false;
+                                break;
+                            }
+                            break;
+                    }
+                }
+                catch (NumberFormatException e)
+                    {
+                        flag = false;
+                        break;
+                    }
+            }
+
+        }
+        return flag; // FIXME Task 3
     }
 
     /**
@@ -23,8 +85,9 @@ public class CatanDice {
      * @return true iff the string is a well-formed representation of
      *         a board state, false otherwise.
      */
-    public static boolean isActionWellFormed(String action) {
-	 return false; // FIXME: Task #4
+    public static boolean isActionWellFormed(String action)
+    {
+	    return false; // FIXME: Task #4
     }
 
     /**

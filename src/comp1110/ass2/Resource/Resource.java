@@ -12,7 +12,7 @@ public class Resource
     private int resourceID;
     private ResourceType resourceType;
 
-    public Resource(ResourceType resourceType)
+    public Resource(int resourceID, ResourceType resourceType)
     {
         this.resourceID = resourceType.ordinal() + 1;
         this.resourceType = resourceType;

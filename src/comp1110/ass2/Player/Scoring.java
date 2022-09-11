@@ -6,6 +6,4 @@ public class Scoring
     {
         return 0;
     }
-
-
 }
