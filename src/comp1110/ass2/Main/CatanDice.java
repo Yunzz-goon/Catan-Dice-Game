@@ -88,14 +88,56 @@ public class CatanDice {
     public static boolean isActionWellFormed(String action)
     {
         /*
-        * Conditions for a well formed action:
+        * Conditions for a well-formed action:
         * 1. The action must be one of the following: build, trade, swap
         * 2. The action must be followed by a space
         * 3. If the action is a build, it must be followed by a valid board state
         *    Else if the action is a trade, it must be followed by a number between 0 and 5 inclusive
         *    Else if the action is a swap, it must be followed by two numbers separated by a space, each number between 0 and 5 inclusive
          */
-	    return false; // FIXME: Task #4
+        boolean flag = true;
+        String[] actionArray = action.split(" ");
+        int length = actionArray.length;
+        if (length <= 1 || length > 3) flag = false;
+        else if (length == 2)
+        {
+            if (actionArray[0].equals("build"))
+            {
+                if (!isBoardStateWellFormed(actionArray[1])) flag = false;
+            }
+            else if (actionArray[0].equals("trade"))
+            {
+                try
+                {
+                    int number = Integer.parseInt(actionArray[1]);
+                    if (number < 0 || number > 5) flag = false;
+                }
+                catch (NumberFormatException e)
+                {
+                    flag = false;
+                }
+            }
+            else flag = false;
+        }
+        else
+        {
+            if (!actionArray[0].equals("swap")) flag = false;
+            else
+            {
+                try
+                {
+                    int firstNumber = Integer.parseInt(actionArray[1]);
+                    int secondNumber = Integer.parseInt(actionArray[2]);
+                    if (firstNumber < 0 || firstNumber > 5 || secondNumber < 0 || secondNumber > 5) flag = false;
+                }
+                catch (NumberFormatException e)
+                {
+                    flag = false;
+                }
+            }
+
+        }
+	    return flag;
     }
 
     /**
