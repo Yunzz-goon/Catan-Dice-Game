@@ -24,6 +24,13 @@ public class CatanDice {
         return flag;
     }
 
+    /**
+     * Check if the string encoding of a single state is well-formed.
+     * Used for both the boardState check and the action check so turned into its own method
+     * @param state the string encoding of a single state
+     * @return true if the string is well-formed, false otherwise
+     */
+
     public static boolean isStateWellFormed (String state)
     {
         boolean flag = true;
