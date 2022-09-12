@@ -2,10 +2,10 @@ package comp1110.ass2.Resource;
 
 public enum ResourceType
 {
-    GRAIN,
-    LUMBER,
-    WOOL,
     ORE,
+    GRAIN,
+    WOOL,
+    LUMBER,
     BRICK,
     GOLD
 }

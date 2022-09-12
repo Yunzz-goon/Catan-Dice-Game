@@ -1,5 +1,7 @@
 package comp1110.ass2.Main;
 
+import static comp1110.ass2.Resource.Resource.*;
+
 public class CatanDice {
 
     /**
@@ -194,9 +196,55 @@ public class CatanDice {
      * @return true iff the structure can be built with the available
      *         resources, false otherwise.
      */
-    public static boolean checkResources(String structure,
-					 int[] resource_state) {
-	 return false; // FIXME: Task #7
+    public static boolean checkResources(String structure, int[] resource_state)
+    {
+        /*
+        * There are 4 types of structures, road, knight, settlement and city
+        * Each type of structure has a different cost
+        * The cost of a road is 1 brick and 1 lumber - represented by R and then a number
+        * The cost of a knight is 1 ore, 1 wool and 1 grain - represented by a K and then a number
+        * The cost of a settlement is 1 brick, 1 lumber, 1 wool and 1 grain - represented by an S and then a number
+        * The cost of a city is 3 ore and 2 grain - represented by a C and then a number
+        * The resources are represented by the following index in the resource_state array
+        * 0 - ore
+        * 1 - grain
+        * 2 - wool
+        * 3 - lumber
+        * 4 - brick
+        * 5 - gold
+        * These are represented by <RESOURCE_NAME>_ID
+         */
+        boolean flag = true;
+        char struct = structure.charAt(0);
+        switch (struct)
+        {
+            case 'R' ->
+            {
+                if (resource_state[ORE_ID] < 1 ||
+                        resource_state[GRAIN_ID] < 1) flag = false;
+            }
+            case 'K' ->
+            {
+                if (resource_state[ORE_ID] < 1 ||
+                        resource_state[WOOL_ID] < 1 ||
+                        resource_state[GRAIN_ID] < 1) flag = false;
+            }
+            case 'S' ->
+            {
+                if (resource_state[ORE_ID] < 1 ||
+                        resource_state[WOOL_ID] < 1 ||
+                        resource_state[GRAIN_ID] < 1 ||
+                        resource_state[LUMBER_ID] < 1 ||
+                        resource_state[BRICK_ID] < 1) flag = false;
+            }
+            case 'C' ->
+            {
+                if (resource_state[ORE_ID] < 3 ||
+                        resource_state[GRAIN_ID] < 2) flag = false;
+            }
+            default -> flag = false;
+        }
+	    return flag; // FIXME: Task #7
     }
 
     /**
