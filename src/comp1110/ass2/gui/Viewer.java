@@ -81,7 +81,6 @@ public class Viewer extends Application {
             this.setLayoutY(yPos);
             this.setRadius(radius);
             this.setFill(Color.GOLD);
-
         }
     }
 
@@ -166,6 +165,10 @@ public class Viewer extends Application {
 
     /**
      * Show the state of a (single player's) board in the window.
+     *
+     * For the status of the buildings:
+     * - Road, settlement, city have only two states: unbuilt(gold), built(green)
+     * - Knight have three states: unbuilt(gold), built also unused(yellow), built also used(red)
      *
      * @param board_state string representation of the board state.
      */
