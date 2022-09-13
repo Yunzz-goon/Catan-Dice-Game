@@ -107,7 +107,8 @@ public class CatanDice {
         boolean flag = true;
         String[] actionArray = action.split(" ");
         int length = actionArray.length;
-        if (length <= 1 || length > 3) flag = false;
+        // if there are fewer than 2 or more than three elements in the array, the action cannot be well-formed
+        if (length < 2 || length > 3) flag = false;
         else if (length == 2)
         {
             if (actionArray[0].equals("build"))
@@ -121,6 +122,7 @@ public class CatanDice {
                     int number = Integer.parseInt(actionArray[1]);
                     if (number < 0 || number > 5) flag = false;
                 }
+                // if the second element is not an integer, the action cannot be well-formed
                 catch (NumberFormatException e)
                 {
                     flag = false;
@@ -139,6 +141,7 @@ public class CatanDice {
                     int secondNumber = Integer.parseInt(actionArray[2]);
                     if (firstNumber < 0 || firstNumber > 5 || secondNumber < 0 || secondNumber > 5) flag = false;
                 }
+                // if the second or third element is not an integer, the action cannot be well-formed
                 catch (NumberFormatException e)
                 {
                     flag = false;
@@ -205,14 +208,7 @@ public class CatanDice {
         * The cost of a knight is 1 ore, 1 wool and 1 grain - represented by a K and then a number
         * The cost of a settlement is 1 brick, 1 lumber, 1 wool and 1 grain - represented by an S and then a number
         * The cost of a city is 3 ore and 2 grain - represented by a C and then a number
-        * The resources are represented by the following index in the resource_state array
-        * 0 - ore
-        * 1 - grain
-        * 2 - wool
-        * 3 - lumber
-        * 4 - brick
-        * 5 - gold
-        * These are represented by <RESOURCE_NAME>_ID
+        * The resources are represented by their ID in the resource state array
          */
         boolean flag = true;
         char struct = structure.charAt(0);
@@ -220,10 +216,10 @@ public class CatanDice {
         {
             case 'R' ->
             {
-                if (resource_state[ORE_ID] < 1 ||
-                        resource_state[GRAIN_ID] < 1) flag = false;
+                if (resource_state[BRICK_ID] < 1 ||
+                        resource_state[LUMBER_ID] < 1) flag = false;
             }
-            case 'K' ->
+            case 'K', 'J' ->
             {
                 if (resource_state[ORE_ID] < 1 ||
                         resource_state[WOOL_ID] < 1 ||
@@ -231,8 +227,7 @@ public class CatanDice {
             }
             case 'S' ->
             {
-                if (resource_state[ORE_ID] < 1 ||
-                        resource_state[WOOL_ID] < 1 ||
+                if (resource_state[WOOL_ID] < 1  ||
                         resource_state[GRAIN_ID] < 1 ||
                         resource_state[LUMBER_ID] < 1 ||
                         resource_state[BRICK_ID] < 1) flag = false;
@@ -244,7 +239,7 @@ public class CatanDice {
             }
             default -> flag = false;
         }
-	    return flag; // FIXME: Task #7
+	    return flag;
     }
 
     /**
