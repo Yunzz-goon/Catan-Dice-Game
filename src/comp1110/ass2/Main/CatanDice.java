@@ -1,5 +1,7 @@
 package comp1110.ass2.Main;
 
+import java.util.Random;
+
 import static comp1110.ass2.Resource.Resource.*;
 
 public class CatanDice {
@@ -170,6 +172,16 @@ public class CatanDice {
      */
     public static void rollDice(int n_dice, int[] resource_state) {
 	// FIXME: Task #6
+        /*
+        The order of the resources is (0) Ore, (1) Grain, (2) Wool, (3) Timber, (4) Bricks and (5) Gold.
+        For example, the array { 1, 0, 1, 2, 0, 2 } indicates that the player has 1 Ore, 1 Wool, 2 Timber
+        and 2 Gold available. Note that the total quantity of resources can vary.
+         */
+        Random random = new Random(6710);
+        for (int i = 0; i < n_dice; i++){
+            int resource_index = random.nextInt(6);
+            resource_state[resource_index] += 1;
+        }
     }
 
     /**

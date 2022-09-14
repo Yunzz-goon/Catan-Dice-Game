@@ -51,6 +51,7 @@ public class TestRollDice {
 	checkReturn(n2, copy1, copy2);
     }
 
+	// roll once
     @Test
     public void rollAll() {
 	int[] empty = { 0, 0, 0, 0, 0, 0 };
@@ -59,6 +60,7 @@ public class TestRollDice {
 	}
     }
 
+	// roll twice
     @Test
     public void rollTwice() {
 	int[] empty = { 0, 0, 0, 0, 0, 0 };
