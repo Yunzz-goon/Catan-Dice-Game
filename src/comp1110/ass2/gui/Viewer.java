@@ -166,13 +166,15 @@ public class Viewer extends Application {
     /**
      * Show the state of a (single player's) board in the window.
      *
-     * For the status of the buildings:
-     * - Road, settlement, city have only two states: unbuilt(gold), built(green)
-     * - Knight have three states: unbuilt(gold), built also unused(yellow), built also used(red)
-     *
      * @param board_state string representation of the board state.
      */
     void displayState(String board_state) {
+        // For the status of the buildings:
+        // - Road, settlement, city have only two states: unbuilt(gold), built(green)
+        // - Knight have three states: unbuilt(gold), built also unused(green), built also used(red)
+        // unbuilt is the default state with color gold.
+
+        // default initialization for color
         for (RoadFX road : roads){
             road.setFill(Color.GOLD);
         }
@@ -185,6 +187,7 @@ public class Viewer extends Application {
         for (KnightFX knight : knights){
             knight.setFill(Color.GOLD);
         }
+
         String[] states = board_state.split(",");
         for (String state : states){
             char build_type = state.charAt(0);
@@ -194,10 +197,10 @@ public class Viewer extends Application {
             String build_no_str = new String(build_no);
             Integer build_no_int = Integer.valueOf(build_no_str);
 
-
             // road 0-15
             if (build_type == 'R'){
                 roads.get(build_no_int).setFill(Color.GREEN);
+            // settlement
             } else if (build_type == 'S') {
                 for (SettlementFX settlement : settlements){
                     if (settlement.mark == build_no_int){
@@ -205,6 +208,7 @@ public class Viewer extends Application {
                         break;
                     }
                 }
+            // city
             } else if (build_type == 'C') {
                 for (CityFX city : cities){
                     if (city.mark == build_no_int){
@@ -212,16 +216,16 @@ public class Viewer extends Application {
                         break;
                     }
                 }
+            // Knight J
             } else if (build_type == 'J') {
                 knights.get(build_no_int-1).setFill(Color.GREEN);
-
+            // Knight K
             } else if (build_type == 'K') {
                 knights.get(build_no_int-1).setFill(Color.RED);
             } else{
                 System.out.println("Unexpected type");
             }
         }
-        // FIXME Task 5: implement the state viewer
     }
 
     /**
