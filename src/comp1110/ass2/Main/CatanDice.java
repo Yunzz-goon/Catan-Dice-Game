@@ -235,32 +235,24 @@ public class CatanDice {
                 {
                     case 'R' ->
                     {
-                        // if the road is not well-formed, return false
-                        if (!isRoadWellFormed(tempArray[i])) return false;
                         // if the road is not inline with the build constraints for a road, return false
                         if (!isRoadConnected(tempArray[i], tempArray)) return false;
 
                     }
                     case 'S' ->
                     {
-                        // if the settlement is not well-formed, return false
-                        if (!isSettlementWellFormed(tempArray[i])) return false;
                         // if the settlement is not inline with the build constraints for a settlement, return false
                         if (!isSettlementConnected(tempArray[i], tempArray)) return false;
 
                     }
                     case 'C' ->
                     {
-                        // if the city is not well-formed, return false
-                        if (!isCityWellFormed(tempArray[i])) return false;
                         // if the city is not inline with the build constraints for a city, return false
                         if (!isCityConnected(tempArray[i], tempArray)) return false;
 
                     }
                     case 'K' ->
                     {
-                        // if the knight is not well-formed, return false
-                        if (!isKnightWellFormed(tempArray[i])) return false;
                         // if the knight is not inline with the build constraints for a knight, return false
                         if (!isKnightConnected(tempArray[i], tempArray)) return false;
 
@@ -268,8 +260,6 @@ public class CatanDice {
                     // i'm not 100% sure that this case is needed but better safe than sorry
                     case 'J' ->
                     {
-                        // if the joker is not well-formed, return false
-                        if (!isJokerWellFormed(tempArray[i])) return false;
                         // if the joker is not inline with the build constraints for a junction, return false
                         if (!isJokerConnected(tempArray[i], tempArray)) return false;
 
@@ -289,26 +279,6 @@ public class CatanDice {
      * needed to validate that a structure is within the build constraints
      */
     // TODO - all of these methods need to be implemented - Jingru I'll leave this up to you
-    public static boolean isRoadWellFormed(String road)
-    {
-        return false;
-    }
-    public static boolean isSettlementWellFormed(String settlement)
-    {
-        return false;
-    }
-    public static boolean isCityWellFormed(String city)
-    {
-        return false;
-    }
-    public static boolean isKnightWellFormed(String knight)
-    {
-        return false;
-    }
-    public static boolean isJokerWellFormed(String joker)
-    {
-        return false;
-    }
     public static boolean isRoadConnected(String road, String[] boardStateArray)
     {
         return false;
@@ -325,7 +295,7 @@ public class CatanDice {
     {
         return false;
     }
-    // again i'm not sure if this method is 100% needed, but better safe than sorry, and it should
+    // again I'm not sure if this method is 100% needed, but better safe than sorry, and it should
     // be very similar to isKnightConnected
     public static boolean isJokerConnected(String joint, String[] boardStateArray)
     {
