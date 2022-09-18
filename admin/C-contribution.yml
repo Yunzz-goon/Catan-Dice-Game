@@ -12,7 +12,7 @@ contributions:
     contribution: 33
   - uid: u7501226
     contribution: 33
-  - uid:
+  - uid: u7503889
     contribution:
 
 # Sign *your* name and uids here. (Remove entries if you have fewer
@@ -22,5 +22,5 @@ signatures:
     uid: u7543705
   - name: Matthew Britton
     uid: u7501226
-  - name:
-    uid:
+  - name: u7503889
+    uid: Jingru Lin
