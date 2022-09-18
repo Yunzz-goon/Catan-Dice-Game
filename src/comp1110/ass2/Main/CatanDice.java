@@ -1,5 +1,6 @@
 package comp1110.ass2.Main;
 
+import javax.lang.model.util.AbstractAnnotationValueVisitor14;
 import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.Objects;
@@ -209,7 +210,7 @@ public class CatanDice {
          * For settlements, this means that the 12 point settlement must be built, then the 20 point one, then the 30 point on
          * For knights, this means the knight with the number one lower than the knight of this number needs to have been built
          * For cities, the 3 point comes first, then the 4, 5, 7, 9 and 11
-         * Note that the first of each of these can be built provided the necessary roads / other previous items have been bult
+         * Note that the first of each of these can be built provided the necessary roads / other previous items have been built
          * Roads, Settlements and Cities must form a connected network, starting from the initial Road (which is already on the board)
          */
 
@@ -279,12 +280,53 @@ public class CatanDice {
      * needed to validate that a structure is within the build constraints
      */
     // TODO - all of these methods need to be implemented - Jingru I'll leave this up to you
-    public static boolean isRoadConnected(String road, String[] boardStateArray)
-    {
+    public static boolean isRoadConnected(String road, String[] boardStateArray) //look R10 if valid，check R9 is true or not. Only R9 is true then R10 is true.
+    { String R = road;
+        String numberString = state.substring(1);
+        int endNumber = Integer.parseInt(numberString);
+        String PreRoad = road;
+
+        for(endNumber = R1, endNumber < 15, endNumber++){
+        if (PreRoad = R0) { //R1
+            return true;
+        }else if(PreRoad = R1 || R0) { //R2
+            return true;
+        }else if(PreRoad = R2) { //R3
+            return true;
+        }else if(PreRoad = R3) { //R4
+            return true;
+        }else if(PreRoad = R3 || R4) { //R5
+            return true;
+        }else if(PreRoad = R5) { //R6
+            return true;
+        }else if(PreRoad = R6) { //R7
+            return true;
+        }else if(PreRoad = R7) { //R8
+            return true;
+        }else if(PreRoad = R8) { //R9
+            return true;
+        }else if(PreRoad = R9) { //R10
+            return true;
+        }else if(PreRoad = R10) { //R11
+            return true;
+        }else if(PreRoad = R8 || R7) { //for R12 either R8 or R7 can get to
+            return true;
+        }else if(PreRoad = R12) { //R13
+            return true;
+        }else if(PreRoad = R13) { //R14
+            return true;
+        }else if(PreRoad = R14) { //R15
+            return true;
+            }
+        }
+
         return false;
     }
     public static boolean isSettlementConnected(String settlement, String[] boardStateArray)
-    {
+    { //i don't know how to write but here is what i'm thinking,
+        //i'm thinking that if we pick S4, then it should have S3,R0,R1,R2 to be true, otherwise false
+        // however we need to start at S3 to be true, but how can we pick
+
         return false;
     }
     public static boolean isCityConnected(String city, String[] boardStateArray)
