@@ -1,5 +1,8 @@
 package comp1110.ass2.Main;
 
+import java.text.NumberFormat;
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.Random;
 
 import static comp1110.ass2.Resource.Resource.*;
@@ -99,12 +102,12 @@ public class CatanDice {
     public static boolean isActionWellFormed(String action)
     {
         /*
-        * Conditions for a well-formed action:
-        * 1. The action must be one of the following: build, trade, swap
-        * 2. The action must be followed by a space
-        * 3. If the action is a build, it must be followed by a valid board state
-        *    Else if the action is a trade, it must be followed by a number between 0 and 5 inclusive
-        *    Else if the action is a swap, it must be followed by two numbers separated by a space, each number between 0 and 5 inclusive
+         * Conditions for a well-formed action:
+         * 1. The action must be one of the following: build, trade, swap
+         * 2. The action must be followed by a space
+         * 3. If the action is a build, it must be followed by a valid board state
+         *    Else if the action is a trade, it must be followed by a number between 0 and 5 inclusive
+         *    Else if the action is a swap, it must be followed by two numbers separated by a space, each number between 0 and 5 inclusive
          */
         boolean flag = true;
         String[] actionArray = action.split(" ");
@@ -151,7 +154,7 @@ public class CatanDice {
             }
 
         }
-	    return flag;
+        return flag;
     }
 
     /**
@@ -171,7 +174,7 @@ public class CatanDice {
      * resource_state.
      */
     public static void rollDice(int n_dice, int[] resource_state) {
-	// FIXME: Task #6
+        // FIXME: Task #6
         /*
         The order of the resources is (0) Ore, (1) Grain, (2) Wool, (3) Timber, (4) Bricks and (5) Gold.
         For example, the array { 1, 0, 1, 2, 0, 2 } indicates that the player has 1 Ore, 1 Wool, 2 Timber
@@ -197,9 +200,138 @@ public class CatanDice {
      *         otherwise.
      */
     public static boolean checkBuildConstraints(String structure,
-						String board_state) {
-	 return false; // FIXME: Task #8
+                                                String board_state)
+    {
+        // the following code assumes that check resources has already been called (hence that the player does
+        // have the resources to build the structure, as the resource_state argument isn't passed to this function)
+        /* what are the build constraints?
+         * The settlements, cities and knights need to have the settlement/city/knight with fewer points than it build first
+         * For settlements, this means that the 12 point settlement must be built, then the 20 point one, then the 30 point on
+         * For knights, this means the knight with the number one lower than the knight of this number needs to have been built
+         * For cities, the 3 point comes first, then the 4, 5, 7, 9 and 11
+         * Note that the first of each of these can be built provided the necessary roads / other previous items have been bult
+         * Roads, Settlements and Cities must form a connected network, starting from the initial Road (which is already on the board)
+         */
+
+        if (!isBoardStateWellFormed(board_state)) return false;
+        if (!isStateWellFormed(structure)) return false;
+        String copyBoardState = board_state;
+        copyBoardState += ",";
+        copyBoardState += structure;
+        String[] boardStateArray = copyBoardState.split(",");
+        int length = boardStateArray.length;
+        if (length == 1)
+            return Objects.equals(boardStateArray[1], "C3") && Objects.equals(structure, "R0");
+        else
+        {
+           // iterate through the board state array, ensuring that for each stage, all actions are correct,
+            // including the last action we have added on
+            for (int i = 0; i < length; i++)
+            {
+                // the array we have checked up too
+                String[] tempArray = Arrays.copyOfRange(boardStateArray, 0, i);
+                char referenceChar = tempArray[i].charAt(0);
+                switch (referenceChar)
+                {
+                    case 'R' ->
+                    {
+                        // if the road is not well-formed, return false
+                        if (!isRoadWellFormed(tempArray[i])) return false;
+                        // if the road is not inline with the build constraints for a road, return false
+                        if (!isRoadConnected(tempArray[i], tempArray)) return false;
+
+                    }
+                    case 'S' ->
+                    {
+                        // if the settlement is not well-formed, return false
+                        if (!isSettlementWellFormed(tempArray[i])) return false;
+                        // if the settlement is not inline with the build constraints for a settlement, return false
+                        if (!isSettlementConnected(tempArray[i], tempArray)) return false;
+
+                    }
+                    case 'C' ->
+                    {
+                        // if the city is not well-formed, return false
+                        if (!isCityWellFormed(tempArray[i])) return false;
+                        // if the city is not inline with the build constraints for a city, return false
+                        if (!isCityConnected(tempArray[i], tempArray)) return false;
+
+                    }
+                    case 'K' ->
+                    {
+                        // if the knight is not well-formed, return false
+                        if (!isKnightWellFormed(tempArray[i])) return false;
+                        // if the knight is not inline with the build constraints for a knight, return false
+                        if (!isKnightConnected(tempArray[i], tempArray)) return false;
+
+                    }
+                    // i'm not 100% sure that this case is needed but better safe than sorry
+                    case 'J' ->
+                    {
+                        // if the joker is not well-formed, return false
+                        if (!isJokerWellFormed(tempArray[i])) return false;
+                        // if the joker is not inline with the build constraints for a junction, return false
+                        if (!isJokerConnected(tempArray[i], tempArray)) return false;
+
+                    }
+                    default ->
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true; // FIXME: Task #8
     }
+
+    /*
+     * these methods are for Jingru to implement - between them they should cover all of the cases
+     * needed to validate that a structure is within the build constraints
+     */
+    // TODO - all of these methods need to be implemented - Jingru I'll leave this up to you
+    public static boolean isRoadWellFormed(String road)
+    {
+        return false;
+    }
+    public static boolean isSettlementWellFormed(String settlement)
+    {
+        return false;
+    }
+    public static boolean isCityWellFormed(String city)
+    {
+        return false;
+    }
+    public static boolean isKnightWellFormed(String knight)
+    {
+        return false;
+    }
+    public static boolean isJokerWellFormed(String joker)
+    {
+        return false;
+    }
+    public static boolean isRoadConnected(String road, String[] boardStateArray)
+    {
+        return false;
+    }
+    public static boolean isSettlementConnected(String settlement, String[] boardStateArray)
+    {
+        return false;
+    }
+    public static boolean isCityConnected(String city, String[] boardStateArray)
+    {
+        return false;
+    }
+    public static boolean isKnightConnected(String knight, String[] boardStateArray)
+    {
+        return false;
+    }
+    // again i'm not sure if this method is 100% needed, but better safe than sorry, and it should
+    // be very similar to isKnightConnected
+    public static boolean isJokerConnected(String joint, String[] boardStateArray)
+    {
+        return false;
+    }
+
 
     /**
      * Check if the available resources are sufficient to build the
@@ -214,13 +346,13 @@ public class CatanDice {
     public static boolean checkResources(String structure, int[] resource_state)
     {
         /*
-        * There are 4 types of structures, road, knight, settlement and city
-        * Each type of structure has a different cost
-        * The cost of a road is 1 brick and 1 lumber - represented by R and then a number
-        * The cost of a knight is 1 ore, 1 wool and 1 grain - represented by a K and then a number
-        * The cost of a settlement is 1 brick, 1 lumber, 1 wool and 1 grain - represented by an S and then a number
-        * The cost of a city is 3 ore and 2 grain - represented by a C and then a number
-        * The resources are represented by their ID in the resource state array
+         * There are 4 types of structures, road, knight, settlement and city
+         * Each type of structure has a different cost
+         * The cost of a road is 1 brick and 1 lumber - represented by R and then a number
+         * The cost of a knight is 1 ore, 1 wool and 1 grain - represented by a K and then a number
+         * The cost of a settlement is 1 brick, 1 lumber, 1 wool and 1 grain - represented by an S and then a number
+         * The cost of a city is 3 ore and 2 grain - represented by a C and then a number
+         * The resources are represented by their ID in the resource state array
          */
         boolean flag = true;
         char struct = structure.charAt(0);
@@ -251,7 +383,7 @@ public class CatanDice {
             }
             default -> flag = false;
         }
-	    return flag;
+        return flag;
     }
 
     /**
@@ -268,9 +400,9 @@ public class CatanDice {
      *         resources, false otherwise.
      */
     public static boolean checkResourcesWithTradeAndSwap(String structure,
-							 String board_state,
-							 int[] resource_state) {
-	return false; // FIXME: Task #12
+                                                         String board_state,
+                                                         int[] resource_state) {
+        return false; // FIXME: Task #12
     }
 
     /**
@@ -283,9 +415,9 @@ public class CatanDice {
      * @return true iff the action is applicable, false otherwise.
      */
     public static boolean canDoAction(String action,
-				      String board_state,
-				      int[] resource_state) {
-	 return false; // FIXME: Task #9
+                                      String board_state,
+                                      int[] resource_state) {
+        return false; // FIXME: Task #9
     }
 
     /**
@@ -298,9 +430,9 @@ public class CatanDice {
      * @return true iff the action sequence is executable, false otherwise.
      */
     public static boolean canDoSequence(String[] actions,
-					String board_state,
-					int[] resource_state) {
-	 return false; // FIXME: Task #11
+                                        String board_state,
+                                        int[] resource_state) {
+        return false; // FIXME: Task #11
     }
 
     /**
@@ -311,7 +443,7 @@ public class CatanDice {
      * the target structure (even if it is a road). If the target structure
      * is reachable via the already built roads, the method should return
      * an empty array.
-     * 
+     *
      * Note that on the Island One map, there is a unique path to every
      * structure. 
      *
@@ -322,9 +454,9 @@ public class CatanDice {
      *         path.
      */
     public static String[] pathTo(String target_structure,
-				  String board_state) {
-	String[] result = {};
-	return result; // FIXME: Task #13
+                                  String board_state) {
+        String[] result = {};
+        return result; // FIXME: Task #13
     }
 
     /**
@@ -351,9 +483,9 @@ public class CatanDice {
      *         the method should return null.
      */
     public static String[] buildPlan(String target_structure,
-				     String board_state,
-				     int[] resource_state) {
-	 return null; // FIXME: Task #14
+                                     String board_state,
+                                     int[] resource_state) {
+        return null; // FIXME: Task #14
     }
 
 }
