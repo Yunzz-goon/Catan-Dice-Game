@@ -4,11 +4,11 @@ public class Building {
     private static int point;
     private static boolean buildingStatus;
     private static int[] sourceRequired;
-    public Building(int point, int[] sourceRequired) {
+    public Building(int point) {
         this.point = point;
-        this.sourceRequired = sourceRequired;
         this.buildingStatus = false;
     }
+
 
     /**
      * Set the status of the building

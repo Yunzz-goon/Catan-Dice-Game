@@ -4,8 +4,8 @@ public class City extends Building implements Assess {
     public static Road adjacentRoad;
     public static City lastCity;
 
-    public City(int point, int[] sourceRequired, Road adjacentRoad, City lastCity) {
-        super(point, sourceRequired);
+    public City(int point, Road adjacentRoad, City lastCity) {
+        super(point);
         this.adjacentRoad = adjacentRoad;
         this.lastCity = lastCity;
     }

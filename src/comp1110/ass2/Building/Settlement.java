@@ -4,9 +4,9 @@ public class Settlement extends Building implements Assess {
     public static Road adjacentRoad;
     public static Settlement lastSettlement;
 
-    public Settlement(int point, int[] source_required, Road adjacentRoad,
+    public Settlement(int point, Road adjacentRoad,
                       Settlement lastSettlement) {
-        super(point, source_required);
+        super(point);
         this.adjacentRoad = adjacentRoad;
         this.lastSettlement = lastSettlement;
     }

@@ -1,5 +1,8 @@
 package comp1110.ass2.Main;
 
+import comp1110.ass2.gui.Viewer;
+
+import java.util.ArrayList;
 import java.util.Random;
 
 import static comp1110.ass2.Resource.Resource.*;
@@ -184,6 +187,8 @@ public class CatanDice {
         }
     }
 
+
+
     /**
      * Check if the specified structure can be built next, given the
      * current board state. This method should check that the build
@@ -198,7 +203,46 @@ public class CatanDice {
      */
     public static boolean checkBuildConstraints(String structure,
 						String board_state) {
-	 return false; // FIXME: Task #8
+        char build_type;
+        int length;
+        char[] build_no;
+        Integer build_no_int;
+        String[] states;
+        String build_no_str;
+        ArrayList<Integer> knights = new ArrayList<Integer>();
+        ArrayList<Integer> settlements = new ArrayList<Integer>();
+        ArrayList<Integer> cities = new ArrayList<Integer>();
+        ArrayList<Integer> roads = new ArrayList<Integer>();
+
+        states = board_state.split(",");
+        for (String state : states){
+            build_type = state.charAt(0);
+            length = state.length()-1;
+            build_no = new char[length];
+            state.getChars(1, length+1, build_no, 0);
+            build_no_str = new String(build_no);
+            build_no_int = Integer.valueOf(build_no_str);
+            if (build_type == 'R'){
+                roads.add(build_no_int);
+            } else if (build_type == 'C') {
+                cities.add(build_no_int);
+            } else if (build_type == 'S') {
+                settlements.add(build_no_int);
+            } else if(build_type == 'K' || build_type == 'J'){
+                knights.add(build_no_int);
+            }
+        }
+
+        build_type = structure.charAt(0);
+        length = structure.length()-1;
+        build_no = new char[length];
+        structure.getChars(1, length+1, build_no, 0);
+        build_no_str = new String(build_no);
+        build_no_int = Integer.valueOf(build_no_str);
+
+
+
+        return false; // FIXME: Task #8
     }
 
     /**

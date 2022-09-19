@@ -3,8 +3,8 @@ package comp1110.ass2.Building;
 public class Road extends Building implements Assess {
     public static Road lastRoad;
 
-    public Road(int point, int[] source_required, Road lastRoad) {
-        super(point, source_required);
+    public Road(int point, Road lastRoad) {
+        super(point);
         this.lastRoad = lastRoad;
     }
 
