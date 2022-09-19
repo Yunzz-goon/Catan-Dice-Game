@@ -1,7 +1,7 @@
 package comp1110.ass2.Main;
 
+import java.text.NumberFormat;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
@@ -209,10 +209,10 @@ public class CatanDice {
          * For settlements, this means that the 12 point settlement must be built, then the 20 point one, then the 30 point on
          * For knights, this means the knight with the number one lower than the knight of this number needs to have been built
          * For cities, the 3 point comes first, then the 4, 5, 7, 9 and 11
-         * Note that the first of each of these can be built provided the necessary roads / other previous items have been built
+         * Note that the first of each of these can be built provided the necessary roads / other previous items have been bult
          * Roads, Settlements and Cities must form a connected network, starting from the initial Road (which is already on the board)
          */
-        // FIXME - ArrayIndexOutOfBoundsException on line 234
+
         if (!isBoardStateWellFormed(board_state)) return false;
         if (!isStateWellFormed(structure)) return false;
         String copyBoardState = board_state;
@@ -224,42 +224,49 @@ public class CatanDice {
             return Objects.equals(boardStateArray[1], "C3") && Objects.equals(structure, "R0");
         else
         {
-           // iterate through the board state array, ensuring that for each stage, all actions are correct,
+            // iterate through the board state array, ensuring that for each stage, all actions are correct,
             // including the last action we have added on
-            for (int i = 1; i < length; i++)
+            for (int i = 0; i < length; i++)
             {
                 // the array we have checked up too
-                String[] tempArray1 = Arrays.copyOfRange(boardStateArray, 0, i);
-                List<String> tempArray = Arrays.asList(tempArray1);
-                char referenceChar = tempArray1[i].charAt(0);
-                String comparison = tempArray.get(i);
+                String[] tempArray = Arrays.copyOfRange(boardStateArray, 0, i);
+                char referenceChar = tempArray[i].charAt(0);
                 switch (referenceChar)
                 {
                     case 'R' ->
                     {
                         // if the road is not inline with the build constraints for a road, return false
-                        if (!isRoadConnected(comparison, tempArray)) return false;
+                        if (!isRoadConnected(tempArray[i], tempArray)) return false;
+
                     }
                     case 'S' ->
                     {
                         // if the settlement is not inline with the build constraints for a settlement, return false
-                        if (!isSettlementConnected(comparison, tempArray)) return false;
+                        if (!isSettlementConnected(tempArray[i], tempArray)) return false;
+
                     }
                     case 'C' ->
                     {
                         // if the city is not inline with the build constraints for a city, return false
-                        if (!isCityConnected(comparison, tempArray)) return false;
+                        if (!isCityConnected(tempArray[i], tempArray)) return false;
+
                     }
                     case 'K' ->
                     {
                         // if the knight is not inline with the build constraints for a knight, return false
-                        if (!isKnightConnected(comparison, tempArray)) return false;
+                        if (!isKnightConnected(tempArray[i], tempArray)) return false;
+
                     }
                     // i'm not 100% sure that this case is needed but better safe than sorry
                     case 'J' ->
                     {
-                        // if the joker is not inline with the build constraints for a joker, return false
-                        if (!isJokerConnected(comparison, tempArray)) return false;
+                        // if the joker is not inline with the build constraints for a junction, return false
+                        if (!isJokerConnected(tempArray[i], tempArray)) return false;
+
+                    }
+                    default ->
+                    {
+                        return false;
                     }
                 }
             }
@@ -267,195 +274,32 @@ public class CatanDice {
         return true; // FIXME: Task #8
     }
 
-
-    public static boolean isRoadConnected(String road, List<String> boardStateArray) //look R10 if valid，check R9 is true or not. Only R9 is true then R10 is true.
+    /*
+     * these methods are for Jingru to implement - between them they should cover all of the cases
+     * needed to validate that a structure is within the build constraints
+     */
+    // TODO - all of these methods need to be implemented - Jingru I'll leave this up to you
+    public static boolean isRoadConnected(String road, String[] boardStateArray)
     {
-        switch (road)
-        {
-            case "R0" ->
-            {
-                return boardStateArray.get(0).equals("C3");
-            }
-            case "R1", "R2" ->
-            {
-                return boardStateArray.contains("R0");
-            }
-            case "R3" ->
-            {
-                return boardStateArray.contains("C4");
-            }
-            case "R4", "R5" ->
-            {
-                return boardStateArray.contains("R3");
-            }
-            case "R6" ->
-            {
-                return boardStateArray.contains("C5");
-            }
-            case "R7" ->
-            {
-                return boardStateArray.contains("R6");
-            }
-            case "R8", "R12" ->
-            {
-                return boardStateArray.contains("C7");
-            }
-            case "R9" ->
-            {
-                return boardStateArray.contains("R8");
-            }
-            case "R10" ->
-            {
-                return boardStateArray.contains("C9");
-            }
-            case "R11" ->
-            {
-                return boardStateArray.contains("R10");
-            }
-            case "R13" ->
-            {
-                return boardStateArray.contains("R13");
-            }
-            case "R14" ->
-            {
-                return boardStateArray.contains("S20");
-            }
-            case "R15" ->
-            {
-                return boardStateArray.contains("R14");
-            }
-        }
-
-
         return false;
     }
-    public static boolean isSettlementConnected(String settlement, List<String> boardStateArray)
-    { //i don't know how to write but here is what i'm thinking,
-        //i'm thinking that if we pick S4, then it should have S3,R0,R1,R2 to be true, otherwise false
-        // however we need to start at S3 to be true, but how can we pick
-        switch (settlement)
-        {
-            case "S7" ->
-            {
-                return boardStateArray.contains("R1");
-            }
-            case "S12" ->
-            {
-                return boardStateArray.contains("R4") &&
-                        boardStateArray.contains("S7");
-            }
-            case "S20" ->
-            {
-                return boardStateArray.contains("R20") &&
-                        // this should work because if the array contains S12 then we must have done the check for S7
-                        // already to place S12, hence no need to recheck for S7
-                        boardStateArray.contains("S12");
-            }
-            case "S30" ->
-            {
-                return boardStateArray.contains("R15") &&
-                        boardStateArray.contains("S20");
-            }
-        }
-        return true;
-    }
-    public static boolean isCityConnected(String city, List<String> boardStateArray)
+    public static boolean isSettlementConnected(String settlement, String[] boardStateArray)
     {
-        boolean flag = false;
-        switch (city)
-        {
-            case "C3" ->
-            {
-                flag = true; // this is the first thing that can be built
-            }
-            case "C4" ->
-            {
-                flag = boardStateArray.contains("R2");
-            }
-            case "C5" ->
-            {
-                flag = boardStateArray.contains("R5");
-            }
-            case "C7" ->
-            {
-                flag = boardStateArray.contains("R7");
-            }
-            case "C9" ->
-            {
-                flag = boardStateArray.contains("R9");
-            }
-            case "C11" ->
-            {
-                flag = boardStateArray.contains("R11");
-            }
-        }
-        return flag;
+        return false;
     }
-    public static boolean isKnightConnected(String knight, List<String> boardStateArray)
+    public static boolean isCityConnected(String city, String[] boardStateArray)
     {
-        boolean flag = false;
-        switch (knight)
-        {
-            case "K1" ->
-            {
-                flag = true; // this is the first thing that can be built
-            }
-            case "K2" ->
-            {
-                flag = boardStateArray.contains("K1");
-            }
-            case "K3" ->
-            {
-                flag = boardStateArray.contains("K2");
-            }
-            case "K4" ->
-            {
-                flag = boardStateArray.contains("K3");
-            }
-            case "K5" ->
-            {
-                flag = boardStateArray.contains("K4");
-            }
-            case "K6" ->
-            {
-                flag = boardStateArray.contains("K5");
-            }
-        }
-        return flag;
+        return false;
+    }
+    public static boolean isKnightConnected(String knight, String[] boardStateArray)
+    {
+        return false;
     }
     // again i'm not sure if this method is 100% needed, but better safe than sorry, and it should
     // be very similar to isKnightConnected
-    public static boolean isJokerConnected(String joker, List<String> boardStateArray)
+    public static boolean isJokerConnected(String joint, String[] boardStateArray)
     {
-        boolean flag = false;
-        switch (joker)
-        {
-            case "J1" ->
-            {
-                flag = true; // this is the first thing that can be built
-            }
-            case "J2" ->
-            {
-                flag = boardStateArray.contains("J1");
-            }
-            case "J3" ->
-            {
-                flag = boardStateArray.contains("J2");
-            }
-            case "J4" ->
-            {
-                flag = boardStateArray.contains("J3");
-            }
-            case "J5" ->
-            {
-                flag = boardStateArray.contains("J4");
-            }
-            case "J6" ->
-            {
-                flag = boardStateArray.contains("J5");
-            }
-        }
-        return flag;
+        return false;
     }
 
 
@@ -571,7 +415,7 @@ public class CatanDice {
      * an empty array.
      *
      * Note that on the Island One map, there is a unique path to every
-     * structure. 
+     * structure.
      *
      * @param target_structure: The string representation of the structure
      *        to reach.

@@ -10,9 +10,9 @@ declaration: >-
 contributions:
   - uid: u7543705
     contribution: 33
-  - uid:
-    contribution:
-  - uid:
+  - uid: u7501226
+    contribution: 33
+  - uid: u7503889
     contribution:
 
 # Sign *your* name and uids here. (Remove entries if you have fewer
@@ -20,7 +20,7 @@ contributions:
 signatures:
   - name: Yunzhong Zhang
     uid: u7543705
-  - name:
-    uid:
-  - name:
-    uid:
+  - name: Matthew Britton
+    uid: u7501226
+  - name: u7503889
+    uid: Jingru Lin
