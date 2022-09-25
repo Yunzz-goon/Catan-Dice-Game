@@ -7,12 +7,12 @@ public class ConvertString
     // It will also convert it back
 
     // FIXME: Task #15 - implement convertTo and convertFrom
-    public String convertTo(String state)
+    public GameState convertTo(String state)
     {
-        return "";
+        return null;
     }
 
-    public String convertFrom(String state)
+    public String convertFrom(GameState state)
     {
         return "";
     }
