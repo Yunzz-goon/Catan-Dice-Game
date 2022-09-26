@@ -7,5 +7,6 @@ public enum ResourceType
     WOOL,
     LUMBER,
     BRICK,
-    GOLD
+    GOLD,
+    NULL // the type for the unknown joker
 }

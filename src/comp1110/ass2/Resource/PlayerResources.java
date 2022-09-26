@@ -2,8 +2,20 @@ package comp1110.ass2.Resource;
 
 public class PlayerResources
 {
-    private Resource[] resources = new Resource[6];
+    private Resource[] resources;
 
+    /**
+     * This class contains the resources that a player has on a given turn of the game
+     */
+    public PlayerResources()
+    {
+        this.resources = null; // initialise the resources to null
+    }
+
+    public PlayerResources(Resource[] resources)
+    {
+        this.resources = resources;
+    }
     /**
     * given a die and the resource it shows, add that resource to the player's resources
     * @param diceNumbers the numbers rolled by the dice class

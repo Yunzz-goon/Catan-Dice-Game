@@ -11,9 +11,9 @@ public class Resource
     public final static int ORE_ID = ORE.ordinal();
     public final static int BRICK_ID = BRICK.ordinal();
 
-    private ResourceType resourceType;
+    protected ResourceType resourceType;
 
-    private int resourceQuantity;
+    protected int resourceQuantity;
 
     public Resource(ResourceType resourceType, int resourceQuantity)
     {
