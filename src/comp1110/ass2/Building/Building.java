@@ -44,4 +44,9 @@ public class Building {
     public int[] getRequiredSource(){
         return this.sourceRequired;
     }
+
+    public char toChar()
+    {
+        return ' ';
+    }
 }

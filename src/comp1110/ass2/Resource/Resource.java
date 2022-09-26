@@ -11,22 +11,29 @@ public class Resource
     public final static int ORE_ID = ORE.ordinal();
     public final static int BRICK_ID = BRICK.ordinal();
 
-    private int resourceID;
     private ResourceType resourceType;
 
-    public Resource(int resourceID, ResourceType resourceType)
+    private int resourceQuantity;
+
+    public Resource(ResourceType resourceType, int resourceQuantity)
     {
-        this.resourceID = resourceType.ordinal();
         this.resourceType = resourceType;
+        this.resourceQuantity = resourceQuantity;
     }
 
-    public int getResourceID()
+
+    public int getResourceQuantity()
     {
-        return resourceID;
+        return resourceQuantity;
     }
 
     public ResourceType getResourceType()
     {
         return resourceType;
+    }
+
+    public void setResourceQuantity(int resourceQuantity)
+    {
+        this.resourceQuantity = resourceQuantity;
     }
 }

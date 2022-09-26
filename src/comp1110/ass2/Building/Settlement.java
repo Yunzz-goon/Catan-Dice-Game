@@ -23,4 +23,9 @@ public class Settlement extends Building implements Assess {
             return false;
         }
     }
+
+    @Override
+    public char toChar() {
+        return 'S';
+    }
 }

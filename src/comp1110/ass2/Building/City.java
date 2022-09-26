@@ -23,5 +23,10 @@ public class City extends Building implements Assess {
             return false;
         }
     }
+
+    @Override
+    public char toChar() {
+        return 'C';
+    }
 }
 
