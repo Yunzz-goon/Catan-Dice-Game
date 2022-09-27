@@ -8,6 +8,7 @@ public class Road extends Building implements Assess {
         this.lastRoad = lastRoad;
     }
 
+
     /**
      * judge whether the road could access
      * @return the result of judging whether the road could access
