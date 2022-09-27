@@ -141,6 +141,8 @@ public class ConvertString
         return 0;
     }
     public ResourceJoker[] determineJokers(String boardState)
+            // FIXME - I'm still not sure what the difference between a knight and a joker is - this code assumes
+            //  that a knight is unused and a joker is used
     {
         ResourceJoker[] jokers = new ResourceJoker[6];
         String[] buildings = boardState.split(",");
