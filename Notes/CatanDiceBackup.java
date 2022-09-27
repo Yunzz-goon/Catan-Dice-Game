@@ -174,7 +174,6 @@ public class CatanDice {
      * resource_state.
      */
     public static void rollDice(int n_dice, int[] resource_state) {
-        // FIXME: Task #6
         /*
         The order of the resources is (0) Ore, (1) Grain, (2) Wool, (3) Timber, (4) Bricks and (5) Gold.
         For example, the array { 1, 0, 1, 2, 0, 2 } indicates that the player has 1 Ore, 1 Wool, 2 Timber
