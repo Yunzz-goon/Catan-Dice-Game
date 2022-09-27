@@ -51,4 +51,14 @@ public class PlayerBuildings
         }
         return score;
     }
+
+    public Building[] getBuildingsAsArray()
+    {
+        Building[] buildingsArray = new Building[buildings.size()];
+        for (int i = 0; i < buildings.size(); i++)
+        {
+            buildingsArray[i] = buildings.get(i);
+        }
+        return buildingsArray;
+    }
 }

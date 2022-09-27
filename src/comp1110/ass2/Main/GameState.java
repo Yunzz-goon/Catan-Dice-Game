@@ -1,9 +1,12 @@
 package comp1110.ass2.Main;
 
+import comp1110.ass2.Building.Building;
 import comp1110.ass2.Building.PlayerBuildings;
 import comp1110.ass2.Resource.PlayerResources;
 import comp1110.ass2.Resource.Resource;
 import comp1110.ass2.Resource.ResourceJoker;
+
+import java.util.ArrayList;
 
 import static comp1110.ass2.Resource.ResourceType.*;
 
@@ -110,11 +113,25 @@ public class GameState
         return score;
     }
 
-    public void calculateAvailableBuildings(PlayerResources[] resourceRecord)
+    public Building[] calculateAvailableBuildings(PlayerResources[] resourceRecord)
     {
         Resource[] availableResources = resourceRecord[turn].getResources(); // get the resources available to the player
-
+        ArrayList<Building> availableBuildings = new ArrayList<Building>();
         // TODO: calculate available buildings
 
+
+        int size = availableBuildings.size();
+        Building[] availableBuildingsArray = new Building[size];
+        for (int i = 0; i < size; i++)
+        {
+            availableBuildingsArray[i] = availableBuildings.get(i);
+        }
+        return availableBuildingsArray;
+
+    }
+
+    public Building[] removeAvailableDuplicates(Building[] availableBuildings)
+    {
+        return null;
     }
 }
