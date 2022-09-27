@@ -37,6 +37,11 @@ public class Building {
     }
 
 
+    public void setSourceRequired(int[] sourceRequired){
+        this.sourceRequired = sourceRequired;
+    }
+
+
     /**
      * get the required source of building the building
      * @return return the required source of building the building

@@ -1,4 +1,5 @@
 package comp1110.ass2.Resource;
+import static comp1110.ass2.Building.Knight.ExchangingResource;
 
 public class PlayerResources
 {
@@ -26,7 +27,7 @@ public class PlayerResources
      * array of available resources
      * @param resourcesToSpend the resources the player wants to spend
      */
-    public void spendResources(Resource[] resourcesToSpend)
+    public static void spendResources(int[] resourcesToSpend, char type){}
     {
 
     }
