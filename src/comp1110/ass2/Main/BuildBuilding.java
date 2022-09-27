@@ -109,4 +109,9 @@ public class BuildBuilding {
             borad_state += "," + structure;
         }
     }
+
+    public void knightUsed(Knight knight){
+        knight.setDisposableStatus(true);
+    }
+
 }
