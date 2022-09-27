@@ -22,6 +22,12 @@ public class Road extends Building implements Assess {
         }
     }
 
+    @Override
+    public char toChar() {
+        return 'R';
+    }
+
+
 
 
 

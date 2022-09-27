@@ -119,7 +119,7 @@ turn. Also note that building and swapping can be interleaved: a Knight
 can be used to swap a resource on the same turn that the knight was built
 (but only after it has been built, of course).
 
-When a player cannot take any more actions, they sum up the points values
+When a player cannot, or chooses not to, take any more actions, they sum up the points values
 of all structures built during the turn and add that to their running score.
 Resources remaining at the end of the turn are lost (i.e., there is no
 accumulation of resources between turns).

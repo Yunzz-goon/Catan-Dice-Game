@@ -45,5 +45,10 @@ public class Knight extends Building implements Assess {
         }
     }
 
+    @Override
+    public char toChar() {
+        return 'K';
+    }
+
 
 }
