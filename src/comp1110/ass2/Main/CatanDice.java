@@ -426,4 +426,8 @@ public class CatanDice {
         return null; // FIXME: Task #14
     }
 
+    public static void main(String[] args) {
+
+    }
+
 }
