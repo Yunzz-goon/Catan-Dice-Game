@@ -61,4 +61,9 @@ public class PlayerBuildings
         }
         return buildingsArray;
     }
+
+    public void addBuilding(Building building)
+    {
+        buildings.add(building);
+    }
 }

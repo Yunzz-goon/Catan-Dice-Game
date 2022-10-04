@@ -1,5 +1,6 @@
 package comp1110.ass2.MainTests;
 
+import comp1110.ass2.Building.Available;
 import comp1110.ass2.Main.GameState;
 import org.junit.jupiter.api.Test;
 
@@ -27,83 +28,50 @@ public class TestGameState
     public void testInitialScore()
     {
         assertEquals(0, Structures.startState.getCurrentScore());
+        // TODO - Test the initial score on the partial state
+        // TODO - test the initial score on the full state
     }
 
     @Test
     public void testInitialTurn()
     {
         assertEquals(0, Structures.startState.getTurn());
+        // TODO - Test the initial turn on the partial state
+        // TODO - test the initial turn on the full state
     }
 
     @Test
     public void testInitialResources()
     {
+        // TODO - Test the initial resources on the start state
+        // TODO - Test the initial resources on the partial state
+        // TODO - Test the initial resources on the full state
     }
 
     @Test
     public void testInitialBuildings()
     {
+        // TODO - Test the initial buildings on the start state
+        // TODO - Test the initial buildings on the partial state
+        // TODO - Test the initial buildings on the full state
     }
 
     @Test
     public void testInitialJokers()
     {
+        // TODO - Test the initial jokers on the start state
+        // TODO - Test the initial jokers on the partial state
+        // TODO - Test the initial jokers on the full state
     }
 
-    @Test
-    public void testPartialTurn()
-    {
-    }
 
-    @Test
-    public void testPartialScore()
-    {
-    }
-
-    @Test
-    public void testPartialResources()
-    {
-    }
-
-    @Test
-    public void testPartialBuildings()
-    {
-    }
-
-    @Test
-    public void testPartialJokers()
-    {
-    }
-
-    @Test
-    public void testFinalTurn()
-    {
-    }
-
-    @Test
-    public void testFinalScore()
-    {
-    }
-
-    @Test
-    public void testFinalResources()
-    {
-    }
-
-    @Test
-    public void testFinalBuildings()
-    {
-    }
-
-    @Test
-    public void testFinalJokers()
-    {
-    }
-    // here ends the intialisation tests
+    // Modifying states test - ensure that the various methods implemented to modify the states work as expected
 
     @Test
     public void testModifyState1()
     {
+        GameState tempState = Structures.startState;
+        tempState.addBuilding(0, Available.ROAD_1);
     }
 
     @Test

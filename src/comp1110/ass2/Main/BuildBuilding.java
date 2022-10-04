@@ -14,20 +14,20 @@ import static comp1110.ass2.Main.CatanDice.checkBuildConstraints;
 import static comp1110.ass2.Main.CatanDice.checkResources;
 
 
-public class BuildBuilding {
+public class BuildBuilding
+{
+    /**
+     *  Initialize the building state, the default building status is unbuilt.
+     */
 
-    public String borad_state = "";
+    public String board_state = "";
     public ArrayList<Road> roads = new ArrayList<>();
     public HashMap<Integer, Settlement> settlements = new HashMap<Integer, Settlement>();
     public HashMap<Integer, City> cities = new HashMap<Integer, City>();
     public HashMap<Integer, Knight> knights = new HashMap<Integer, Knight>();
 
-    /**
-     *  Initialize the building state, the default building status is unbuilt.
-     */
     public BuildBuilding(){
         // initialize roads
-        // Use arraylist to store roads.
         Road road = new Road(1, null);
         roads.add(road);
         for (int i = 0; i < 16; i++){
@@ -36,7 +36,7 @@ public class BuildBuilding {
         }
 
         // initialize settlements
-        // Use hashmap to store settlement. Key: marks; Value: settlement
+//        ArrayList<Settlement> settlements = new ArrayList<>();
         Settlement settlement = new Settlement(3, null, null);
         settlements.put(settlement.getPoint(), settlement);
         settlement = new Settlement(4, roads.get(2), settlement);
@@ -51,7 +51,8 @@ public class BuildBuilding {
         settlements.put(settlement.getPoint(), settlement);
 
         // initialize cities
-        // Use hashmap to store cities. Key: marks; Value: cities
+//        ArrayList<City> cities = new ArrayList<>();
+
         City city = new City(7, roads.get(1), null);
         cities.put(city.getPoint(), city);
         city = new City(12, roads.get(4), city);
@@ -62,7 +63,7 @@ public class BuildBuilding {
         cities.put(city.getPoint(), city);
 
         // initialize knight
-        // Use hashmap to store Knight. Key: marks; Value: knight
+//        ArrayList<Knight> knights = new ArrayList<>();
         Knight knight = new Knight(1, BRICK, null);
         knights.put(knight.getPoint(), knight);
         knight = new Knight(2, LUMBER, knight);
@@ -81,11 +82,11 @@ public class BuildBuilding {
 
     /**
      * Build a building if current state satisfies the building constraints and resource constraints.
-     * @param structure a desired to be built struture
+     * @param structure a desired to be built structure
      * @param resource_state the current resource state
      */
     public void buildBuilding(String structure, int[] resource_state){
-        if (checkBuildConstraints(structure, borad_state) && (checkResources(structure, resource_state))) {
+        if (checkBuildConstraints(structure, board_state) && (checkResources(structure, resource_state))) {
             char build_type;
             int length;
             char[] build_no;
@@ -108,9 +109,12 @@ public class BuildBuilding {
                 knights.get(build_no_int).setStatus(true);
             }
             PlayerResources.spendResources(resource_state, build_type);
-            borad_state += "," + structure;
+            board_state += "," + structure;
         }
     }
 
+    public void knightUsed(Knight knight){
+        knight.setDisposableStatus(true);
+    }
 
 }
