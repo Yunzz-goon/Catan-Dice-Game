@@ -4,6 +4,12 @@ import java.util.Random;
 
 public class Dice
 {
+    private String ORE;
+    private String GRAIN;
+    private String WOOL;
+    private String TIMBER;
+    private String BRICKS;
+    private String GOLD;
     private int dice1;
     private int dice2;
     private int dice3;
@@ -17,6 +23,12 @@ public class Dice
     private int dice4Count;
     private int dice5Count;
     private int dice6Count;
+    private String ORECount;
+    private String GRAINCount;
+    private String WOOLCount;
+    private String TIMBERCount;
+    private String BRICKSCount;
+    private String GOLDCount;
 
     public Random random = new Random();
 
