@@ -1,7 +1,7 @@
 package comp1110.ass2.Building;
 
 public class Road extends Building implements Assess {
-    public static Road lastRoad;
+    public Road lastRoad;
 
     public Road(int point, Road lastRoad) {
         super(point);
@@ -21,6 +21,7 @@ public class Road extends Building implements Assess {
             return false;
         }
     }
+
 
     @Override
     public char toChar() {
