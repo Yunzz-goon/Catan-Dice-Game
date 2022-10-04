@@ -87,26 +87,13 @@ public class ConvertString
         {
             if (r != null)
             {
-                switch (r.getResourceType())
-                {
-                    case BRICK:
-                        output[0] = r.getResourceQuantity();
-                        break;
-                    case GRAIN:
-                        output[1] = r.getResourceQuantity();
-                        break;
-                    case LUMBER:
-                        output[2] = r.getResourceQuantity();
-                        break;
-                    case ORE:
-                        output[3] = r.getResourceQuantity();
-                        break;
-                    case WOOL:
-                        output[4] = r.getResourceQuantity();
-                        break;
-                    case GOLD:
-                        output[5] = r.getResourceQuantity();
-                        break;
+                switch (r.getResourceType()) {
+                    case BRICK -> output[0] = r.getResourceQuantity();
+                    case GRAIN -> output[1] = r.getResourceQuantity();
+                    case LUMBER -> output[2] = r.getResourceQuantity();
+                    case ORE -> output[3] = r.getResourceQuantity();
+                    case WOOL -> output[4] = r.getResourceQuantity();
+                    case GOLD -> output[5] = r.getResourceQuantity();
                 }
             }
         }

@@ -134,4 +134,9 @@ public class GameState
     {
         return null;
     }
+
+    public void addBuilding(int turn, Building building)
+    {
+        buildingRecord[turn].addBuilding(building);
+    }
 }
