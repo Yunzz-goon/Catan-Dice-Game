@@ -23,12 +23,7 @@ public class Dice
     private int dice4Count;
     private int dice5Count;
     private int dice6Count;
-    private String ORECount;
-    private String GRAINCount;
-    private String WOOLCount;
-    private String TIMBERCount;
-    private String BRICKSCount;
-    private String GOLDCount;
+
 
     public Random random = new Random();
 
