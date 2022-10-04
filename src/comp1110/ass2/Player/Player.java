@@ -4,6 +4,10 @@ public class Player
 {
     private int turnNumber;
     private int playerID;
+    private int scoring;
+    private String resource;
+    private String building;
+
 
     public Player(int playerID)
     {
@@ -27,6 +31,22 @@ public class Player
         this.playerID = playerID;
     }
 
+
+    public int getScore(){
+        return scoring;
+
+    }
+
+
+    public String getResource(){
+        return resource;
+
+    }
+
+    public String getBuilding(){
+        return building;
+    }
+
     /**
      * updates the player's turn
      */
@@ -40,7 +60,6 @@ public class Player
      * ends the game after 15 turns
      */
     public void endGame()
-    {
-
+    { System.exit(0);
     }
 }
