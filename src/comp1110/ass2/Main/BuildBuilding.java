@@ -1,6 +1,9 @@
 package comp1110.ass2.Main;
-import comp1110.ass2.Building.*;
-import comp1110.ass2.Main.CatanDice;
+
+import comp1110.ass2.Building.City;
+import comp1110.ass2.Building.Knight;
+import comp1110.ass2.Building.Road;
+import comp1110.ass2.Building.Settlement;
 import comp1110.ass2.Resource.PlayerResources;
 
 import java.util.ArrayList;
@@ -9,13 +12,9 @@ import java.util.HashMap;
 import static comp1110.ass2.Building.Knight.ExchangingResource.*;
 import static comp1110.ass2.Main.CatanDice.checkBuildConstraints;
 import static comp1110.ass2.Main.CatanDice.checkResources;
-import static comp1110.ass2.Resource.PlayerResources.*;
 
 
 public class BuildBuilding {
-    /**
-     *  Initialize the building state, the default building status is unbuilt.
-     */
 
     public String borad_state = "";
     public ArrayList<Road> roads = new ArrayList<>();
@@ -23,8 +22,12 @@ public class BuildBuilding {
     public HashMap<Integer, City> cities = new HashMap<Integer, City>();
     public HashMap<Integer, Knight> knights = new HashMap<Integer, Knight>();
 
+    /**
+     *  Initialize the building state, the default building status is unbuilt.
+     */
     public BuildBuilding(){
         // initialize roads
+        // Use arraylist to store roads.
         Road road = new Road(1, null);
         roads.add(road);
         for (int i = 0; i < 16; i++){
@@ -33,7 +36,7 @@ public class BuildBuilding {
         }
 
         // initialize settlements
-//        ArrayList<Settlement> settlements = new ArrayList<>();
+        // Use hashmap to store settlement. Key: marks; Value: settlement
         Settlement settlement = new Settlement(3, null, null);
         settlements.put(settlement.getPoint(), settlement);
         settlement = new Settlement(4, roads.get(2), settlement);
@@ -48,8 +51,7 @@ public class BuildBuilding {
         settlements.put(settlement.getPoint(), settlement);
 
         // initialize cities
-//        ArrayList<City> cities = new ArrayList<>();
-
+        // Use hashmap to store cities. Key: marks; Value: cities
         City city = new City(7, roads.get(1), null);
         cities.put(city.getPoint(), city);
         city = new City(12, roads.get(4), city);
@@ -60,7 +62,7 @@ public class BuildBuilding {
         cities.put(city.getPoint(), city);
 
         // initialize knight
-//        ArrayList<Knight> knights = new ArrayList<>();
+        // Use hashmap to store Knight. Key: marks; Value: knight
         Knight knight = new Knight(1, BRICK, null);
         knights.put(knight.getPoint(), knight);
         knight = new Knight(2, LUMBER, knight);
@@ -110,8 +112,5 @@ public class BuildBuilding {
         }
     }
 
-    public void knightUsed(Knight knight){
-        knight.setDisposableStatus(true);
-    }
 
 }
