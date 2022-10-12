@@ -9,12 +9,16 @@ public class Road extends Building implements Assess {
     }
 
 
+
     /**
      * judge whether the road could access
      * @return the result of judging whether the road could access
      */
     @Override
     public boolean isBuildingAssess(){
+        if (this.lastRoad == null){
+            return true;
+        }
         if (this.lastRoad.getStatus()){
             return true;
         }else{

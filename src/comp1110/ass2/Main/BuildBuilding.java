@@ -20,7 +20,7 @@ public class BuildBuilding
      *  Initialize the building state, the default building status is unbuilt.
      */
 
-    public String board_state = "";
+    public String board_state_whole = "";
     public ArrayList<Road> roads = new ArrayList<>();
     public HashMap<Integer, Settlement> settlements = new HashMap<Integer, Settlement>();
     public HashMap<Integer, City> cities = new HashMap<Integer, City>();
@@ -29,9 +29,11 @@ public class BuildBuilding
     public BuildBuilding(){
         // initialize roads
         Road road = new Road(1, null);
+        Road old_road = road;
         roads.add(road);
         for (int i = 0; i < 16; i++){
-            road = new Road(1, road);
+            old_road = road;
+            road = new Road(1, old_road);
             roads.add(road);
         }
 
@@ -86,7 +88,7 @@ public class BuildBuilding
      * @param resource_state the current resource state
      */
     public void buildBuilding(String structure, int[] resource_state){
-        if (checkBuildConstraints(structure, board_state) && (checkResources(structure, resource_state))) {
+        if (checkBuildConstraints(structure, board_state_whole) && (checkResources(structure, resource_state))) {
             char build_type;
             int length;
             char[] build_no;
@@ -109,7 +111,7 @@ public class BuildBuilding
                 knights.get(build_no_int).setStatus(true);
             }
             PlayerResources.spendResources(resource_state, build_type);
-            board_state += "," + structure;
+            board_state_whole += "," + structure;
         }
     }
 

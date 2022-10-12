@@ -1,8 +1,8 @@
 package comp1110.ass2.Building;
 
 public class City extends Building implements Assess {
-    public static Road adjacentRoad;
-    public static City lastCity;
+    public Road adjacentRoad;
+    public City lastCity;
 
     public City(int point, Road adjacentRoad, City lastCity) {
         super(point);
@@ -17,7 +17,10 @@ public class City extends Building implements Assess {
      */
     @Override
     public boolean isBuildingAssess() {
-        if (this.lastCity.getStatus() && adjacentRoad.getStatus()) {
+        if (this.lastCity == null && this.adjacentRoad.getStatus()){
+            return true;
+        }
+        if (this.lastCity.getStatus() && this.adjacentRoad.getStatus()) {
             return true;
         } else {
             return false;

@@ -1,8 +1,8 @@
 package comp1110.ass2.Building;
 
 public class Settlement extends Building implements Assess {
-    public static Road adjacentRoad;
-    public static Settlement lastSettlement;
+    public Road adjacentRoad;
+    public Settlement lastSettlement;
 
     public Settlement(int point, Road adjacentRoad,
                       Settlement lastSettlement) {
@@ -17,6 +17,12 @@ public class Settlement extends Building implements Assess {
      */
     @Override
     public boolean isBuildingAssess() {
+        if (this.adjacentRoad == null){
+            return true;
+        }
+        if (this.lastSettlement == null && adjacentRoad.getStatus()){
+            return true;
+        }
         if (this.lastSettlement.getStatus() && adjacentRoad.getStatus()) {
             return true;
         } else {
