@@ -4,6 +4,7 @@ import java.util.Random;
 
 import static comp1110.ass2.Resource.Resource.*;
 public class CatanDice {
+    public static int seed = 100;
 
     /**
      * Check if the string encoding of a board state is well formed.
@@ -176,7 +177,7 @@ public class CatanDice {
         and 2 Gold available. Note that the total quantity of resources can vary.
          */
 
-        Random random = new Random(6710);
+        Random random = new Random(seed);
         for (int i = 0; i < n_dice; i++){
             int resource_index = random.nextInt(6);
             resource_state[resource_index] += 1;
@@ -201,6 +202,9 @@ public class CatanDice {
         BuildBuilding buildings = new BuildBuilding();
 
         // deploy the status of the building
+        if (board_state == ""){
+            return true;
+        }
         String[] states = board_state.split(",");
         for (String state : states) {
             char build_type = state.charAt(0);

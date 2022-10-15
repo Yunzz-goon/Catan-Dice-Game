@@ -22,9 +22,9 @@ public class Viewer extends Application {
 //    private static final int VIEWER_HEIGHT = 700;
 
     protected final Group root = new Group();
-    protected final Group controls = new Group();
+    private final Group controls = new Group();
     protected TextField playerTextField;
-    public TextField boardTextField;
+    private TextField boardTextField;
 
     public static double HEXAGON_SIDE_LENGTH = 120;
     public static double HEXAGON_SIDE_LENGTH_half = HEXAGON_SIDE_LENGTH/2;

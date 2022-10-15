@@ -1,5 +1,4 @@
 package comp1110.ass2.Resource;
-import static comp1110.ass2.Building.Knight.ExchangingResource;
 
 public class PlayerResources
 {
@@ -39,10 +38,10 @@ public class PlayerResources
      * array of available resources
      * @param resourcesToSpend the resources the player wants to spend
      */
-    public static void spendResources(int[] resourcesToSpend, char type){}
-    {
+    public static void spendResources(int[] resourcesToSpend, char type){
 
     }
+
 
     /**
      * allows the player to exchange two gold resources for any one of the other resources
