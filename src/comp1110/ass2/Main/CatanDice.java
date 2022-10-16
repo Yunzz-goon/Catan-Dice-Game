@@ -1,11 +1,10 @@
 package comp1110.ass2.Main;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import static comp1110.ass2.Resource.Resource.*;
 public class CatanDice {
+    public static int seed = 100;
 
     /**
      * Check if the string encoding of a board state is well formed.
@@ -178,7 +177,7 @@ public class CatanDice {
         and 2 Gold available. Note that the total quantity of resources can vary.
          */
 
-        Random random = new Random(6710);
+        Random random = new Random(seed);
         for (int i = 0; i < n_dice; i++){
             int resource_index = random.nextInt(6);
             resource_state[resource_index] += 1;
@@ -200,74 +199,56 @@ public class CatanDice {
     public static boolean checkBuildConstraints(String structure,
                                                 String board_state) {
         // FIXME: Task #8
-        char build_type;
-        int length;
-        char[] build_no;
-        Integer build_no_int;
-        String[] states;
-        String build_no_str;
-        ArrayList<Integer> knights = new ArrayList<Integer>();
-        ArrayList<Integer> settlements = new ArrayList<Integer>();
-        ArrayList<Integer> cities = new ArrayList<Integer>();
-        ArrayList<Integer> roads = new ArrayList<Integer>();
+        BuildBuilding buildings = new BuildBuilding();
 
-        states = board_state.split(",");
-        for (String state : states){
-            build_type = state.charAt(0);
-            length = state.length()-1;
-            build_no = new char[length];
-            state.getChars(1, length+1, build_no, 0);
-            build_no_str = new String(build_no);
-            build_no_int = Integer.valueOf(build_no_str);
+        // deploy the status of the building
+        if (board_state == ""){
+            return true;
+        }
+        String[] states = board_state.split(",");
+        for (String state : states) {
+            char build_type = state.charAt(0);
+            int length = state.length() - 1;
+            char[] build_no = new char[length];
+            state.getChars(1, length + 1, build_no, 0);
+            String build_no_str = new String(build_no);
+            Integer build_no_int = Integer.valueOf(build_no_str);
+
             if (build_type == 'R'){
-                roads.add(build_no_int);
-            } else if (build_type == 'C') {
-                cities.add(build_no_int);
+                buildings.roads.get(build_no_int).setStatus(true);
             } else if (build_type == 'S') {
-                settlements.add(build_no_int);
-            } else if(build_type == 'K' || build_type == 'J'){
-                knights.add(build_no_int);
+                buildings.settlements.get(build_no_int).setStatus(true);
+            } else if (build_type == 'C') {
+                buildings.cities.get(build_no_int).setStatus(true);
+            } else if (build_type == 'J') {
+                buildings.knights.get(build_no_int).setStatus(true);
+            } else if (build_type == 'K') {
+                buildings.knights.get(build_no_int).setStatus(true);
+                buildings.knights.get(build_no_int).setDisposableStatus(true);
+            } else{
+                System.out.println("Unexpected type");
             }
         }
-
-        build_type = structure.charAt(0);
-        length = structure.length()-1;
-        build_no = new char[length];
-        structure.getChars(1, length+1, build_no, 0);
-        build_no_str = new String(build_no);
-        build_no_int = Integer.valueOf(build_no_str);
-
-
-
-        return false; // FIXME: Task #8
-    }
-
-
-    public static boolean isRoadConnected(String road, List<String> boardStateArray) //look R10 if valid，check R9 is true or not. Only R9 is true then R10 is true.
-    {
+        char build_type = structure.charAt(0);
+        int length = structure.length() - 1;
+        char[] build_no = new char[length];
+        structure.getChars(1, length + 1, build_no, 0);
+        String build_no_str = new String(build_no);
+        Integer build_no_int = Integer.valueOf(build_no_str);
+        if (build_type == 'R'){
+            return buildings.roads.get(build_no_int).isBuildingAssess();
+        } else if (build_type == 'S') {
+            return buildings.settlements.get(build_no_int).isBuildingAssess();
+        } else if (build_type == 'C') {
+            return buildings.cities.get(build_no_int).isBuildingAssess();
+        } else if (build_type == 'J') {
+            return buildings.knights.get(build_no_int).isBuildingAssess();
+        } else if (build_type == 'K') {
+            return buildings.knights.get(build_no_int).isBuildingAssess();
+        } else{
+            System.out.println("Unexpected type");
+        }
         return false;
-    }
-    public static boolean isSettlementConnected(String settlement, List<String> boardStateArray)
-    {
-
-        return true;
-    }
-    public static boolean isCityConnected(String city, List<String> boardStateArray)
-    {
-        boolean flag = false;
-        return flag;
-    }
-    public static boolean isKnightConnected(String knight, List<String> boardStateArray)
-    {
-        boolean flag = false;
-        return flag;
-    }
-    // again i'm not sure if this method is 100% needed, but better safe than sorry, and it should
-    // be very similar to isKnightConnected
-    public static boolean isJokerConnected(String joker, List<String> boardStateArray)
-    {
-        boolean flag = false;
-        return flag;
     }
 
 

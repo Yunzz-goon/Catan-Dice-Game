@@ -10,22 +10,18 @@ public class Knight extends Building implements Assess {
         UNDETERMINED;
     }
 
-    public static ExchangingResource exchangableThing;
-    public static boolean disposable_status;
-    public static boolean buildingStatus;
-    public static Knight lastKnight;
+    public ExchangingResource exchangableThing;
+    public boolean disposable_status;
+    public boolean buildingStatus;
+    public Knight lastKnight;
     public Knight(int point, ExchangingResource exchangableThing,
                   Knight lastKnight) {
         super(point);
         this.exchangableThing = exchangableThing;
-        this.buildingStatus = false;
         this.disposable_status = false;
         this.lastKnight = lastKnight;
     }
 
-    public void setBuiltStatus(boolean status){
-        this.buildingStatus = status;
-    }
 
     public void setDisposableStatus(boolean status){
         this.disposable_status = status;
@@ -38,6 +34,9 @@ public class Knight extends Building implements Assess {
      */
     @Override
     public boolean isBuildingAssess() {
+        if (this.lastKnight == null){
+            return true;
+        }
         if(this.lastKnight.getStatus()) {
             return true;
         }else{

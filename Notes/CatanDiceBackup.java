@@ -270,36 +270,9 @@ public class CatanDice {
                 }
             }
         }
-        return true; // FIXME: Task #8
+        return true;
     }
 
-    /*
-     * these methods are for Jingru to implement - between them they should cover all of the cases
-     * needed to validate that a structure is within the build constraints
-     */
-    // TODO - all of these methods need to be implemented - Jingru I'll leave this up to you
-    public static boolean isRoadConnected(String road, String[] boardStateArray)
-    {
-        return false;
-    }
-    public static boolean isSettlementConnected(String settlement, String[] boardStateArray)
-    {
-        return false;
-    }
-    public static boolean isCityConnected(String city, String[] boardStateArray)
-    {
-        return false;
-    }
-    public static boolean isKnightConnected(String knight, String[] boardStateArray)
-    {
-        return false;
-    }
-    // again i'm not sure if this method is 100% needed, but better safe than sorry, and it should
-    // be very similar to isKnightConnected
-    public static boolean isJokerConnected(String joint, String[] boardStateArray)
-    {
-        return false;
-    }
 
 
     /**

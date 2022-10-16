@@ -1,9 +1,9 @@
 package comp1110.ass2.Building;
 
 public class Building {
-    private static int point;
-    private static boolean buildingStatus;
-    private static int[] sourceRequired;
+    private int point;
+    private boolean buildingStatus;
+    private int[] sourceRequired;
     public Building(int point) {
         this.point = point;
         this.buildingStatus = false;

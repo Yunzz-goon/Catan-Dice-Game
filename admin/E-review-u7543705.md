@@ -1,8 +1,8 @@
 ## Code Review
 
-Reviewed by: <Yunzhong Zhang>, <u7543704>
+Reviewed by: Yunzhong Zhang, u7543704
 
-Reviewing code written by: <Jingru Lin> <u7503889>
+Reviewing code written by: Jingru Lin u7503889
 
 
 

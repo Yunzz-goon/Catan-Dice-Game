@@ -21,9 +21,9 @@ public class Viewer extends Application {
 //    private static final int VIEWER_WIDTH = 1200;
 //    private static final int VIEWER_HEIGHT = 700;
 
-    private final Group root = new Group();
+    protected final Group root = new Group();
     private final Group controls = new Group();
-    private TextField playerTextField;
+    protected TextField playerTextField;
     private TextField boardTextField;
 
     public static double HEXAGON_SIDE_LENGTH = 120;
@@ -32,10 +32,10 @@ public class Viewer extends Application {
             - HEXAGON_SIDE_LENGTH_half * HEXAGON_SIDE_LENGTH_half);
     public static double WINDOW_WIDTH = 1200;
     public static double WINDOW_HEIGHT = 700;
-    private static ArrayList<RoadFX> roads = new ArrayList<RoadFX>();
-    private static ArrayList<SettlementFX> settlements = new ArrayList<SettlementFX>();
-    private static ArrayList<KnightFX> knights = new ArrayList<KnightFX>();
-    private static ArrayList<CityFX> cities = new ArrayList<CityFX>();
+    protected ArrayList<RoadFX> roads_fx = new ArrayList<RoadFX>();
+    protected ArrayList<SettlementFX> settlements_fx = new ArrayList<SettlementFX>();
+    protected ArrayList<KnightFX> knights_fx = new ArrayList<KnightFX>();
+    protected ArrayList<CityFX> cities_fx = new ArrayList<CityFX>();
 
 
     class Hexagon extends Polygon {
@@ -173,16 +173,16 @@ public class Viewer extends Application {
         // unbuilt is the default state with color gold.
 
         // default initialization for color
-        for (RoadFX road : roads){
+        for (RoadFX road : roads_fx){
             road.setFill(Color.GOLD);
         }
-        for (CityFX city : cities){
+        for (CityFX city : cities_fx){
             city.setFill(Color.GOLD);
         }
-        for (SettlementFX settlement: settlements){
+        for (SettlementFX settlement: settlements_fx){
             settlement.setFill(Color.GOLD);
         }
-        for (KnightFX knight : knights){
+        for (KnightFX knight : knights_fx){
             knight.setFill(Color.GOLD);
         }
 
@@ -197,10 +197,10 @@ public class Viewer extends Application {
 
             // road 0-15
             if (build_type == 'R'){
-                roads.get(build_no_int).setFill(Color.GREEN);
+                roads_fx.get(build_no_int).setFill(Color.GREEN);
             // settlement
             } else if (build_type == 'S') {
-                for (SettlementFX settlement : settlements){
+                for (SettlementFX settlement : settlements_fx){
                     if (settlement.mark == build_no_int){
                         settlement.setFill(Color.GREEN);
                         break;
@@ -208,7 +208,7 @@ public class Viewer extends Application {
                 }
             // city
             } else if (build_type == 'C') {
-                for (CityFX city : cities){
+                for (CityFX city : cities_fx){
                     if (city.mark == build_no_int){
                         city.setFill(Color.GREEN);
                         break;
@@ -216,10 +216,10 @@ public class Viewer extends Application {
                 }
             // Knight J
             } else if (build_type == 'J') {
-                knights.get(build_no_int-1).setFill(Color.GREEN);
+                knights_fx.get(build_no_int-1).setFill(Color.GREEN);
             // Knight K
             } else if (build_type == 'K') {
-                knights.get(build_no_int-1).setFill(Color.RED);
+                knights_fx.get(build_no_int-1).setFill(Color.RED);
             } else{
                 System.out.println("Unexpected type");
             }
@@ -229,7 +229,7 @@ public class Viewer extends Application {
     /**
      * Create a basic text field for input and a refresh button.
      */
-    private void makeControls() {
+    protected void makeControls() {
         Label boardLabel = new Label("Board State:");
         boardTextField = new TextField();
         boardTextField.setPrefWidth(500);
@@ -247,10 +247,7 @@ public class Viewer extends Application {
         controls.getChildren().add(hb);
     }
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("Board State Viewer");
-
+    public void buildBuildingFX(){
         double[] resource_x = {2 * HEXAGON_SIDE_LENGTH_half, 2 * HEXAGON_SIDE_LENGTH_half,
                 5 * HEXAGON_SIDE_LENGTH_half, 8 * HEXAGON_SIDE_LENGTH_half,
                 8 * HEXAGON_SIDE_LENGTH_half, 5 * HEXAGON_SIDE_LENGTH_half};
@@ -281,25 +278,25 @@ public class Viewer extends Application {
             KnightFX knightfx = new KnightFX(resource_x[i], resource_y[i] - radiusCircle, i+1);
             Text text = new Text(knightfx.centralX, knightfx.centralY, String.valueOf(i+1));
             root.getChildren().addAll(knightfx, text);
-            knights.add(knightfx);
+            knights_fx.add(knightfx);
         }
-        System.out.println(knights.size());
+        System.out.println(knights_fx.size());
 
         // settlement
         double[] settlement_x = {4 * HEXAGON_SIDE_LENGTH_half,
-                                4 * HEXAGON_SIDE_LENGTH_half,
-                                4 * HEXAGON_SIDE_LENGTH_half,
-                                7 * HEXAGON_SIDE_LENGTH_half,
-                                7 * HEXAGON_SIDE_LENGTH_half,
-                                7 * HEXAGON_SIDE_LENGTH_half};
+                4 * HEXAGON_SIDE_LENGTH_half,
+                4 * HEXAGON_SIDE_LENGTH_half,
+                7 * HEXAGON_SIDE_LENGTH_half,
+                7 * HEXAGON_SIDE_LENGTH_half,
+                7 * HEXAGON_SIDE_LENGTH_half};
         double[] settlement_y = {2 * HEXAGON_HEIGHT, 4 * HEXAGON_HEIGHT,
-                                 6 * HEXAGON_HEIGHT, 5 * HEXAGON_HEIGHT,
-                                 3 * HEXAGON_HEIGHT, HEXAGON_HEIGHT};
+                6 * HEXAGON_HEIGHT, 5 * HEXAGON_HEIGHT,
+                3 * HEXAGON_HEIGHT, HEXAGON_HEIGHT};
         int[] settlement_marks = {3, 4, 5, 7, 9, 11};
 
         for (int i = 0; i < 6; i++){
             SettlementFX settlementfx = new SettlementFX(settlement_x[i], settlement_y[i], settlement_marks[i]);
-            settlements.add(settlementfx);
+            settlements_fx.add(settlementfx);
             Text text = new Text(String.valueOf(settlementfx.mark));
             text.setLayoutX(settlementfx.centralX);
             text.setLayoutY(settlementfx.centralY);
@@ -321,7 +318,7 @@ public class Viewer extends Application {
             text.setLayoutX(cityfx.centralX);
             text.setLayoutY(cityfx.centralY);
             root.getChildren().addAll(cityfx, text);
-            cities.add(cityfx);
+            cities_fx.add(cityfx);
         }
 
         // road
@@ -365,13 +362,23 @@ public class Viewer extends Application {
 
         for (int i = 0; i < 16; i++){
             RoadFX roadfx = new RoadFX(road_x[i], road_y[i], road_degree[i], 1);
-            roads.add(roadfx);
+            roads_fx.add(roadfx);
             Text text = new Text("1");
             text.setLayoutX(road_x[i]);
             text.setLayoutY(road_y[i]);
             text.setRotate(road_degree[i]);
             root.getChildren().addAll(roadfx, text);
         }
+
+
+
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        primaryStage.setTitle("Board State Viewer");
+
+        buildBuildingFX();
 
         Scene scene = new Scene(root,WINDOW_WIDTH,WINDOW_HEIGHT,Color.
                 DEEPSKYBLUE);
@@ -381,5 +388,9 @@ public class Viewer extends Application {
 
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 }

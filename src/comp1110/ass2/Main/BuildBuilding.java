@@ -4,7 +4,6 @@ import comp1110.ass2.Building.City;
 import comp1110.ass2.Building.Knight;
 import comp1110.ass2.Building.Road;
 import comp1110.ass2.Building.Settlement;
-import comp1110.ass2.Resource.PlayerResources;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,18 +19,22 @@ public class BuildBuilding
      *  Initialize the building state, the default building status is unbuilt.
      */
 
-    public String board_state = "";
+    public String board_state_whole = "";
     public ArrayList<Road> roads = new ArrayList<>();
     public HashMap<Integer, Settlement> settlements = new HashMap<Integer, Settlement>();
     public HashMap<Integer, City> cities = new HashMap<Integer, City>();
     public HashMap<Integer, Knight> knights = new HashMap<Integer, Knight>();
 
+    public static HashMap<Character, int[]> resourceRequired = new HashMap<>();
+
     public BuildBuilding(){
         // initialize roads
         Road road = new Road(1, null);
+        Road old_road = road;
         roads.add(road);
         for (int i = 0; i < 16; i++){
-            road = new Road(1, road);
+            old_road = road;
+            road = new Road(1, old_road);
             roads.add(road);
         }
 
@@ -77,7 +80,33 @@ public class BuildBuilding
         knight = new Knight(6, UNDETERMINED, knight);
         knights.put(knight.getPoint(), knight);
 
+        int[] resourceList;
+        resourceList = new int[]{3, 4};
+        resourceRequired.put('R', resourceList);
+        resourceList = new int[]{0, 1, 2};
+        resourceRequired.put('J', resourceList);
+        resourceRequired.put('K', resourceList);
+        resourceList = new int[]{1, 2, 3, 4};
+        resourceRequired.put('S', resourceList);
+        resourceList = new int[]{0, 0, 0, 1, 1};
+        resourceRequired.put('C', resourceList);
 
+
+
+        // (0) Ore, (1) Grain, (2) Wool, (3) Timber, (4) Bricks and (5) Gold.
+
+    }
+
+    private void spendResources(int[] resource_status, String structure){
+        if (checkResources(structure, resource_status ) == false) {
+            System.out.println("resource is not enough to build such a building");
+            return;
+        }
+        Character build_type = structure.charAt(0);
+        int[] resource_list = resourceRequired.get(build_type);
+        for (int resource_index : resource_list){
+            resource_status[resource_index] -= 1;
+        }
     }
 
     /**
@@ -86,7 +115,7 @@ public class BuildBuilding
      * @param resource_state the current resource state
      */
     public void buildBuilding(String structure, int[] resource_state){
-        if (checkBuildConstraints(structure, board_state) && (checkResources(structure, resource_state))) {
+        if (checkBuildConstraints(structure, board_state_whole) && (checkResources(structure, resource_state))) {
             char build_type;
             int length;
             char[] build_no;
@@ -108,8 +137,10 @@ public class BuildBuilding
             } else if (build_type == 'K') {
                 knights.get(build_no_int).setStatus(true);
             }
-            PlayerResources.spendResources(resource_state, build_type);
-            board_state += "," + structure;
+            spendResources(resource_state, structure);
+//            board_state_whole += "," + structure;
+
+
         }
     }
 
