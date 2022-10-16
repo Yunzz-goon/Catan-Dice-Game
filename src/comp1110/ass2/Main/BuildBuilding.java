@@ -114,7 +114,7 @@ public class BuildBuilding
      * @param structure a desired to be built structure
      * @param resource_state the current resource state
      */
-    public void buildBuilding(String structure, int[] resource_state){
+    public int buildBuilding(String structure, int[] resource_state){
         if (checkBuildConstraints(structure, board_state_whole) && (checkResources(structure, resource_state))) {
             char build_type;
             int length;
@@ -128,20 +128,38 @@ public class BuildBuilding
             structure.getChars(1, length + 1, build_no, 0);
             build_no_str = new String(build_no);
             build_no_int = Integer.valueOf(build_no_str);
+            spendResources(resource_state, structure);
             if (build_type == 'R') {
                 roads.get(build_no_int).setStatus(true);
+                return roads.get(build_no_int).getPoint();
             } else if (build_type == 'C') {
                 cities.get(build_no_int).setStatus(true);
+                return cities.get(build_no_int).getPoint();
             } else if (build_type == 'S') {
                 settlements.get(build_no_int).setStatus(true);
+                return settlements.get(build_no_int).getPoint();
             } else if (build_type == 'K') {
                 knights.get(build_no_int).setStatus(true);
+                return knights.get(build_no_int).getPoint();
             }
-            spendResources(resource_state, structure);
-//            board_state_whole += "," + structure;
+            if (board_state_whole.equals("")){
+                board_state_whole += board_state_whole + structure;
 
+            }else{
+                board_state_whole += board_state_whole + "," + structure;
+            }
 
+        } else{
+            if (checkBuildConstraints(structure, board_state_whole) ==  false){
+                System.out.println("it can not be built due to building contraints");
+            }
+            else{
+                System.out.println("it can not be built due to resource contraints");
+            }
+
+            return 0;
         }
+        return 0;
     }
 
     public void knightUsed(Knight knight){
