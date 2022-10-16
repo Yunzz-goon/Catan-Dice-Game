@@ -11,12 +11,6 @@ Everyone: create application skeleton - meeting 14:00 19 Mar
 
 ## Week 5
 
-Zhang San: Task 3 isPlayerStateWellFormed - 23 Mar
-
-Jane Bloggs: Task 5 drawTileFromBag - 23 Mar
-
-Erika Mustermann: Task 6 refillFactories - 25 Mar (depends on Task 5)
-
 ## Week 6
 
 ...
@@ -28,6 +22,10 @@ Erika Mustermann: Task 6 refillFactories - 25 Mar (depends on Task 5)
 ## Week 8
 
 ## Week 9
+
+Jingru: 13, 11
+Matthew: 9, 14, 12, 15
+Yungzhong: 8, 10 
 
 ## Week 10
 
