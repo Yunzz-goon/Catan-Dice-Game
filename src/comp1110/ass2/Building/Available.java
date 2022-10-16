@@ -6,22 +6,22 @@ import static comp1110.ass2.Resource.ResourceType.*;
 
 public class Available
 {
-    public final static Road ROAD_0 = new Road(0, null);
+    public final static Road ROAD_0 = new Road(1, null);
     public final static Road ROAD_1 = new Road(1, ROAD_0);
-    public final static Road ROAD_2 = new Road(2, ROAD_0);
-    public final static Road ROAD_3 = new Road(3, ROAD_2);
-    public final static Road ROAD_4 = new Road(4, ROAD_3);
-    public final static Road ROAD_5 = new Road(5, ROAD_3);
-    public final static Road ROAD_6 = new Road(6, ROAD_5);
-    public final static Road ROAD_7 = new Road(7, ROAD_6);
-    public final static Road ROAD_8 = new Road(8, ROAD_7);
-    public final static Road ROAD_9 = new Road(9, ROAD_8);
-    public final static Road ROAD_10 = new Road(10, ROAD_9);
-    public final static Road ROAD_11 = new Road(11, ROAD_10);
-    public final static Road ROAD_12 = new Road(12, ROAD_7);
-    public final static Road ROAD_13 = new Road(13, ROAD_12);
-    public final static Road ROAD_14 = new Road(14, ROAD_13);
-    public final static Road ROAD_15 = new Road(15, ROAD_14);
+    public final static Road ROAD_2 = new Road(1, ROAD_0);
+    public final static Road ROAD_3 = new Road(1, ROAD_2);
+    public final static Road ROAD_4 = new Road(1, ROAD_3);
+    public final static Road ROAD_5 = new Road(1, ROAD_3);
+    public final static Road ROAD_6 = new Road(1, ROAD_5);
+    public final static Road ROAD_7 = new Road(1, ROAD_6);
+    public final static Road ROAD_8 = new Road(1, ROAD_7);
+    public final static Road ROAD_9 = new Road(1, ROAD_8);
+    public final static Road ROAD_10 = new Road(1, ROAD_9);
+    public final static Road ROAD_11 = new Road(1, ROAD_10);
+    public final static Road ROAD_12 = new Road(1, ROAD_7);
+    public final static Road ROAD_13 = new Road(1, ROAD_12);
+    public final static Road ROAD_14 = new Road(1, ROAD_13);
+    public final static Road ROAD_15 = new Road(1, ROAD_14);
 
     public final static ResourceJoker JOKER_1 = new ResourceJoker(ORE);
     public final static ResourceJoker JOKER_2 = new ResourceJoker(GRAIN);

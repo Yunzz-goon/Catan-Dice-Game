@@ -1,8 +1,8 @@
 ## Code Review
 
-Reviewed by: <Matthew Britton> <u7501226>
+Reviewed by: Matthew Britton u7501226
 
-Reviewing code written by: <Yunzhong Zhang>, <u7543704>
+Reviewing code written by: Yunzhong Zhang, u7543704
 
 
 
