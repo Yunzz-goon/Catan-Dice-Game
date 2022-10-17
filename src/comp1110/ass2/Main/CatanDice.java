@@ -368,7 +368,62 @@ public class CatanDice {
                                       String board_state,
                                       int[] resource_state)
     {
-        return false; // FIXME: Task #9 - Matthew
+//       proceed to systematically check all conditions whereby the action would be invalid
+        if (!isBoardStateWellFormed(board_state)) return false;
+        else if (!isActionWellFormed(action)) return false;
+        else
+        {
+            char actionType = action.charAt(0);
+            switch (actionType)
+            {
+                case 'B' ->
+                {
+                    String[] actionSplit = action.split(" ");
+                    String structure = actionSplit[1].replace(",", ""); // not sure if this is necessary
+//                    System.out.println(structure);
+                    if (!checkResources(structure, resource_state)) return false;
+                    // otherwise ensure the building can be built
+                    else if (!checkBuildConstraints(structure, board_state)) return false;
+                }
+                case 'T' ->
+                {
+                    return resource_state[5] >= 2;
+                }
+                case 'S' ->
+                {
+                    String[] actionSplit = action.split(" ");
+                    String resource1 = actionSplit[1].replace(",", ""); // not sure if this is necessary
+                    String resource2 = actionSplit[2].replace(",", ""); // not sure if this is necessary
+                    try
+                    {
+                        int resource1ID = Integer.parseInt(resource1);
+//                        int resource2ID = Integer.parseInt(resource2);
+                        if (resource_state[resource1ID] < 1) return false;
+                        else
+                        {
+                            // ensure we have built the correct knight to perform the swap
+                            String[] boardSplit = board_state.split(",");
+                            String[] knights = new String[6];
+                            for (String b : boardSplit)
+                            {
+                                if (b.charAt(0) == 'K')
+                                {
+                                    knights[Integer.parseInt(b.substring(1, 2))] = b;
+                                }
+                            }
+                            if (knights[resource1ID] == null && knights[5] == null) return false;
+                        }
+                    }
+                    catch (NumberFormatException e)
+                    {
+                        System.out.println("Invalid resource ID");
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return true; // FIXME: Task #9 - Matthew
     }
 
     /**
