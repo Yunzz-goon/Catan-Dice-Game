@@ -161,18 +161,7 @@ public class Viewer extends Application {
         }
     }
 
-    /**
-     * Show the state of a (single player's) board in the window.
-     *
-     * @param board_state string representation of the board state.
-     */
-    void displayState(String board_state) {
-        // For the status of the buildings:
-        // - Road, settlement, city have only two states: unbuilt(gold), built(green)
-        // - Knight have three states: unbuilt(gold), built also unused(green), built also used(red)
-        // unbuilt is the default state with color gold.
-
-        // default initialization for color
+    public void displayinitial(){
         for (RoadFX road : roads_fx){
             road.setFill(Color.GOLD);
         }
@@ -185,6 +174,20 @@ public class Viewer extends Application {
         for (KnightFX knight : knights_fx){
             knight.setFill(Color.GOLD);
         }
+    }
+
+    /**
+     * Show the state of a (single player's) board in the window.
+     *
+     * @param board_state string representation of the board state.
+     */
+    void displayState(String board_state) {
+        // For the status of the buildings:
+        // - Road, settlement, city have only two states: unbuilt(gold), built(green)
+        // - Knight have three states: unbuilt(gold), built also unused(green), built also used(red)
+        // unbuilt is the default state with color gold.
+
+        // default initialization for color
 
         String[] states = board_state.split(",");
         for (String state : states){
@@ -379,6 +382,7 @@ public class Viewer extends Application {
         primaryStage.setTitle("Board State Viewer");
 
         buildBuildingFX();
+        displayinitial();
 
         Scene scene = new Scene(root,WINDOW_WIDTH,WINDOW_HEIGHT,Color.
                 DEEPSKYBLUE);
