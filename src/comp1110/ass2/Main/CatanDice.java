@@ -1,5 +1,6 @@
 package comp1110.ass2.Main;
 
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
 
@@ -376,7 +377,7 @@ public class CatanDice {
             char actionType = action.charAt(0);
             switch (actionType)
             {
-                case 'B' ->
+                case 'b' ->
                 {
                     String[] actionSplit = action.split(" ");
                     String structure = actionSplit[1].replace(",", ""); // not sure if this is necessary
@@ -385,34 +386,28 @@ public class CatanDice {
                     // otherwise ensure the building can be built
                     else if (!checkBuildConstraints(structure, board_state)) return false;
                 }
-                case 'T' ->
+                case 't' ->
                 {
-                    return resource_state[5] >= 2;
+                    return resource_state[resource_state.length - 1] >= 2;
                 }
-                case 'S' ->
+                case 's' ->
                 {
                     String[] actionSplit = action.split(" ");
-                    String resource1 = actionSplit[1].replace(",", ""); // not sure if this is necessary
-                    String resource2 = actionSplit[2].replace(",", ""); // not sure if this is necessary
+                    String knightResource = actionSplit[1].replace(",", ""); // not sure if this is necessary
                     try
                     {
-                        int resource1ID = Integer.parseInt(resource1);
-//                        int resource2ID = Integer.parseInt(resource2);
-                        if (resource_state[resource1ID] < 1) return false;
-                        else
+                        int knightID = Integer.parseInt(knightResource) + 1;
+                        ArrayList<Integer> knightsBuilt = new ArrayList<>();
+                        for (String s : board_state.split(","))
                         {
-                            // ensure we have built the correct knight to perform the swap
-                            String[] boardSplit = board_state.split(",");
-                            String[] knights = new String[6];
-                            for (String b : boardSplit)
+                            if (s.charAt(0) == 'K')
                             {
-                                if (b.charAt(0) == 'K')
-                                {
-                                    knights[Integer.parseInt(b.substring(1, 2))] = b;
-                                }
+                                knightsBuilt.add(Integer.parseInt(s.substring(1)));
                             }
-                            if (knights[resource1ID] == null && knights[5] == null) return false;
                         }
+                        if (!knightsBuilt.contains(knightID)) return false;
+
+
                     }
                     catch (NumberFormatException e)
                     {
