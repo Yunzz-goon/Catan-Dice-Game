@@ -394,20 +394,17 @@ public class CatanDice {
                 {
                     String[] actionSplit = action.split(" ");
                     String knightResource = actionSplit[1].replace(",", ""); // not sure if this is necessary
-                    try
-                    {
+                    try {
                         int knightID = Integer.parseInt(knightResource) + 1;
+                        if (resource_state[Integer.parseInt(knightResource)] < 1) return false;
                         ArrayList<Integer> knightsBuilt = new ArrayList<>();
                         for (String s : board_state.split(","))
                         {
-                            if (s.charAt(0) == 'K')
-                            {
+                            if (s.charAt(0) == 'J') {
                                 knightsBuilt.add(Integer.parseInt(s.substring(1)));
                             }
                         }
                         if (!knightsBuilt.contains(knightID)) return false;
-
-
                     }
                     catch (NumberFormatException e)
                     {
