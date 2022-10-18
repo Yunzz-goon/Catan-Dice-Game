@@ -1,6 +1,7 @@
 package comp1110.ass2.Main;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
 
@@ -392,25 +393,32 @@ public class CatanDice {
                 }
                 case 's' ->
                 {
-                    String[] actionSplit = action.split(" ");
-                    String knightResource = actionSplit[1].replace(",", ""); // not sure if this is necessary
-                    try {
-                        int knightID = Integer.parseInt(knightResource) + 1;
-                        if (resource_state[Integer.parseInt(knightResource)] < 1) return false;
-                        ArrayList<Integer> knightsBuilt = new ArrayList<>();
-                        for (String s : board_state.split(","))
-                        {
-                            if (s.charAt(0) == 'J') {
-                                knightsBuilt.add(Integer.parseInt(s.substring(1)));
-                            }
-                        }
-                        if (!knightsBuilt.contains(knightID)) return false;
+                    try
+                    {
+                        int resourceToSwap = Integer.parseInt(action.substring(6, 7));
+                        if (resource_state[resourceToSwap] == 0) return false;
                     }
                     catch (NumberFormatException e)
                     {
-                        System.out.println("Invalid resource ID");
+                        System.out.println("Invalid resource to swap");
                         return false;
                     }
+
+                    try
+                    {
+                        int knightNumber = Integer.parseInt(action.substring(8)) + 1;
+                        String knightToUse = "J" + knightNumber; // if this knight (J<knightToUse> is not available, we need to check if the J6 is available
+                        ArrayList<String> builtStructures = (ArrayList<String>) Arrays.asList(board_state.split(","));
+                        if (!builtStructures.contains(knightToUse)) knightToUse = "J6";
+                        if (!builtStructures.contains(knightToUse)) return false;
+                    }
+                    catch (NumberFormatException e)
+                    {
+                        System.out.println("Invalid knight to use");
+                        return false;
+                    }
+
+
                 }
             }
         }
