@@ -234,6 +234,7 @@ public class Game extends Viewer {
                 + resource_state[3] + " Lumber, "
                 + resource_state[4] + " Brick, "
                 + resource_state[5] + " Gold. ");
+        // TODO: change the used status for the knight and change its color.
     }
 
     private void scoreBoardInitial(){
