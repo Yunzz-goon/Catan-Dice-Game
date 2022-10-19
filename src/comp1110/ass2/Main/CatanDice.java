@@ -1,15 +1,11 @@
 package comp1110.ass2.Main;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 import static comp1110.ass2.Building.City.cityResources;
 import static comp1110.ass2.Building.Knight.knightResources;
 import static comp1110.ass2.Building.Road.roadResources;
 import static comp1110.ass2.Building.Settlement.settlementResources;
-
 import static comp1110.ass2.Resource.Resource.*;
 public class CatanDice {
     public static int seed = 100;
@@ -358,12 +354,12 @@ public class CatanDice {
      */
     public static boolean checkResourcesWithTradeAndSwap(String structure,
                                                          String board_state,
-                                                         int[] resource_state) throws IllegalArgumentException
-    {
-        if (checkResources(structure, resource_state)) return true; // if the basic check works then we don't need to do anything else
-        // first we need to check which trades and swaps can be performed and store them all in a list
-        else
-        {
+                                                         int[] resource_state) throws IllegalArgumentException {
+        int[] resourcesAfterBuild;
+        if (checkResources(structure, resource_state))
+            return true; // if the basic check works then we don't need to do anything else
+            // first we need to check which trades and swaps can be performed and store them all in a list
+        else {
             String struct = String.valueOf(structure.charAt(0));
             assert struct.equals("J") || struct.equals("R") || struct.equals("C") || struct.equals("S"); // if the structure is not one of these then we have a problem
             int[] availableResources = resource_state.clone();
@@ -372,19 +368,92 @@ public class CatanDice {
             // we need to check what knights are available to perform swaps
             // we need to check how much gold we have available to trade for gold
             // this array will have some negative values in it, which will be the amount of resources we need to get from trades or swaps
-            int[] resourcesAfterBuild = new int[6];
-            for (int i = 0; i < 6; i++)
-            {
-                switch (struct)
-                {
+
+            // this is what is missing
+            resourcesAfterBuild = new int[6];
+            for (int i = 0; i < 6; i++) {
+                switch (struct) {
                     case "R" -> resourcesAfterBuild[i] = availableResources[i] - roadResources[i];
                     case "J" -> resourcesAfterBuild[i] = availableResources[i] - knightResources[i];
                     case "C" -> resourcesAfterBuild[i] = availableResources[i] - cityResources[i];
                     case "S" -> resourcesAfterBuild[i] = availableResources[i] - settlementResources[i];
-                };
+                }
+                ;
             }
+
+            // this is the gold available to trade for resources - swapping with gold should be prioritised over using
+            // a knight to trade for resources, however as we are just doing validation that the build is possible
+            // we don't need to worry about that, and we can use the knights first and then see if we have enough gold
+            // to complete the build
+            int goldAvailable = resource_state[GOLD_ID];
+
+            // this is the knights available to trade with
+            ArrayList<Integer> knightsList = new ArrayList<>();
+            String[] boardArray = board_state.split(",");
+            for (String s : boardArray)
+            {
+                if (s.charAt(0) == 'J')
+                {
+                    try {
+                        knightsList.add(Integer.parseInt(s.substring(1)) - 1); // this will be the index of the resource we can get from the knight (apart from 5 which we can use for anything)
+                    } catch (NumberFormatException e) {
+                        System.out.println("Error parsing knight number");
+                        return false;
+                    }
+                }
+            }
+            // for each required resource, we first want to see if we can get it from the specific knight for that
+            // resource (by trading using any resource in the available resources array that has a value greater than one)
+            // if we can't get it from the specific knight then we want to see if we can get it from the wildcard knight
+            // if we can't get if from that knight then we want to see if we can get it from gold (if we can we add one
+            // to the resource count and subtract two from the gold count)
+
+            for (int pos = 0; pos < availableResources.length - 1; pos++)
+            {
+                int timesRound = 0; // this is to make sure we don't get stuck in an infinite loop
+                if (availableResources[pos] >= 0) continue;
+                else
+                {
+                    // first see if we have the specific knight for that resource
+                    if (knightsList.contains(pos))
+                    {
+
+                        timesRound++;
+                    }
+                    // otherwise see if we have the wildcard knight
+                    else if (knightsList.contains(5))
+                    {
+
+                        timesRound++;
+                    }
+                    // otherwise see if we can trade for gold
+                    else if (availableResources[GOLD_ID] >= 2)
+                    {
+                        availableResources[GOLD_ID] -= 2;
+                        availableResources[pos] += 1;
+                        timesRound ++;
+                    }
+                    // maybe we need to loop back as we have done one of the above but we still need more resources
+                    if (availableResources[pos] < 0 && timesRound < 5)
+                    {
+                        timesRound = 0;
+                        pos = -1;
+                    }
+                    // end the cycle if we have done it too many times
+                    else if (availableResources[pos] < 0 && timesRound >= 5)
+                    {
+                        return false;
+                    }
+                }
+            }
+
         }
-        return false; // FIXME: Task #12 - Matthew
+        return resourcesAfterBuild[0] >= 0 &&
+                resourcesAfterBuild[1] >= 0 &&
+                resourcesAfterBuild[2] >= 0 &&
+                resourcesAfterBuild[3] >= 0 &&
+                resourcesAfterBuild[4] >= 0 &&
+                resourcesAfterBuild[5] >= 0; // FIXME: Task #12 - Matthew
     }
 
     /**
@@ -468,80 +537,265 @@ public class CatanDice {
      */
     public static boolean canDoSequence(String[] actions,
                                         String board_state,
-                                        int[] resource_state) {
-        for (int i = 0; i < actions.length; i++) {
-            String action = actions[i];
-            String temp[] = action.split(" ");
-            switch (temp[0]) {
-                case "build":
-                    switch (temp[1].charAt(0)) { //return char type
-                        case 'J':
-                            if (resource_state[ORE_ID] < 1 || resource_state[WOOL_ID] < 1 || resource_state[GRAIN_ID] < 1) {
-                                System.out.println(action);
-                                return false;
-                            } else {
-                                resource_state[ORE_ID]--;
-                                resource_state[WOOL_ID]--;
-                                resource_state[GRAIN_ID]--;
-                                board_state = board_state + "," + temp[1];
-                            }
-                            break;
-                        case 'C':
-                            if (resource_state[ORE_ID] < 3 || resource_state[GRAIN_ID] < 2) {
-                                return false;
-                            } else {
-                                resource_state[ORE_ID]--;
-                                resource_state[GRAIN_ID]--;
-                            }
-                            break;
-                        case 'R':
-                            if (resource_state[BRICK_ID] < 1 || resource_state[LUMBER_ID] < 1) {
-                                return false;
-                            } else {
-                                resource_state[BRICK_ID]--;
-                                resource_state[LUMBER_ID]--;
-                            }
-                            break;
-                        case 'S':
-                            if (resource_state[BRICK_ID] < 1 || resource_state[LUMBER_ID] < 1 || resource_state[WOOL_ID] < 1 || resource_state[GRAIN_ID] < 1) {
-                                return false;
-                            } else {
-                                resource_state[BRICK_ID]--;
-                                resource_state[LUMBER_ID]--;
-                                resource_state[WOOL_ID]--;
-                                resource_state[GRAIN_ID]--;
-                            }
-                            break;
-                    }
-                    break;
-                case "trade":
-                    if (resource_state[GOLD_ID] < 2) {
-                        return false;
-                    } else {
-                        resource_state[GOLD_ID] = resource_state[GOLD_ID] - 2;
-                        resource_state[Integer.valueOf(temp[1])]++;
-                    }
-                    break;
-                case "swap":
-
-
-                    if (resource_state[Integer.valueOf(temp[1])] > 0 && (board_state.contains("J6") || board_state.contains("J" + (Integer.valueOf(temp[2])+ 1)))){
-
-                        resource_state[Integer.valueOf(temp[1])]--;
-                        resource_state[Integer.valueOf(temp[2])]++;
-                        board_state = board_state.replace("J" + (Integer.valueOf(temp[2]) + 1), "K" + (Integer.valueOf(temp[2]) + 1) );
-                    } else {
-
-                        return false;
-                    }
-                    break;
-            }
-        }
-        return true;
-         // FIXME: Task #11 - Jingru
                                         int[] resource_state)
     {
-        return false; // FIXME: Task #11 - Jingru
+        // first we will want to validate that the first action can be done
+        // then we update the list of actions, board state and resource state, and recursively check the next action
+        // if the list of actions is null or has length zero then we can do the sequence (base case of the resursion)
+        if (actions == null || actions.length == 0) return true;
+        else if (!isBoardStateWellFormed(board_state)) return false;
+        else if (!isAllActionsWellFormed(actions)) return false;
+        else
+        {
+            String actionThisIteration = actions[0];
+            String newBoardState;
+            int[] newResourceState;
+            String[] newActions = new String[actions.length - 1];
+            if (canDoAction(actionThisIteration, board_state, resource_state))
+            {
+                // update the board state, resource state and action list for the next iteration
+                if (actions.length == 1) return true; 
+                else
+                {
+                    newResourceState = updateResourceState(actionThisIteration, resource_state);
+                    newBoardState = updateBoardState(actionThisIteration, board_state);
+                    System.arraycopy(actions, 1, newActions, 0, actions.length - 1);
+                    return canDoSequence(newActions, newBoardState, newResourceState);
+                }
+
+            }
+            else return false; // if the first action can't be done then we can't do the rest of the sequence
+        }
+
+
+//        for (String action : actions)
+//        {
+//            String[] temp = action.split(" ");
+//            switch (temp[0])
+//            {
+//                case "build":
+//                    switch (temp[1].charAt(0))
+//                    { //return char type
+//                        case 'J':
+//                            if (resource_state[ORE_ID] < 1 || resource_state[WOOL_ID] < 1 || resource_state[GRAIN_ID] < 1)
+//                            {
+//                                System.out.println(action);
+//                                return false;
+//                            }
+//                            else
+//                            {
+//                                resource_state[ORE_ID]--;
+//                                resource_state[WOOL_ID]--;
+//                                resource_state[GRAIN_ID]--;
+//                                board_state = board_state + "," + temp[1];
+//                            }
+//                            break;
+//                        case 'C':
+//                            if (resource_state[ORE_ID] < 3 || resource_state[GRAIN_ID] < 2)
+//                            {
+//                                return false;
+//                            }
+//                            else
+//                            {
+//                                resource_state[ORE_ID]--;
+//                                resource_state[GRAIN_ID]--;
+//                            }
+//                            break;
+//                        case 'R':
+//                            if (resource_state[BRICK_ID] < 1 || resource_state[LUMBER_ID] < 1)
+//                            {
+//                                return false;
+//                            }
+//                            else
+//                            {
+//                                resource_state[BRICK_ID]--;
+//                                resource_state[LUMBER_ID]--;
+//                            }
+//                            break;
+//                        case 'S':
+//                            if (resource_state[BRICK_ID] < 1 || resource_state[LUMBER_ID] < 1 || resource_state[WOOL_ID] < 1 || resource_state[GRAIN_ID] < 1)
+//                            {
+//                                return false;
+//                            }
+//                            else
+//                            {
+//                                resource_state[BRICK_ID]--;
+//                                resource_state[LUMBER_ID]--;
+//                                resource_state[WOOL_ID]--;
+//                                resource_state[GRAIN_ID]--;
+//                            }
+//                            break;
+//                    }
+//                    break;
+//                case "trade":
+//                    if (resource_state[GOLD_ID] < 2)
+//                    {
+//                        return false;
+//                    }
+//                    else
+//                    {
+//                        resource_state[GOLD_ID] = resource_state[GOLD_ID] - 2;
+//                        resource_state[Integer.parseInt(temp[1])]++;
+//                    }
+//                    break;
+//                case "swap":
+//
+//
+//                    if (resource_state[Integer.parseInt(temp[1])] > 0 && (board_state.contains("J6") || board_state.contains("J" + (Integer.valueOf(temp[2]) + 1))))
+//                    {
+//
+//                        resource_state[Integer.parseInt(temp[1])]--;
+//                        resource_state[Integer.parseInt(temp[2])]++;
+//                        board_state = board_state.replace("J" + (Integer.parseInt(temp[2]) + 1), "K" + (Integer.valueOf(temp[2]) + 1));
+//                    }
+//                    else
+//                    {
+//
+//                        return false;
+//                    }
+//                    break;
+//            }
+//        }
+//        return true;
+    }
+
+    private static boolean isAllActionsWellFormed(String[] actions)
+    {
+        boolean output = true;
+        for (String action : actions)
+        {
+            output = output && isActionWellFormed(action);
+        }
+        return output;
+    }
+
+    private static int[] updateResourceState(String actionThisIteration, int[] resource_state)
+    {
+        assert isActionWellFormed(actionThisIteration);
+        int[] output = resource_state.clone();
+        String actionType = actionThisIteration.split(" ")[0].charAt(0) + "";
+        switch (actionType)
+        {
+            case "b" ->
+            {
+                // remove the resources used in the build action
+                String buildingType = actionThisIteration.split(" ")[1].charAt(0) + "";
+                switch (buildingType)
+                {
+                    case "J" ->
+                    {
+                        output[ORE_ID]--;
+                        output[WOOL_ID]--;
+                        output[GRAIN_ID]--;
+                    }
+                    case "C" ->
+                    {
+                        output[ORE_ID] -= 3;
+                        output[GRAIN_ID] -= 2;
+                    }
+                    case "R" ->
+                    {
+                        output[BRICK_ID]--;
+                        output[LUMBER_ID]--;
+                    }
+                    case "S" ->
+                    {
+                        output[BRICK_ID]--;
+                        output[LUMBER_ID]--;
+                        output[WOOL_ID]--;
+                        output[GRAIN_ID]--;
+                    }
+                }
+
+            }
+            case "t" ->
+            {
+                // remove the gold used and add the resource gained
+                assert resource_state[GOLD_ID] >= 2;
+                try
+                {
+                    int resourceGained = Integer.parseInt(actionThisIteration.split(" ")[1]);
+                    output[GOLD_ID] -= 2;
+                    output[resourceGained]++;
+                }
+                catch (NumberFormatException e)
+                {
+                    System.out.println("Error: the resource gained in the trade action is not a number");
+                    System.exit(1);
+                }
+
+            }
+            case "s" ->
+            {
+                // add the resource gained and remove the resource lost -
+                // the joker lost will need to be updated by updateBoardState
+                try
+                {
+                    int resourceLost = Integer.parseInt(actionThisIteration.split(" ")[1]);
+                    int resourceGained = Integer.parseInt(actionThisIteration.split(" ")[2]);
+                    output[resourceLost]--;
+                    output[resourceGained]++;
+                }
+                catch (NumberFormatException e)
+                {
+                    System.out.println("Error: the resource gained or lost in the swap action is not a number");
+                    System.exit(1);
+                }
+
+            }
+        }
+        return output;
+    }
+
+    private static String updateBoardState(String actionThisIteration, String board_state)
+    {
+        assert isActionWellFormed(actionThisIteration);
+        assert isBoardStateWellFormed(board_state);
+        StringBuilder output = new StringBuilder(board_state);
+        String actionType = actionThisIteration.split(" ")[0].charAt(0) + "";
+        switch (actionType)
+        {
+            case "b" ->
+            {
+                // add the building to the board state
+                String buildingType = actionThisIteration.split(" ")[1].charAt(0) + "";
+                String buildingPoint = actionThisIteration.split(" ")[1].substring(1);
+                output.append(",");
+                output.append(buildingType);
+                output.append(buildingPoint);
+            }
+            case "t" ->
+            {
+                // a trade will not affect the board state string as all a trade does is update the available resources
+            }
+            case "s" ->
+            {
+                // we will need to update the correct joker to a knight
+                // first we try to update the joker that corresponds to the resource gained,
+                // but if that one isn't available then we will use the wildcard joker.
+                List<String> boardStateList = Arrays.asList(board_state.split(","));
+                try
+                {
+                    int jokerInt = Integer.parseInt(actionThisIteration.split(" ")[2]) + 1;
+                    String jokerToReplace = "J" + jokerInt;
+                    if (boardStateList.contains(jokerToReplace))
+                    {
+                        output = new StringBuilder(output.toString().replace(jokerToReplace, "K" + jokerInt));
+                    }
+                    else
+                    {
+                        output = new StringBuilder(output.toString().replace("J6", "K6"));
+                    }
+
+                }
+                catch (NumberFormatException e)
+                {
+                    System.out.println("Error: the resource gained in the swap action is not a number");
+                    System.exit(1);
+                }
+            }
+        }
+        return output.toString();
     }
 
     /**
