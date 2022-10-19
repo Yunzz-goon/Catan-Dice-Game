@@ -31,5 +31,7 @@ public class City extends Building implements Assess {
     public char toChar() {
         return 'C';
     }
+
+    public static final int[] cityResources = {3, 2, 0, 0, 0, 0};
 }
 

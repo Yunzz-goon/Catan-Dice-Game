@@ -32,6 +32,8 @@ public class Road extends Building implements Assess {
         return 'R';
     }
 
+    public static final int[] roadResources = {0, 0, 0, 1, 1, 0};
+
 
 
 

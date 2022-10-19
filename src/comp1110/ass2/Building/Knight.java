@@ -49,5 +49,7 @@ public class Knight extends Building implements Assess {
         return 'K';
     }
 
+    public static final int[] knightResources = {1, 1, 1, 0, 0, 0};
+
 
 }

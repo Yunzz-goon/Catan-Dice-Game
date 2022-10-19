@@ -1,7 +1,14 @@
 package comp1110.ass2.Main;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Random;
 
+import static comp1110.ass2.Building.City.cityResources;
+import static comp1110.ass2.Building.Knight.knightResources;
+import static comp1110.ass2.Building.Road.roadResources;
+import static comp1110.ass2.Building.Settlement.settlementResources;
 import static comp1110.ass2.Resource.Resource.*;
 public class CatanDice {
     public static int seed = 100;
@@ -350,7 +357,32 @@ public class CatanDice {
      */
     public static boolean checkResourcesWithTradeAndSwap(String structure,
                                                          String board_state,
-                                                         int[] resource_state) {
+                                                         int[] resource_state) throws IllegalArgumentException
+    {
+        if (checkResources(structure, resource_state)) return true; // if the basic check works then we don't need to do anything else
+        // first we need to check which trades and swaps can be performed and store them all in a list
+        else
+        {
+            String struct = String.valueOf(structure.charAt(0));
+            assert struct.equals("J") || struct.equals("R") || struct.equals("C") || struct.equals("S"); // if the structure is not one of these then we have a problem
+            int[] availableResources = resource_state.clone();
+            // for the code to get here we know that the basic check failed, thus the input resource state is missing some element.
+            // we need to work out what is missing, and then check if we can get it from a trade or swap
+            // we need to check what knights are available to perform swaps
+            // we need to check how much gold we have available to trade for gold
+            // this array will have some negative values in it, which will be the amount of resources we need to get from trades or swaps
+            int[] resourcesAfterBuild = new int[6];
+            for (int i = 0; i < 6; i++)
+            {
+                switch (struct)
+                {
+                    case "R" -> resourcesAfterBuild[i] = availableResources[i] - roadResources[i];
+                    case "J" -> resourcesAfterBuild[i] = availableResources[i] - knightResources[i];
+                    case "C" -> resourcesAfterBuild[i] = availableResources[i] - cityResources[i];
+                    case "S" -> resourcesAfterBuild[i] = availableResources[i] - settlementResources[i];
+                };
+            }
+        }
         return false; // FIXME: Task #12 - Matthew
     }
 
@@ -421,7 +453,7 @@ public class CatanDice {
             }
         }
 
-        return true; // FIXME: Task #9 - Matthew
+        return true;
     }
 
     /**
@@ -435,7 +467,8 @@ public class CatanDice {
      */
     public static boolean canDoSequence(String[] actions,
                                         String board_state,
-                                        int[] resource_state) {
+                                        int[] resource_state)
+    {
         return false; // FIXME: Task #11 - Jingru
     }
 

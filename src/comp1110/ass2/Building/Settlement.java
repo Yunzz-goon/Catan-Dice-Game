@@ -34,4 +34,6 @@ public class Settlement extends Building implements Assess {
     public char toChar() {
         return 'S';
     }
+
+    public static final int[] settlementResources = {0, 1, 1, 1, 1, 0};
 }
