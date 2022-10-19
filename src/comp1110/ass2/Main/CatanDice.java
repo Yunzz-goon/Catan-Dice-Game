@@ -436,7 +436,77 @@ public class CatanDice {
     public static boolean canDoSequence(String[] actions,
                                         String board_state,
                                         int[] resource_state) {
-        return false; // FIXME: Task #11 - Jingru
+        for (int i = 0; i < actions.length; i++) { //索引index和长度
+            String action = actions[i]; //化整为零，取出单个的行为，因为不能整体分析 {打散数组} 取值一定是降维
+            String temp[] = action.split(" "); //分割action用空格分开 这个变量是一个数组，是string类 一变多
+            switch (temp[0]) {
+                case "build":
+                    switch (temp[1].charAt(0)) { //return char type
+                        case 'J':
+                            if (resource_state[ORE_ID] < 1 || resource_state[WOOL_ID] < 1 || resource_state[GRAIN_ID] < 1) {
+                                System.out.println(action);
+                                return false;
+                            } else {
+                                resource_state[ORE_ID]--;
+                                resource_state[WOOL_ID]--;
+                                resource_state[GRAIN_ID]--;
+                                board_state = board_state + "," + temp[1];
+                            }
+                            break;
+                        case 'C':
+                            if (resource_state[ORE_ID] < 3 || resource_state[GRAIN_ID] < 2) {
+                                return false;
+                            } else {
+                                resource_state[ORE_ID]--;
+                                resource_state[GRAIN_ID]--;
+                            }
+                            break;
+                        case 'R':
+                            if (resource_state[BRICK_ID] < 1 || resource_state[LUMBER_ID] < 1) {
+                                return false;
+                            } else {
+                                resource_state[BRICK_ID]--;
+                                resource_state[LUMBER_ID]--;
+                            }
+                            break;
+                        case 'S':
+                            if (resource_state[BRICK_ID] < 1 || resource_state[LUMBER_ID] < 1 || resource_state[WOOL_ID] < 1 || resource_state[GRAIN_ID] < 1) {
+                                return false;
+                            } else {
+                                resource_state[BRICK_ID]--;
+                                resource_state[LUMBER_ID]--;
+                                resource_state[WOOL_ID]--;
+                                resource_state[GRAIN_ID]--;
+                            }
+                            break;
+                    }
+                    break;
+                case "trade": //单次判断，已经分割出来了用for loop.
+                    if (resource_state[GOLD_ID] < 2) {
+                        return false;
+                    } else {
+                        resource_state[GOLD_ID] = resource_state[GOLD_ID] - 2;
+                        resource_state[Integer.valueOf(temp[1])]++;
+                    }
+                    break;
+                case "swap":
+//                    ("J" + temp[1].charAt(0) + 1)
+//                    board_state.contains("J" + (temp[1].charAt(0) + 1));
+                    System.out.println(board_state);
+                    if (resource_state[Integer.valueOf(temp[1])] > 0 && (board_state.contains("J6") || board_state.contains("J" + (Integer.valueOf(temp[2])+ 1)))){ //是否包含括号内指定字符串(查找字符).
+                        // + 用在字符串里是一个拼接的作用。 转换为字符形式 看到字符就是拼接
+                        resource_state[Integer.valueOf(temp[1])]--;
+                        resource_state[Integer.valueOf(temp[2])]++;
+                        board_state = board_state.replace("J" + (Integer.valueOf(temp[2]) + 1), "K" + (Integer.valueOf(temp[2]) + 1) );
+                    } else {
+                        System.out.println(action);
+                        return false;
+                    }
+                    break;
+            }
+        }
+        return true;
+         // FIXME: Task #11 - Jingru
     }
 
     /**
