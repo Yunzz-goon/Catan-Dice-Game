@@ -1,9 +1,6 @@
 package comp1110.ass2.Main;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 import static comp1110.ass2.Resource.Resource.*;
 public class CatanDice {
@@ -395,20 +392,21 @@ public class CatanDice {
                 {
                     try
                     {
-                        int resourceToSwap = Integer.parseInt(action.substring(6, 7));
+                        int resourceToSwap = Integer.parseInt(action.split(" ")[1]);
                         if (resource_state[resourceToSwap] == 0) return false;
                     }
                     catch (NumberFormatException e)
                     {
                         System.out.println("Invalid resource to swap");
+                        System.out.println(e);
                         return false;
                     }
 
                     try
                     {
-                        int knightNumber = Integer.parseInt(action.substring(8)) + 1;
+                        int knightNumber = Integer.parseInt(action.split(" ")[2]) + 1;
                         String knightToUse = "J" + knightNumber; // if this knight (J<knightToUse> is not available, we need to check if the J6 is available
-                        ArrayList<String> builtStructures = (ArrayList<String>) Arrays.asList(board_state.split(","));
+                        List<String> builtStructures = Arrays.asList(board_state.split(","));
                         if (!builtStructures.contains(knightToUse)) knightToUse = "J6";
                         if (!builtStructures.contains(knightToUse)) return false;
                     }
