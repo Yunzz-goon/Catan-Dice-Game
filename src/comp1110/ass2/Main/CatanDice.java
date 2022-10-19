@@ -9,6 +9,7 @@ import static comp1110.ass2.Building.City.cityResources;
 import static comp1110.ass2.Building.Knight.knightResources;
 import static comp1110.ass2.Building.Road.roadResources;
 import static comp1110.ass2.Building.Settlement.settlementResources;
+
 import static comp1110.ass2.Resource.Resource.*;
 public class CatanDice {
     public static int seed = 100;
@@ -453,7 +454,7 @@ public class CatanDice {
             }
         }
 
-        return true;
+        return true; // FIXME: Task #9 - Matthew
     }
 
     /**
@@ -467,6 +468,77 @@ public class CatanDice {
      */
     public static boolean canDoSequence(String[] actions,
                                         String board_state,
+                                        int[] resource_state) {
+        for (int i = 0; i < actions.length; i++) {
+            String action = actions[i];
+            String temp[] = action.split(" ");
+            switch (temp[0]) {
+                case "build":
+                    switch (temp[1].charAt(0)) { //return char type
+                        case 'J':
+                            if (resource_state[ORE_ID] < 1 || resource_state[WOOL_ID] < 1 || resource_state[GRAIN_ID] < 1) {
+                                System.out.println(action);
+                                return false;
+                            } else {
+                                resource_state[ORE_ID]--;
+                                resource_state[WOOL_ID]--;
+                                resource_state[GRAIN_ID]--;
+                                board_state = board_state + "," + temp[1];
+                            }
+                            break;
+                        case 'C':
+                            if (resource_state[ORE_ID] < 3 || resource_state[GRAIN_ID] < 2) {
+                                return false;
+                            } else {
+                                resource_state[ORE_ID]--;
+                                resource_state[GRAIN_ID]--;
+                            }
+                            break;
+                        case 'R':
+                            if (resource_state[BRICK_ID] < 1 || resource_state[LUMBER_ID] < 1) {
+                                return false;
+                            } else {
+                                resource_state[BRICK_ID]--;
+                                resource_state[LUMBER_ID]--;
+                            }
+                            break;
+                        case 'S':
+                            if (resource_state[BRICK_ID] < 1 || resource_state[LUMBER_ID] < 1 || resource_state[WOOL_ID] < 1 || resource_state[GRAIN_ID] < 1) {
+                                return false;
+                            } else {
+                                resource_state[BRICK_ID]--;
+                                resource_state[LUMBER_ID]--;
+                                resource_state[WOOL_ID]--;
+                                resource_state[GRAIN_ID]--;
+                            }
+                            break;
+                    }
+                    break;
+                case "trade":
+                    if (resource_state[GOLD_ID] < 2) {
+                        return false;
+                    } else {
+                        resource_state[GOLD_ID] = resource_state[GOLD_ID] - 2;
+                        resource_state[Integer.valueOf(temp[1])]++;
+                    }
+                    break;
+                case "swap":
+
+
+                    if (resource_state[Integer.valueOf(temp[1])] > 0 && (board_state.contains("J6") || board_state.contains("J" + (Integer.valueOf(temp[2])+ 1)))){
+
+                        resource_state[Integer.valueOf(temp[1])]--;
+                        resource_state[Integer.valueOf(temp[2])]++;
+                        board_state = board_state.replace("J" + (Integer.valueOf(temp[2]) + 1), "K" + (Integer.valueOf(temp[2]) + 1) );
+                    } else {
+
+                        return false;
+                    }
+                    break;
+            }
+        }
+        return true;
+         // FIXME: Task #11 - Jingru
                                         int[] resource_state)
     {
         return false; // FIXME: Task #11 - Jingru
@@ -525,7 +597,7 @@ public class CatanDice {
         return null; // FIXME: Task #14 - Matthew
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args){
 
     }
 
