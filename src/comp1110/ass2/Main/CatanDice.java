@@ -436,9 +436,9 @@ public class CatanDice {
     public static boolean canDoSequence(String[] actions,
                                         String board_state,
                                         int[] resource_state) {
-        for (int i = 0; i < actions.length; i++) { //索引index和长度
-            String action = actions[i]; //化整为零，取出单个的行为，因为不能整体分析 {打散数组} 取值一定是降维
-            String temp[] = action.split(" "); //分割action用空格分开 这个变量是一个数组，是string类 一变多
+        for (int i = 0; i < actions.length; i++) {
+            String action = actions[i];
+            String temp[] = action.split(" ");
             switch (temp[0]) {
                 case "build":
                     switch (temp[1].charAt(0)) { //return char type
@@ -481,7 +481,7 @@ public class CatanDice {
                             break;
                     }
                     break;
-                case "trade": //单次判断，已经分割出来了用for loop.
+                case "trade":
                     if (resource_state[GOLD_ID] < 2) {
                         return false;
                     } else {
@@ -490,16 +490,15 @@ public class CatanDice {
                     }
                     break;
                 case "swap":
-//                    ("J" + temp[1].charAt(0) + 1)
-//                    board_state.contains("J" + (temp[1].charAt(0) + 1));
-                    System.out.println(board_state);
-                    if (resource_state[Integer.valueOf(temp[1])] > 0 && (board_state.contains("J6") || board_state.contains("J" + (Integer.valueOf(temp[2])+ 1)))){ //是否包含括号内指定字符串(查找字符).
-                        // + 用在字符串里是一个拼接的作用。 转换为字符形式 看到字符就是拼接
+
+
+                    if (resource_state[Integer.valueOf(temp[1])] > 0 && (board_state.contains("J6") || board_state.contains("J" + (Integer.valueOf(temp[2])+ 1)))){
+
                         resource_state[Integer.valueOf(temp[1])]--;
                         resource_state[Integer.valueOf(temp[2])]++;
                         board_state = board_state.replace("J" + (Integer.valueOf(temp[2]) + 1), "K" + (Integer.valueOf(temp[2]) + 1) );
                     } else {
-                        System.out.println(action);
+
                         return false;
                     }
                     break;
