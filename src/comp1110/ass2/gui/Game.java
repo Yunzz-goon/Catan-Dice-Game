@@ -36,7 +36,7 @@ public class Game extends Viewer {
     int[] resource_state = new int[6];
     Text text_resource = new Text();
 
-//    private final Group root = new Group();
+    //    private final Group root = new Group();
 //    private static final int WINDOW_WIDTH = 1200;
 //    private static final int WINDOW_HEIGHT = 700;
     private final Group controls = new Group();
@@ -141,6 +141,7 @@ public class Game extends Viewer {
 
     BuildBuilding buildBuild = new BuildBuilding();
     public void buildingChangeDisplay(String structure, int[] resource_state){
+
         int point = buildBuild.buildBuilding(structure, resource_state);
         if (point == 0){
             return;
@@ -198,9 +199,12 @@ public class Game extends Viewer {
         String type = tmp_list[1];
         Integer jokerno = Integer.valueOf(tmp_list[2]);
         if (jokerno==6){
+            knights_fx.get(5).setFill(Color.RED);
             String resource_want = tmp_list[3];
             switch (resource_want){
-                case "Ore": resource_state[0] += amount;break;
+                case "Ore":
+                    resource_state[0] += amount;break;
+
                 case "Grain": resource_state[1] += amount;break;
                 case "Wool": resource_state[2] += amount;break;
                 case "Lumber": resource_state[3] += amount;break;
@@ -210,11 +214,26 @@ public class Game extends Viewer {
             }
         } else{
             switch (jokerno){
-                case 1: resource_state[0] += amount;break;
-                case 2: resource_state[1] += amount;break;
-                case 3: resource_state[2] += amount;break;
-                case 4: resource_state[3] += amount;break;
-                case 5: resource_state[4] += amount;break;
+                case 1:
+                    resource_state[0] += amount;
+                    knights_fx.get(0).setFill(Color.RED);
+                    break;
+                case 2:
+                    resource_state[1] += amount;
+                    knights_fx.get(1).setFill(Color.RED);
+                    break;
+                case 3:
+                    resource_state[2] += amount;
+                    knights_fx.get(2).setFill(Color.RED);
+                    break;
+                case 4:
+                    resource_state[3] += amount;
+                    knights_fx.get(3).setFill(Color.RED);
+                    break;
+                case 5:
+                    resource_state[4] += amount;
+                    knights_fx.get(4).setFill(Color.RED);
+                    break;
                 default:
                     System.out.println("Wrong type in swap");
             }
