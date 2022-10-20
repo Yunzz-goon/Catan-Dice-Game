@@ -19,7 +19,8 @@ public class BuildBuilding
      *  Initialize the building state, the default building status is unbuilt.
      */
 
-    public String board_state_whole = "";
+    public static String board_state = "";
+
     public ArrayList<Road> roads = new ArrayList<>();
     public HashMap<Integer, Settlement> settlements = new HashMap<Integer, Settlement>();
     public HashMap<Integer, City> cities = new HashMap<Integer, City>();
@@ -115,7 +116,7 @@ public class BuildBuilding
      * @param resource_state the current resource state
      */
     public int buildBuilding(String structure, int[] resource_state){
-        if (checkBuildConstraints(structure, board_state_whole) && (checkResources(structure, resource_state))) {
+        if (checkBuildConstraints(structure, board_state) && (checkResources(structure, resource_state))) {
             char build_type;
             int length;
             char[] build_no;
@@ -129,6 +130,12 @@ public class BuildBuilding
             build_no_str = new String(build_no);
             build_no_int = Integer.valueOf(build_no_str);
             spendResources(resource_state, structure);
+            if (board_state.equals("")){
+                board_state +=  structure;
+            }else{
+                board_state +=  "," + structure;
+            }
+            System.out.println("current board state " + board_state);
             if (build_type == 'R') {
                 roads.get(build_no_int).setStatus(true);
                 return roads.get(build_no_int).getPoint();
@@ -138,20 +145,15 @@ public class BuildBuilding
             } else if (build_type == 'S') {
                 settlements.get(build_no_int).setStatus(true);
                 return settlements.get(build_no_int).getPoint();
-            } else if (build_type == 'K') {
+            } else if (build_type == 'J') {
                 knights.get(build_no_int).setStatus(true);
                 return knights.get(build_no_int).getPoint();
             }
-            if (board_state_whole.equals("")){
-                board_state_whole += board_state_whole + structure;
-
-            }else{
-                board_state_whole += board_state_whole + "," + structure;
-            }
 
         } else{
-            if (checkBuildConstraints(structure, board_state_whole) ==  false){
+            if (checkBuildConstraints(structure, board_state) ==  false){
                 System.out.println("it can not be built due to building contraints");
+                System.out.println("the board state now is"+ board_state);
             }
             else{
                 System.out.println("it can not be built due to resource contraints");

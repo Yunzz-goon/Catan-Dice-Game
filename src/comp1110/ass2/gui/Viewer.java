@@ -266,7 +266,7 @@ public class Viewer extends Application {
         }
 
         // resource:
-        String[] text_content = {"Ore", "Grain", "Wool", "Timber", "Bricks", "Gold"};
+        String[] text_content = {"Ore", "Grain", "Wool", "Lumber", "Bricks", "Gold"};
         double radiusCircle = HEXAGON_SIDE_LENGTH/3;
         ArrayList<ResourceFX> resources = new ArrayList<ResourceFX>();
         for (int i = 0; i < 6; i++){

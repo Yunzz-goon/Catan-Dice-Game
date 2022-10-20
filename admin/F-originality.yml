@@ -21,7 +21,7 @@ declaration: >-
 # (or remove it altogether if you haven't collaborated with anyone)
 collaboration:
   - name:
-    comment: >-
+    comment: >- 
 
 # Use this to list any code that you used that you did not write,
 # aside from code provided by the lecturer.  Provide a comment
@@ -50,8 +50,8 @@ assets:
 # Sign *your* name and uids here. (Remove entries if you have fewer
 # than three members.)
 signatures:
-  - name:
-    uid:
+  - name: Yunzhong Zhang
+    uid: u7543705
   - name:
     uid:
   - name:
