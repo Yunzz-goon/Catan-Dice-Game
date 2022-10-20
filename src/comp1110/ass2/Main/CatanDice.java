@@ -877,25 +877,25 @@ public class CatanDice {
                 "S7,R12,R13,C20,R14,R15,C30",
                 "S7,R8,J4,R9,S9,R10,J5,R11,J6,S11"
                 };
-        String point[] = board_state.split(","); //A value in stack memory = (connection) heap memory Wired question
-        String result = path[0] + ",";
+        String result = path[0];
         String temp[] = result.split(",");
         String last = temp[temp.length - 1];
         for (int i = 1; i < path.length; i++) {
+            if (result.contains(target_structure)){
+                break;
+            }
             if (path[i].contains(target_structure)) {
-                result = result + path[i].substring(3) + ",";
+                result = result + "," + path[i].substring(3) ;
                 break;
             }
             if (path[i].startsWith(last)) {
                 temp = path[i].split(",");
-                System.out.println(path[i]);
                 if (path[i+1].startsWith(temp[temp.length - 1])){
                     last = temp[temp.length - 1];
-                    result = result + path[i].substring(3) + ",";
+                    result = result + "," + path[i].substring(3);
                 }
             }
         }
-        result = result.substring(0, result.length()-1);
         String unbuilt = "";
         for (String j: result.split(","))
         { //break the result into several string
@@ -905,7 +905,7 @@ public class CatanDice {
                 } else {
                     if (j.charAt(0) == 'R')
                     {
-                        unbuilt = unbuilt + j + ","; // eg. R1,R2,R3,R4
+                        unbuilt = unbuilt + j + ","; // eg. R1,R2,R3,R4,
                     }
                 }
             }
@@ -913,7 +913,7 @@ public class CatanDice {
         if (unbuilt.length() == 0){
             return new String[]{}; // none array
         } else {
-            return unbuilt.substring(0).split(",");
+            return unbuilt.substring(0, unbuilt.length() - 1).split(",");
         }
     }
 
