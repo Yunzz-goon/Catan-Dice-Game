@@ -678,7 +678,7 @@ public class CatanDice {
     {
         // first we will want to validate that the first action can be done
         // then we update the list of actions, board state and resource state, and recursively check the next action
-        // if the list of actions is null or has length zero then we can do the sequence (base case of the resursion)
+        // if the list of actions is null or has length zero then we can do the sequence (base case of the recursion)
         if (actions == null || actions.length == 0) return true;
         else if (!isBoardStateWellFormed(board_state)) return false;
         else if (!isAllActionsWellFormed(actions)) return false;
@@ -864,9 +864,69 @@ public class CatanDice {
      */
     public static String[] pathTo(String target_structure,
                                   String board_state) {
-        String[] result = {};
-        return result; // FIXME: Task #13 - Yungzhong
+        if (board_state.contains(target_structure)) {
+            //create array string representation
+            return new String[]{}; //return the empty array.  null
+        }
+        String[] path = {
+                "S3,R0",
+                "R0,R1,C7",
+                "R0,R2,S4,R3", //String 里的索引
+                "R3,R4,C12",
+                "R3,R5,S5,R6,R7,S7",
+                "S7,R12,R13,C20,R14,R15,C30",
+                "S7,R8,R9,S9,R10,R11,S11"};
+        String point[] = board_state.split(","); //栈内存里的一个值 =（连接） 堆内存 连线题
+        String result = path[0] + ",";
+        String temp[] = result.split(",");
+        String last = temp[temp.length - 1];
+        for (int i = 1; i < path.length; i++) {
+            if (path[i].contains(target_structure)) {
+                result = result + path[i].substring(3) + ",";
+                break;
+            }
+            if (path[i].startsWith(last)) {
+                temp = path[i].split(",");
+                if (path[i+1].startsWith(temp[temp.length - 1])){
+                    last = temp[temp.length - 1];
+                    result = result + path[i].substring(3) + ",";
+                }
+            }
+        }
+
+        result = result.substring(0, result.length()-1);
+        String unbuilt = "";
+        for (String j: result.split(",")) { //break the result into several string
+            if (!board_state.contains(j)){
+                if(j.equals(target_structure)){
+                    break;
+                } else {
+                    if (j.charAt(0) == 'R'){
+                        unbuilt = unbuilt + j + ","; // eg. R1,R2,R3,R4
+                    }
+                }
+            }
+        }
+        if (unbuilt.length() == 0){
+            return new String[]{}; // none array
+        } else {
+            return unbuilt.substring(0, unbuilt.length()-1).split(",");
+        }
+
+
+        // FIXME: Task #13 - Jingru
     }
+//        for (String point1 : point) { // int i = 0; i < point.length; i++
+//            String stand; //创造出来. Think only one board_state condition
+////            stand.indexOf() if =0, then return false, if !=0, then return true
+//            for (int path1 = 0; path1 < path.length; path1++) {
+//                if (path[path1].contains(point1) && (path[path1].indexOf(point1) != 0 || point1.equals("S3"))) { //point在st街上的位置
+//                    stand = path[path1]; //find the path we stand for right now. find the path to the destination.
+//
+//                }
+//            }
+//        }
+
 
     /**
      * Generate a plan (sequence of player actions) to build the target
