@@ -201,88 +201,219 @@ public class CatanDice {
      *         otherwise.
      */
     public static boolean checkBuildConstraints(String structure,
-                                                String board_state) {
-        BuildBuilding buildings = new BuildBuilding();
-
-        // deploy the status of the building
-        if (Objects.equals(board_state, "")) {
-            return true;
-        }
-        String[] states = board_state.split(",");
-        for (String state : states) {
-            char build_type = state.charAt(0);
-            int length = state.length() - 1;
-            char[] build_no = new char[length];
-            state.getChars(1, length + 1, build_no, 0);
-            String build_no_str = new String(build_no);
-            Integer build_no_int = Integer.valueOf(build_no_str);
-
-//            if (build_type == 'R'){
-//                buildings.roads.get(build_no_int).setStatus(true);
-//            } else if (build_type == 'S') {
-//                buildings.settlements.get(build_no_int).setStatus(true);
-//            } else if (build_type == 'C') {
-//                buildings.cities.get(build_no_int).setStatus(true);
-//            } else if (build_type == 'J') {
-//                buildings.knights.get(build_no_int).setStatus(true);
-//            } else if (build_type == 'K') {
-//                buildings.knights.get(build_no_int).setStatus(true);
-//                buildings.knights.get(build_no_int).setDisposableStatus(true);
-//            } else{
-//                System.out.println("Unexpected type");
-//            }
-            switch (build_type) {
-                case 'R' -> buildings.roads.get(build_no_int).setStatus(true);
-                case 'S' -> buildings.settlements.get(build_no_int).setStatus(true);
-                case 'C' -> buildings.cities.get(build_no_int).setStatus(true);
-                case 'J' -> buildings.knights.get(build_no_int).setStatus(true);
-                case 'K' -> {
-                    buildings.knights.get(build_no_int).setStatus(true);
-                    buildings.knights.get(build_no_int).setDisposableStatus(true);
-                }
-                default -> System.out.println("Unexpected type");
-            }
-        }
-        char build_type = structure.charAt(0);
-        int length = structure.length() - 1;
-        char[] build_no = new char[length];
-        structure.getChars(1, length + 1, build_no, 0);
-        String build_no_str = new String(build_no);
-        Integer build_no_int = Integer.valueOf(build_no_str);
-//        if (build_type == 'R') {
-//            return buildings.roads.get(build_no_int).isBuildingAssess();
-//        } else if (build_type == 'S') {
-//            return buildings.settlements.get(build_no_int).isBuildingAssess();
-//        } else if (build_type == 'C') {
-//            return buildings.cities.get(build_no_int).isBuildingAssess();
-//        } else if (build_type == 'J') {
-//            return buildings.knights.get(build_no_int).isBuildingAssess();
-//        } else if (build_type == 'K') {
-//            return buildings.knights.get(build_no_int).isBuildingAssess();
-//        } else {
-//            System.out.println("Unexpected type");
-//        }
-        switch (build_type)
+                                                String board_state)
+    {
+        List<String> boardStateArray = List.of(board_state.split(","));
+        if (boardStateArray.contains(structure)) return false;
+        switch (structure)
         {
-            case 'R' ->
+            case "R0", "S3", "J1" ->
             {
-                return buildings.roads.get(build_no_int).isBuildingAssess();
+                return true;
             }
-            case 'S' ->
+            case "R1", "R2" ->
             {
-                return buildings.settlements.get(build_no_int).isBuildingAssess();
+                return boardStateArray.contains("R0");
             }
-            case 'C' ->
+            case "R3" ->
             {
-                return buildings.cities.get(build_no_int).isBuildingAssess();
+                return boardStateArray.contains("R2");
             }
-            case 'J', 'K' ->
+            case "R4", "R5" ->
             {
-                return buildings.knights.get(build_no_int).isBuildingAssess();
+                return boardStateArray.contains("R3");
             }
-            default -> System.out.println("Unexpected type");
+            case "R6" ->
+            {
+                return boardStateArray.contains("R5");
+            }
+            case "R7" ->
+            {
+                return boardStateArray.contains("R6");
+            }
+            case "R8", "R12" ->
+            {
+                return boardStateArray.contains("R7");
+            }
+            case "R9" ->
+            {
+                return boardStateArray.contains("R8");
+            }
+            case "R10" ->
+            {
+                return boardStateArray.contains("R9");
+            }
+            case "R11" ->
+            {
+                return boardStateArray.contains("R10");
+            }
+            case "R13" ->
+            {
+                return boardStateArray.contains("R12");
+            }
+            case "R14" ->
+            {
+                return boardStateArray.contains("R13");
+            }
+            case "R15" ->
+            {
+                return boardStateArray.contains("R14");
+            }
+
+            case "C7" ->
+            {
+                return boardStateArray.contains("R1");
+            }
+            case "C12" ->
+            {
+                return boardStateArray.contains("C7") &&
+                        boardStateArray.contains("R4");
+            }
+            case "C20" ->
+            {
+                return boardStateArray.contains("C12") &&
+                        boardStateArray.contains("R13");
+            }
+            case "C30" ->
+            {
+                return boardStateArray.contains("C20") &&
+                        boardStateArray.contains("R15");
+            }
+
+            case "S4" ->
+            {
+                return boardStateArray.contains("R2") &&
+                        boardStateArray.contains("S3");
+            }
+            case "S5" ->
+            {
+                return boardStateArray.contains("R5") &&
+                        boardStateArray.contains("S4");
+            }
+            case "S7" ->
+            {
+                return boardStateArray.contains("R7") &&
+                        boardStateArray.contains("S5");
+            }
+            case "S9" ->
+            {
+                return boardStateArray.contains("R9") &&
+                        boardStateArray.contains("S7");
+            }
+            case "S11" ->
+            {
+                return boardStateArray.contains("R11") &&
+                        boardStateArray.contains("S9");
+            }
+
+            case "J2" ->
+            {
+                return boardStateArray.contains("J1") ||
+                        boardStateArray.contains("K1");
+            }
+            case "J3" ->
+            {
+                return boardStateArray.contains("J2") ||
+                        boardStateArray.contains("K2");
+            }
+            case "J4" ->
+            {
+                return boardStateArray.contains("J3") ||
+                        boardStateArray.contains("K3");
+            }
+            case "J5" ->
+            {
+                return boardStateArray.contains("J4") ||
+                        boardStateArray.contains("K4");
+            }
+            case "J6" ->
+            {
+                return boardStateArray.contains("J5") ||
+                        boardStateArray.contains("K5");
+            }
         }
         return false;
+//        BuildBuilding buildings = new BuildBuilding();
+//
+//        // deploy the status of the building
+//        if (Objects.equals(board_state, "")) {
+//            return true;
+//        }
+//        String[] states = board_state.split(",");
+//        for (String state : states) {
+//            char build_type = state.charAt(0);
+//            int length = state.length() - 1;
+//            char[] build_no = new char[length];
+//            state.getChars(1, length + 1, build_no, 0);
+//            String build_no_str = new String(build_no);
+//            Integer build_no_int = Integer.valueOf(build_no_str);
+//
+////            if (build_type == 'R'){
+////                buildings.roads.get(build_no_int).setStatus(true);
+////            } else if (build_type == 'S') {
+////                buildings.settlements.get(build_no_int).setStatus(true);
+////            } else if (build_type == 'C') {
+////                buildings.cities.get(build_no_int).setStatus(true);
+////            } else if (build_type == 'J') {
+////                buildings.knights.get(build_no_int).setStatus(true);
+////            } else if (build_type == 'K') {
+////                buildings.knights.get(build_no_int).setStatus(true);
+////                buildings.knights.get(build_no_int).setDisposableStatus(true);
+////            } else{
+////                System.out.println("Unexpected type");
+////            }
+//            switch (build_type) {
+//                case 'R' -> buildings.roads.get(build_no_int).setStatus(true);
+//                case 'S' -> buildings.settlements.get(build_no_int).setStatus(true);
+//                case 'C' -> buildings.cities.get(build_no_int).setStatus(true);
+//                case 'J' -> buildings.knights.get(build_no_int).setStatus(true);
+//                case 'K' -> {
+//                    buildings.knights.get(build_no_int).setStatus(true);
+//                    buildings.knights.get(build_no_int).setDisposableStatus(true);
+//                }
+//                default -> System.out.println("Unexpected type");
+//            }
+//        }
+//        char build_type = structure.charAt(0);
+//        int length = structure.length() - 1;
+//        char[] build_no = new char[length];
+//        structure.getChars(1, length + 1, build_no, 0);
+//        String build_no_str = new String(build_no);
+//        Integer build_no_int = Integer.valueOf(build_no_str);
+////        if (build_type == 'R') {
+////            return buildings.roads.get(build_no_int).isBuildingAssess();
+////        } else if (build_type == 'S') {
+////            return buildings.settlements.get(build_no_int).isBuildingAssess();
+////        } else if (build_type == 'C') {
+////            return buildings.cities.get(build_no_int).isBuildingAssess();
+////        } else if (build_type == 'J') {
+////            return buildings.knights.get(build_no_int).isBuildingAssess();
+////        } else if (build_type == 'K') {
+////            return buildings.knights.get(build_no_int).isBuildingAssess();
+////        } else {
+////            System.out.println("Unexpected type");
+////        }
+//        switch (build_type)
+//        {
+//            case 'R' ->
+//            {
+//                return buildings.roads.get(build_no_int).isBuildingAssess();
+//            }
+//            case 'S' ->
+//            {
+//                return buildings.settlements.get(build_no_int).isBuildingAssess();
+//            }
+//            case 'C' ->
+//            {
+//                return buildings.cities.get(build_no_int).isBuildingAssess();
+//            }
+//            case 'J', 'K' ->
+//            {
+//                return buildings.knights.get(build_no_int).isBuildingAssess();
+//            }
+//            default -> System.out.println("Unexpected type");
+//        }
+//        return false;
     }
 
 
@@ -482,9 +613,17 @@ public class CatanDice {
                     String[] actionSplit = action.split(" ");
                     String structure = actionSplit[1].replace(",", ""); // not sure if this is necessary
 //                    System.out.println(structure);
-                    if (!checkResources(structure, resource_state)) return false;
+                    if (!checkResources(structure, resource_state))
+                    {
+                        System.out.println("Not enough resources to build " + structure);
+                        return false;
+                    }
                     // otherwise ensure the building can be built
-                    else if (!checkBuildConstraints(structure, board_state)) return false;
+                    else if (!checkBuildConstraints(structure, board_state))
+                    {
+                        System.out.println("Cannot build " + structure + " at this location");
+                        return false;
+                    }
                 }
                 case 't' ->
                 {
@@ -517,13 +656,11 @@ public class CatanDice {
                         System.out.println("Invalid knight to use");
                         return false;
                     }
-
-
                 }
             }
         }
 
-        return true; // FIXME: Task #9 - Matthew
+        return true;
     }
 
     /**
@@ -554,7 +691,7 @@ public class CatanDice {
             if (canDoAction(actionThisIteration, board_state, resource_state))
             {
                 // update the board state, resource state and action list for the next iteration
-                if (actions.length == 1) return true; 
+                if (actions.length == 1) return true;
                 else
                 {
                     newResourceState = updateResourceState(actionThisIteration, resource_state);
@@ -566,97 +703,6 @@ public class CatanDice {
             }
             else return false; // if the first action can't be done then we can't do the rest of the sequence
         }
-
-
-//        for (String action : actions)
-//        {
-//            String[] temp = action.split(" ");
-//            switch (temp[0])
-//            {
-//                case "build":
-//                    switch (temp[1].charAt(0))
-//                    { //return char type
-//                        case 'J':
-//                            if (resource_state[ORE_ID] < 1 || resource_state[WOOL_ID] < 1 || resource_state[GRAIN_ID] < 1)
-//                            {
-//                                System.out.println(action);
-//                                return false;
-//                            }
-//                            else
-//                            {
-//                                resource_state[ORE_ID]--;
-//                                resource_state[WOOL_ID]--;
-//                                resource_state[GRAIN_ID]--;
-//                                board_state = board_state + "," + temp[1];
-//                            }
-//                            break;
-//                        case 'C':
-//                            if (resource_state[ORE_ID] < 3 || resource_state[GRAIN_ID] < 2)
-//                            {
-//                                return false;
-//                            }
-//                            else
-//                            {
-//                                resource_state[ORE_ID]--;
-//                                resource_state[GRAIN_ID]--;
-//                            }
-//                            break;
-//                        case 'R':
-//                            if (resource_state[BRICK_ID] < 1 || resource_state[LUMBER_ID] < 1)
-//                            {
-//                                return false;
-//                            }
-//                            else
-//                            {
-//                                resource_state[BRICK_ID]--;
-//                                resource_state[LUMBER_ID]--;
-//                            }
-//                            break;
-//                        case 'S':
-//                            if (resource_state[BRICK_ID] < 1 || resource_state[LUMBER_ID] < 1 || resource_state[WOOL_ID] < 1 || resource_state[GRAIN_ID] < 1)
-//                            {
-//                                return false;
-//                            }
-//                            else
-//                            {
-//                                resource_state[BRICK_ID]--;
-//                                resource_state[LUMBER_ID]--;
-//                                resource_state[WOOL_ID]--;
-//                                resource_state[GRAIN_ID]--;
-//                            }
-//                            break;
-//                    }
-//                    break;
-//                case "trade":
-//                    if (resource_state[GOLD_ID] < 2)
-//                    {
-//                        return false;
-//                    }
-//                    else
-//                    {
-//                        resource_state[GOLD_ID] = resource_state[GOLD_ID] - 2;
-//                        resource_state[Integer.parseInt(temp[1])]++;
-//                    }
-//                    break;
-//                case "swap":
-//
-//
-//                    if (resource_state[Integer.parseInt(temp[1])] > 0 && (board_state.contains("J6") || board_state.contains("J" + (Integer.valueOf(temp[2]) + 1))))
-//                    {
-//
-//                        resource_state[Integer.parseInt(temp[1])]--;
-//                        resource_state[Integer.parseInt(temp[2])]++;
-//                        board_state = board_state.replace("J" + (Integer.parseInt(temp[2]) + 1), "K" + (Integer.valueOf(temp[2]) + 1));
-//                    }
-//                    else
-//                    {
-//
-//                        return false;
-//                    }
-//                    break;
-//            }
-//        }
-//        return true;
     }
 
     private static boolean isAllActionsWellFormed(String[] actions)
