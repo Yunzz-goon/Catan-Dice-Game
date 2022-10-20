@@ -383,7 +383,7 @@ public class Game extends Viewer {
         Label tradeLabel = new Label("Trade:");
         boardTextField_trade = new TextField();
         boardTextField_trade.setPrefWidth(input_width);
-        Button button_trade = new Button("trade");
+        Button button_trade = new Button("Trade it!");
         button_trade.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
@@ -400,7 +400,7 @@ public class Game extends Viewer {
         Label swapLabel = new Label("Swap:");
         boardTextField_swap = new TextField();
         boardTextField_swap.setPrefWidth(input_width);
-        Button button_swap = new Button("swap");
+        Button button_swap = new Button("Swap it!");
         button_swap.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
