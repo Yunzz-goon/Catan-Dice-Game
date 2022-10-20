@@ -866,17 +866,18 @@ public class CatanDice {
                                   String board_state) {
         if (board_state.contains(target_structure)) {
             //create array string representation
-            return new String[]{}; //return the empty array.  null
+            return new String[]{}; //return the empty array.
         }
         String[] path = {
                 "S3,R0",
                 "R0,R1,C7",
-                "R0,R2,S4,R3", //String 里的索引
+                "R0,R2,S4,R3", //String index in
                 "R3,R4,C12",
                 "R3,R5,S5,R6,R7,S7",
                 "S7,R12,R13,C20,R14,R15,C30",
-                "S7,R8,R9,S9,R10,R11,S11"};
-        String point[] = board_state.split(","); //栈内存里的一个值 =（连接） 堆内存 连线题
+                "S7,R8,R9,S9,R10,R11,S11"
+                };
+        String point[] = board_state.split(","); //A value in stack memory = (connection) heap memory Wired question
         String result = path[0] + ",";
         String temp[] = result.split(",");
         String last = temp[temp.length - 1];
@@ -896,12 +897,15 @@ public class CatanDice {
 
         result = result.substring(0, result.length()-1);
         String unbuilt = "";
-        for (String j: result.split(",")) { //break the result into several string
+        for (String j: result.split(","))
+        { //break the result into several string
             if (!board_state.contains(j)){
                 if(j.equals(target_structure)){
+
                     break;
                 } else {
-                    if (j.charAt(0) == 'R'){
+                    if (j.charAt(0) == 'R')
+                    {
                         unbuilt = unbuilt + j + ","; // eg. R1,R2,R3,R4
                     }
                 }
@@ -912,20 +916,7 @@ public class CatanDice {
         } else {
             return unbuilt.substring(0, unbuilt.length()-1).split(",");
         }
-
-
-        // FIXME: Task #13 - Jingru
     }
-//        for (String point1 : point) { // int i = 0; i < point.length; i++
-//            String stand; //创造出来. Think only one board_state condition
-////            stand.indexOf() if =0, then return false, if !=0, then return true
-//            for (int path1 = 0; path1 < path.length; path1++) {
-//                if (path[path1].contains(point1) && (path[path1].indexOf(point1) != 0 || point1.equals("S3"))) { //point在st街上的位置
-//                    stand = path[path1]; //find the path we stand for right now. find the path to the destination.
-//
-//                }
-//            }
-//        }
 
 
     /**
