@@ -31,7 +31,7 @@ public class TestPathTo {
     }
 
     static String[] board_state = {
-	"",
+	"",//游戏刚开始站的位置
 	"R0,R1,C7,S3",
 	"R0,R1,C7,S3,R2,S4",
 	"R0,R1,C7,R2,R3,R4,C12",
