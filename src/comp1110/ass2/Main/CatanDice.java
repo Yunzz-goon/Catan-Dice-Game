@@ -869,13 +869,13 @@ public class CatanDice {
             return new String[]{}; //return the empty array.
         }
         String[] path = {
-                "S3,R0",
-                "R0,R1,C7",
+                "S3,J1,R0",
+                "R0,R1,J2,C7",
                 "R0,R2,S4,R3", //String index in
-                "R3,R4,C12",
+                "R3,J3,R4,C12",
                 "R3,R5,S5,R6,R7,S7",
                 "S7,R12,R13,C20,R14,R15,C30",
-                "S7,R8,R9,S9,R10,R11,S11"
+                "S7,R8,J4,R9,S9,R10,J5,R11,J6,S11"
                 };
         String point[] = board_state.split(","); //A value in stack memory = (connection) heap memory Wired question
         String result = path[0] + ",";
@@ -888,20 +888,19 @@ public class CatanDice {
             }
             if (path[i].startsWith(last)) {
                 temp = path[i].split(",");
+                System.out.println(path[i]);
                 if (path[i+1].startsWith(temp[temp.length - 1])){
                     last = temp[temp.length - 1];
                     result = result + path[i].substring(3) + ",";
                 }
             }
         }
-
         result = result.substring(0, result.length()-1);
         String unbuilt = "";
         for (String j: result.split(","))
         { //break the result into several string
             if (!board_state.contains(j)){
                 if(j.equals(target_structure)){
-
                     break;
                 } else {
                     if (j.charAt(0) == 'R')
@@ -914,7 +913,7 @@ public class CatanDice {
         if (unbuilt.length() == 0){
             return new String[]{}; // none array
         } else {
-            return unbuilt.substring(0, unbuilt.length()-1).split(",");
+            return unbuilt.substring(0).split(",");
         }
     }
 
@@ -945,7 +944,11 @@ public class CatanDice {
     public static String[] buildPlan(String target_structure,
                                      String board_state,
                                      int[] resource_state) {
+        System.out.println(target_structure);
+        System.out.println(board_state);
+        String[] path = pathTo(target_structure, board_state);
         return null; // FIXME: Task #14 - Matthew
+
     }
 
     public static void main(String[] args){
