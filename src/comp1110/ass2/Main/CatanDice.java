@@ -408,7 +408,6 @@ public class CatanDice {
                                                          String board_state,
                                                          int[] resource_state)
     {
-       // FIXME: Task #12 - Matthew
         if (checkResources(structure, resource_state)) return true;
         String[] boardArray = board_state.split(",");
         String[] knightsAvailable = new String[6];
@@ -813,7 +812,7 @@ public class CatanDice {
      * an empty array.
      *
      * Note that on the Island One map, there is a unique path to every
-     * structure. 
+     * structure.
      *
      * @param target_structure: The string representation of the structure
      *        to reach.
@@ -821,59 +820,338 @@ public class CatanDice {
      * @return An array of string representations of the roads along the
      *         path.
      */
-    public static String[] pathTo(String target_structure,
-                                  String board_state) {
-        if (board_state.contains(target_structure)) {
-            //create array string representation
-            return new String[]{}; //return the empty array.
+    public static String[] pathTo(String target_structure, String board_state) throws IllegalArgumentException
+    {
+        String[] alreadyBuilt = {};
+        String[] path = new String[15];
+        int pathLength = 0;
+        if (target_structure == null
+                || target_structure.length() == 0
+                || target_structure.length() == 1)
+        {
+            throw new IllegalArgumentException("Invalid target structure");
         }
-        String[] path = {
-                "S3,R0",
-                "R0,R1,C7",
-                "R0,R2,S4,R3", //String index in
-                "R3,R4,C12",
-                "R3,R5,S5,R6,R7,S7",
-                "S7,R12,R13,C20,R14,R15,C30",
-                "S7,R8,R9,S9,R10,R11,S11"
-                };
-        String result = path[0] + ",";
-        String temp[] = result.split(",");
-        String last = temp[temp.length - 1];
-        for (int i = 1; i < path.length; i++) {
-            if (path[i].contains(target_structure)) {
-                result = result + path[i].substring(3) + ",";
-                break;
-            }
-            if (path[i].startsWith(last)) {
-                temp = path[i].split(",");
-                if (path[i+1].startsWith(temp[temp.length - 1])){
-                    last = temp[temp.length - 1];
-                    result = result + path[i].substring(3) + ",";
-                }
-            }
+        if (!isBoardStateWellFormed(board_state))
+        {
+            throw new IllegalArgumentException("Invalid board state");
         }
 
-        result = result.substring(0, result.length()-1);
-        String unbuilt = "";
-        for (String j: result.split(","))
-        { //break the result into several string
-            if (!board_state.contains(j)){
-                if(j.equals(target_structure)){
-
-                    break;
-                } else {
-                    if (j.charAt(0) == 'R')
+        switch (target_structure.charAt(0))
+        {
+            case 'R' ->
+            {
+                switch (target_structure.charAt(1))
+                {
+                    case '0' ->
                     {
-                        unbuilt = unbuilt + j + ","; // eg. R1,R2,R3,R4
+                        if (target_structure.length() == 2)
+                        {
+                            return alreadyBuilt;
+                        }
+                    }
+
+                    case '1' ->
+                    {
+                        if (target_structure.length() == 2)
+                        {
+                            return pathToHelper("R1", board_state, path, pathLength);
+                        }
+                        else if (target_structure.length() == 3)
+                        {
+                            switch (target_structure.charAt(2))
+                            {
+                                case '0' ->
+                                {
+                                    return pathToHelper("R9", board_state, path, pathLength);
+                                }
+                                case '1' ->
+                                {
+                                    return pathToHelper("R10", board_state, path, pathLength);
+                                }
+                                case '2' ->
+                                {
+                                    return pathToHelper("R7", board_state, path, pathLength);
+                                }
+                                case '3' ->
+                                {
+                                    return pathToHelper("R12", board_state, path, pathLength);
+                                }
+                                case '4' ->
+                                {
+                                    return pathToHelper("R13", board_state, path, pathLength);
+                                }
+                                case '5' ->
+                                {
+                                    return pathToHelper("R14", board_state, path, pathLength);
+                                }
+                            }
+                        }
+                    }
+                    case '2' ->
+                    {
+                        if (target_structure.length() == 2)
+                        {
+                            return pathToHelper("R0", board_state, path, pathLength);
+                        }
+                    }
+                    case '3' ->
+                    {
+                        if (target_structure.length() == 2)
+                        {
+                            return pathToHelper("R2", board_state, path, pathLength);
+                        }
+                    }
+                    case '4', '5' ->
+                    {
+                        if (target_structure.length() == 2)
+                        {
+                            return pathToHelper("R3", board_state, path, pathLength);
+                        }
+                    }
+                    case '6' ->
+                    {
+                        if (target_structure.length() == 2)
+                        {
+                            return pathToHelper("R5", board_state, path, pathLength);
+                        }
+                    }
+                    case '7' ->
+                    {
+                        if (target_structure.length() == 2)
+                        {
+                            return pathToHelper("R6", board_state, path, pathLength);
+                        }
+                    }
+                    case '8' ->
+                    {
+                        if (target_structure.length() == 2)
+                        {
+                            return pathToHelper("R7", board_state, path, pathLength);
+                        }
+                    }
+                    case '9' ->
+                    {
+                        if (target_structure.length() == 2)
+                        {
+                            return pathToHelper("R8", board_state, path, pathLength);
+                        }
                     }
                 }
             }
+
+            case 'S' ->
+            {
+                if (target_structure.length() == 2)
+                {
+                    switch (target_structure.charAt(1))
+                    {
+                        case '3' ->
+                        {
+                            return alreadyBuilt;
+                        }
+                        case '4' ->
+                        {
+                            return pathToHelper("R2", board_state, path, pathLength);
+                        }
+                        case '5' ->
+                        {
+                            return pathToHelper("R5", board_state, path, pathLength);
+                        }
+                        case '7' ->
+                        {
+                            return pathToHelper("R7", board_state, path, pathLength);
+                        }
+                        case '9' ->
+                        {
+                            return pathToHelper("R9", board_state, path, pathLength);
+                        }
+                    }
+                }
+                else if (target_structure.length() == 3)
+                {
+                    if (target_structure.equals("S11"))
+                    {
+                        return pathToHelper("R11", board_state, path, pathLength);
+                    }
+                }
+            }
+            case 'C' ->
+            {
+                if (target_structure.length() == 2)
+                {
+                    if (target_structure.equals("C7"))
+                    {
+                        return pathToHelper("R1", board_state, path, pathLength);
+                    }
+                }
+                else if (target_structure.length() == 3)
+                {
+                    switch (target_structure)
+                    {
+                        case "C12" ->
+                        {
+                            return pathToHelper("R4", board_state, path, pathLength);
+                        }
+                        case "C20" ->
+                        {
+                            return pathToHelper("R13", board_state, path, pathLength);
+                        }
+                        case "C30" ->
+                        {
+                            return pathToHelper("R15", board_state, path, pathLength);
+                        }
+                    }
+                }
+            }
+            case 'J' ->
+            {
+                return alreadyBuilt;
+            }
         }
-        if (unbuilt.length() == 0){
-            return new String[]{}; // none array
-        } else {
-            return unbuilt.substring(0, unbuilt.length()-1).split(",");
+
+        return alreadyBuilt; // This line is here only so this code will compile if you don't modify it.
+    }
+
+    public static String[] pathToHelper(String ts, String bs, String[] acc, int pl) {
+        String[] path = acc;
+        int pathLength = pl;
+        switch (ts.charAt(1)) {
+            case '0' -> {
+                if (!bs.contains("R0")) {
+                    System.arraycopy(path, 0, path, 1, pathLength);
+                    path[0] = "R0";
+                    pathLength++;
+                }
+            }
+            case '1' -> {
+                if (ts.length()==2) {
+                    if (!bs.endsWith("R1") && !bs.contains("R1,")) {
+                        System.arraycopy(path, 0, path, 1, pathLength);
+                        path[0] = "R1";
+                        pathLength++;
+                    }
+                    return pathToHelper("R0", bs, path, pathLength);
+                } else {
+                    switch (ts.charAt(2)) {
+                        case '0' -> {
+                            if (!bs.contains("R10")) {
+                                System.arraycopy(path, 0, path, 1, pathLength);
+                                path[0] = "R10";
+                                pathLength++;
+                            }
+                            return pathToHelper("R9", bs, path, pathLength);
+                        }
+                        case '1' -> {
+                            if (!bs.contains("R11")) {
+                                System.arraycopy(path, 0, path, 1, pathLength);
+                                path[0] = "R11";
+                                pathLength++;
+                            }
+                            return pathToHelper("R10", bs, path, pathLength);
+                        }
+                        case '2' -> {
+                            if (!bs.contains("R12")) {
+                                System.arraycopy(path, 0, path, 1, pathLength);
+                                path[0] = "R12";
+                                pathLength++;
+                            }
+                            return pathToHelper("R7", bs, path, pathLength);
+                        }
+                        case '3' -> {
+                            if (!bs.contains("R13")) {
+                                System.arraycopy(path, 0, path, 1, pathLength);
+                                path[0] = "R13";
+                                pathLength++;
+                            }
+                            return pathToHelper("R12", bs, path, pathLength);
+                        }
+                        case '4' -> {
+                            if (!bs.contains("R14")) {
+                                System.arraycopy(path, 0, path, 1, pathLength);
+                                path[0] = "R14";
+                                pathLength++;
+                            }
+                            return pathToHelper("R13", bs, path, pathLength);
+                        }
+                        case '5' -> {
+                            if (!bs.contains("R15")) {
+                                System.arraycopy(path, 0, path, 1, pathLength);
+                                path[0] = "R15";
+                                pathLength++;
+                            }
+                            return pathToHelper("R14", bs, path, pathLength);
+                        }
+                    }
+                }
+            }
+            case '2' -> {
+                if (!bs.contains("R2")) {
+                    System.arraycopy(path, 0, path, 1, pathLength);
+                    path[0] = "R2";
+                    pathLength++;
+                }
+                return pathToHelper("R0", bs, path, pathLength);
+            }
+            case '3' -> {
+                if (!bs.contains("R3")) {
+                    System.arraycopy(path, 0, path, 1, pathLength);
+                    path[0] = "R3";
+                    pathLength++;
+                }
+                return pathToHelper("R2", bs, path, pathLength);
+            }
+            case '4' -> {
+                if (!bs.contains("R4")) {
+                    System.arraycopy(path, 0, path, 1, pathLength);
+                    path[0] = "R4";
+                    pathLength++;
+                }
+                return pathToHelper("R3", bs, path, pathLength);
+            }
+            case '5' -> {
+                if (!bs.contains("R5")) {
+                    System.arraycopy(path, 0, path, 1, pathLength);
+                    path[0] = "R5";
+                    pathLength++;
+                }
+                return pathToHelper("R3", bs, path, pathLength);
+            }
+            case '6' -> {
+                if (!bs.contains("R6")) {
+                    System.arraycopy(path, 0, path, 1, pathLength);
+                    path[0] = "R6";
+                    pathLength++;
+                }
+                return pathToHelper("R5", bs, path, pathLength);
+            }
+            case '7' -> {
+                if (!bs.contains("R7")) {
+                    System.arraycopy(path, 0, path, 1, pathLength);
+                    path[0] = "R7";
+                    pathLength++;
+                }
+                return pathToHelper("R6", bs, path, pathLength);
+            }
+            case '8' -> {
+                if (!bs.contains("R8")) {
+                    System.arraycopy(path, 0, path, 1, pathLength);
+                    path[0] = "R8";
+                    pathLength++;
+                }
+                return pathToHelper("R7", bs, path, pathLength);
+            }
+            case '9' -> {
+                if (!bs.contains("R9")) {
+                    System.arraycopy(path, 0, path, 1, pathLength);
+                    path[0] = "R9";
+                    pathLength++;
+                }
+                return pathToHelper("R8", bs, path, pathLength);
+            }
         }
+        String[] pathFinal = new String[pathLength];
+        System.arraycopy(path,0,pathFinal,0,pathLength);
+        return pathFinal;
     }
 
 
@@ -900,11 +1178,58 @@ public class CatanDice {
      *         there exists no valid build plan for the target structure,
      *         the method should return null.
      */
+    // FIXME - Task 14 - Matthew
     public static String[] buildPlan(String target_structure,
                                      String board_state,
-                                     int[] resource_state) {
-        return null; // FIXME: Task #14 - Matthew
+                                     int[] resource_state)
+    {
+        String[] path = pathTo(target_structure, board_state);
+        if (path == null) {
+            return null;
+        }
+        return new String[]{};
     }
+
+    public static boolean checkResourcesWithTradeButNoSwap(String structure, int[] resource_state)
+    {
+        int[] availableResources = new int[6];
+        int[] missingResources = new int[6];
+        // creating available resources array and missing resources array
+        for (int i = 0; i < 6; i++)
+        {
+            int n = 0;
+            switch (structure.charAt(0))
+            {
+                case 'R' ->
+                {
+                    n = resource_state[i] - roadResources[i];
+                    if (n < 0) missingResources[i] = n;
+                    else availableResources[i] = n;
+                }
+                case 'J' ->
+                {
+                    n = resource_state[i] - knightResources[i];
+                    if (n < 0) missingResources[i] = n;
+                    else availableResources[i] = n;
+                }
+                case 'C' ->
+                {
+                    n = resource_state[i] - cityResources[i];
+                    if (n < 0) missingResources[i] = n;
+                    else availableResources[i] = n;
+
+                }
+                case 'S' ->
+                {
+                    n = resource_state[i] - settlementResources[i];
+                    if (n < 0) missingResources[i] = n;
+                    else availableResources[i] = n;
+                }
+            }
+        }
+        return (Math.abs(intSumArray(missingResources)) * 2 <= availableResources[5]);
+    }
+
 
     public static void main(String[] args){
 
