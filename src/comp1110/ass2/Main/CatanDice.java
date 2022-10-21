@@ -1,6 +1,8 @@
 package comp1110.ass2.Main;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 import static comp1110.ass2.Building.City.cityResources;
 import static comp1110.ass2.Building.Knight.knightResources;
@@ -485,106 +487,144 @@ public class CatanDice {
      */
     public static boolean checkResourcesWithTradeAndSwap(String structure,
                                                          String board_state,
-                                                         int[] resource_state) throws IllegalArgumentException {
-        int[] resourcesAfterBuild;
-        if (checkResources(structure, resource_state))
-            return true; // if the basic check works then we don't need to do anything else
-            // first we need to check which trades and swaps can be performed and store them all in a list
-        else {
-            String struct = String.valueOf(structure.charAt(0));
-            assert struct.equals("J") || struct.equals("R") || struct.equals("C") || struct.equals("S"); // if the structure is not one of these then we have a problem
-            int[] availableResources = resource_state.clone();
-            // for the code to get here we know that the basic check failed, thus the input resource state is missing some element.
-            // we need to work out what is missing, and then check if we can get it from a trade or swap
-            // we need to check what knights are available to perform swaps
-            // we need to check how much gold we have available to trade for gold
-            // this array will have some negative values in it, which will be the amount of resources we need to get from trades or swaps
-
-            // this is what is missing
-            resourcesAfterBuild = new int[6];
-            for (int i = 0; i < 6; i++) {
-                switch (struct) {
-                    case "R" -> resourcesAfterBuild[i] = availableResources[i] - roadResources[i];
-                    case "J" -> resourcesAfterBuild[i] = availableResources[i] - knightResources[i];
-                    case "C" -> resourcesAfterBuild[i] = availableResources[i] - cityResources[i];
-                    case "S" -> resourcesAfterBuild[i] = availableResources[i] - settlementResources[i];
-                }
-                ;
-            }
-
-            // this is the gold available to trade for resources - swapping with gold should be prioritised over using
-            // a knight to trade for resources, however as we are just doing validation that the build is possible
-            // we don't need to worry about that, and we can use the knights first and then see if we have enough gold
-            // to complete the build
-            int goldAvailable = resource_state[GOLD_ID];
-
-            // this is the knights available to trade with
-            ArrayList<Integer> knightsList = new ArrayList<>();
-            String[] boardArray = board_state.split(",");
-            for (String s : boardArray)
+                                                         int[] resource_state)
+    {
+        if (checkResources(structure, resource_state)) return true;
+        String[] boardArray = board_state.split(",");
+        String[] knightsAvailable = new String[6];
+        // finding available knights
+        for (String s : boardArray)
+        {
+            if (s.charAt(0) == 'J')
             {
-                if (s.charAt(0) == 'J')
+                knightsAvailable[Integer.parseInt(s.substring(1)) - 1] = s;
+            }
+        }
+        int[] availableResources = new int[6];
+        int[] missingResources = new int[6];
+
+        // creating available resources array and missing resources array
+        for (int i = 0; i < 6; i++)
+        {
+            int n = 0;
+            switch (structure.charAt(0))
+            {
+                case 'R' ->
                 {
-                    try {
-                        knightsList.add(Integer.parseInt(s.substring(1)) - 1); // this will be the index of the resource we can get from the knight (apart from 5 which we can use for anything)
-                    } catch (NumberFormatException e) {
-                        System.out.println("Error parsing knight number");
-                        return false;
+                    n = resource_state[i] - roadResources[i];
+                    if (n < 0) missingResources[i] = n;
+                    else availableResources[i] = n;
+                }
+                case 'J' ->
+                {
+                    n = resource_state[i] - knightResources[i];
+                    if (n < 0) missingResources[i] = n;
+                    else availableResources[i] = n;
+                }
+                case 'C' ->
+                {
+                    n = resource_state[i] - cityResources[i];
+                    if (n < 0) missingResources[i] = n;
+                    else availableResources[i] = n;
+
+                }
+                case 'S' ->
+                {
+                    n = resource_state[i] - settlementResources[i];
+                    if (n < 0) missingResources[i] = n;
+                    else availableResources[i] = n;
+
+                }
+            }
+        }
+        System.out.println("Available Resources: " + Arrays.toString(availableResources));
+        System.out.println("Missing Resources: " + Arrays.toString(missingResources));
+
+        if (Math.abs(2 * intSumArray(missingResources)) <= availableResources[5])
+        {
+            // we can perform gold trades only to get all the resources we need to build the structure
+            return true;
+        }
+        // iterate through the first 5 resources (the ones we need for building), and find all
+        // possible ways to get them above zero
+        for (int i = 0; i < 5; i++)
+        {
+            if (missingResources[i] < 0)
+            {
+                if (knightsAvailable[i] != null)
+                {
+                    // we can perform a swap with the knight, so we want to update the arrays accordingly
+                    // find the first available resource that we can swap with
+                    for (int j = 0; j < 5; j++)
+                    {
+                        if (availableResources[j] > 0)
+                        {
+                            // we can swap with this resource
+                            availableResources[j]--;
+                            missingResources[i]++;
+                            knightsAvailable[i] = null;
+                            if (missingResources[i] < 0) i--; // we want to redo this iteration of the loop and see if
+                            // there are other ways to get the resources we need
+                            System.out.println("Available Resources: " + Arrays.toString(availableResources));
+                            System.out.println("Missing Resources: " + Arrays.toString(missingResources));
+                            System.out.println("Available Knights: " + Arrays.toString(knightsAvailable));
+                            break;
+                        }
                     }
                 }
-            }
-            // for each required resource, we first want to see if we can get it from the specific knight for that
-            // resource (by trading using any resource in the available resources array that has a value greater than one)
-            // if we can't get it from the specific knight then we want to see if we can get it from the wildcard knight
-            // if we can't get if from that knight then we want to see if we can get it from gold (if we can we add one
-            // to the resource count and subtract two from the gold count)
-
-            for (int pos = 0; pos < availableResources.length - 1; pos++)
-            {
-                int timesRound = 0; // this is to make sure we don't get stuck in an infinite loop
-                if (availableResources[pos] >= 0) continue;
+                else if (knightsAvailable[5] != null)
+                {
+                    // we can perform the swap with the wildcard knight
+                    // find the first available resource that we can swap with
+                    for (int j = 0; j < 5; j++)
+                    {
+                        if (availableResources[j] > 0)
+                        {
+                            // we can swap with this resource
+                            availableResources[j]--;
+                            missingResources[i]++;
+                            knightsAvailable[5] = null;
+                            if (missingResources[i] < 0) i--; // we want to redo this iteration of the loop and see if
+                            // there are other ways to get the resources we need
+                            System.out.println("Available Resources: " + Arrays.toString(availableResources));
+                            System.out.println("Missing Resources: " + Arrays.toString(missingResources));
+                            System.out.println("Available Knights: " + Arrays.toString(knightsAvailable));
+                            break;
+                        }
+                    }
+                }
+                // finally we want to try and trade for gold to get the resources we need
+                else if (availableResources[5] >= 2)
+                {
+                    // we can trade for gold
+                    availableResources[5] -= 2;
+                    missingResources[i]++;
+                    if (missingResources[i] < 0) i--; // we want to redo this iteration of the loop and see if
+                    // there are other ways to get the resources we need
+                    System.out.println("Available Resources: " + Arrays.toString(availableResources));
+                    System.out.println("Missing Resources: " + Arrays.toString(missingResources));
+                    System.out.println("Available Knights: " + Arrays.toString(knightsAvailable));
+                }
                 else
                 {
-                    // first see if we have the specific knight for that resource
-                    if (knightsList.contains(pos))
-                    {
-
-                        timesRound++;
-                    }
-                    // otherwise see if we have the wildcard knight
-                    else if (knightsList.contains(5))
-                    {
-
-                        timesRound++;
-                    }
-                    // otherwise see if we can trade for gold
-                    else if (availableResources[GOLD_ID] >= 2)
-                    {
-                        availableResources[GOLD_ID] -= 2;
-                        availableResources[pos] += 1;
-                        timesRound ++;
-                    }
-                    // maybe we need to loop back as we have done one of the above but we still need more resources
-                    if (availableResources[pos] < 0 && timesRound < 5)
-                    {
-                        timesRound = 0;
-                        pos = -1;
-                    }
-                    // end the cycle if we have done it too many times
-                    else if (availableResources[pos] < 0 && timesRound >= 5)
-                    {
-                        return false;
-                    }
+                    // we can't get the resources we need
+                    return false;
                 }
+
             }
 
         }
-        return resourcesAfterBuild[0] >= 0 &&
-                resourcesAfterBuild[1] >= 0 &&
-                resourcesAfterBuild[2] >= 0 &&
-                resourcesAfterBuild[3] >= 0 &&
-                resourcesAfterBuild[4] >= 0 &&
-                resourcesAfterBuild[5] >= 0; // FIXME: Task #12 - Matthew
+        return true;
+    }
+
+    private static int intSumArray(int[] input)
+    {
+        int total = 0;
+        for (int i : input)
+        {
+            total += i;
+        }
+        return total;
     }
 
     /**
@@ -862,59 +902,338 @@ public class CatanDice {
      * @return An array of string representations of the roads along the
      *         path.
      */
-    public static String[] pathTo(String target_structure,
-                                  String board_state) {
-        if (board_state.contains(target_structure)) {
-            //create array string representation
-            return new String[]{}; //return the empty array.
+    public static String[] pathTo(String target_structure, String board_state) throws IllegalArgumentException
+    {
+        String[] alreadyBuilt = {};
+        String[] path = new String[15];
+        int pathLength = 0;
+        if (target_structure == null
+                || target_structure.length() == 0
+                || target_structure.length() == 1)
+        {
+            throw new IllegalArgumentException("Invalid target structure");
         }
-        String[] path = {
-                "S3,J1,R0",
-                "R0,R1,J2,C7",
-                "R0,R2,S4,R3", //String index in
-                "R3,J3,R4,C12",
-                "R3,R5,S5,R6,R7,S7",
-                "S7,R12,R13,C20,R14,R15,C30",
-                "S7,R8,J4,R9,S9,R10,J5,R11,J6,S11"
-                };
-        String result = path[0];
-        String temp[] = result.split(",");
-        String last = temp[temp.length - 1];
-        for (int i = 1; i < path.length; i++) {
-            if (result.contains(target_structure)){
-                break;
-            }
-            if (path[i].contains(target_structure)) {
-                result = result + "," + path[i].substring(3) ;
-                break;
-            }
-            if (path[i].startsWith(last)) {
-                temp = path[i].split(",");
-                if (path[i+1].startsWith(temp[temp.length - 1])){
-                    last = temp[temp.length - 1];
-                    result = result + "," + path[i].substring(3);
-                }
-            }
+        if (!isBoardStateWellFormed(board_state))
+        {
+            throw new IllegalArgumentException("Invalid board state");
         }
-        String unbuilt = "";
-        for (String j: result.split(","))
-        { //break the result into several string
-            if (!board_state.contains(j)){
-                if(j.equals(target_structure)){
-                    break;
-                } else {
-                    if (j.charAt(0) == 'R')
+
+        switch (target_structure.charAt(0))
+        {
+            case 'R' ->
+            {
+                switch (target_structure.charAt(1))
+                {
+                    case '0' ->
                     {
-                        unbuilt = unbuilt + j + ","; // eg. R1,R2,R3,R4,
+                        if (target_structure.length() == 2)
+                        {
+                            return alreadyBuilt;
+                        }
+                    }
+
+                    case '1' ->
+                    {
+                        if (target_structure.length() == 2)
+                        {
+                            return pathToHelper("R1", board_state, path, pathLength);
+                        }
+                        else if (target_structure.length() == 3)
+                        {
+                            switch (target_structure.charAt(2))
+                            {
+                                case '0' ->
+                                {
+                                    return pathToHelper("R9", board_state, path, pathLength);
+                                }
+                                case '1' ->
+                                {
+                                    return pathToHelper("R10", board_state, path, pathLength);
+                                }
+                                case '2' ->
+                                {
+                                    return pathToHelper("R7", board_state, path, pathLength);
+                                }
+                                case '3' ->
+                                {
+                                    return pathToHelper("R12", board_state, path, pathLength);
+                                }
+                                case '4' ->
+                                {
+                                    return pathToHelper("R13", board_state, path, pathLength);
+                                }
+                                case '5' ->
+                                {
+                                    return pathToHelper("R14", board_state, path, pathLength);
+                                }
+                            }
+                        }
+                    }
+                    case '2' ->
+                    {
+                        if (target_structure.length() == 2)
+                        {
+                            return pathToHelper("R0", board_state, path, pathLength);
+                        }
+                    }
+                    case '3' ->
+                    {
+                        if (target_structure.length() == 2)
+                        {
+                            return pathToHelper("R2", board_state, path, pathLength);
+                        }
+                    }
+                    case '4', '5' ->
+                    {
+                        if (target_structure.length() == 2)
+                        {
+                            return pathToHelper("R3", board_state, path, pathLength);
+                        }
+                    }
+                    case '6' ->
+                    {
+                        if (target_structure.length() == 2)
+                        {
+                            return pathToHelper("R5", board_state, path, pathLength);
+                        }
+                    }
+                    case '7' ->
+                    {
+                        if (target_structure.length() == 2)
+                        {
+                            return pathToHelper("R6", board_state, path, pathLength);
+                        }
+                    }
+                    case '8' ->
+                    {
+                        if (target_structure.length() == 2)
+                        {
+                            return pathToHelper("R7", board_state, path, pathLength);
+                        }
+                    }
+                    case '9' ->
+                    {
+                        if (target_structure.length() == 2)
+                        {
+                            return pathToHelper("R8", board_state, path, pathLength);
+                        }
                     }
                 }
             }
+
+            case 'S' ->
+            {
+                if (target_structure.length() == 2)
+                {
+                    switch (target_structure.charAt(1))
+                    {
+                        case '3' ->
+                        {
+                            return alreadyBuilt;
+                        }
+                        case '4' ->
+                        {
+                            return pathToHelper("R2", board_state, path, pathLength);
+                        }
+                        case '5' ->
+                        {
+                            return pathToHelper("R5", board_state, path, pathLength);
+                        }
+                        case '7' ->
+                        {
+                            return pathToHelper("R7", board_state, path, pathLength);
+                        }
+                        case '9' ->
+                        {
+                            return pathToHelper("R9", board_state, path, pathLength);
+                        }
+                    }
+                }
+                else if (target_structure.length() == 3)
+                {
+                    if (target_structure.equals("S11"))
+                    {
+                        return pathToHelper("R11", board_state, path, pathLength);
+                    }
+                }
+            }
+            case 'C' ->
+            {
+                if (target_structure.length() == 2)
+                {
+                    if (target_structure.equals("C7"))
+                    {
+                        return pathToHelper("R1", board_state, path, pathLength);
+                    }
+                }
+                else if (target_structure.length() == 3)
+                {
+                    switch (target_structure)
+                    {
+                        case "C12" ->
+                        {
+                            return pathToHelper("R4", board_state, path, pathLength);
+                        }
+                        case "C20" ->
+                        {
+                            return pathToHelper("R13", board_state, path, pathLength);
+                        }
+                        case "C30" ->
+                        {
+                            return pathToHelper("R15", board_state, path, pathLength);
+                        }
+                    }
+                }
+            }
+            case 'J' ->
+            {
+                return alreadyBuilt;
+            }
         }
-        if (unbuilt.length() == 0){
-            return new String[]{}; // none array
-        } else {
-            return unbuilt.substring(0, unbuilt.length() - 1).split(",");
+
+        return alreadyBuilt; // This line is here only so this code will compile if you don't modify it.
+    }
+
+    public static String[] pathToHelper(String ts, String bs, String[] acc, int pl) {
+        String[] path = acc;
+        int pathLength = pl;
+        switch (ts.charAt(1)) {
+            case '0' -> {
+                if (!bs.contains("R0")) {
+                    System.arraycopy(path, 0, path, 1, pathLength);
+                    path[0] = "R0";
+                    pathLength++;
+                }
+            }
+            case '1' -> {
+                if (ts.length()==2) {
+                    if (!bs.endsWith("R1") && !bs.contains("R1,")) {
+                        System.arraycopy(path, 0, path, 1, pathLength);
+                        path[0] = "R1";
+                        pathLength++;
+                    }
+                    return pathToHelper("R0", bs, path, pathLength);
+                } else {
+                    switch (ts.charAt(2)) {
+                        case '0' -> {
+                            if (!bs.contains("R10")) {
+                                System.arraycopy(path, 0, path, 1, pathLength);
+                                path[0] = "R10";
+                                pathLength++;
+                            }
+                            return pathToHelper("R9", bs, path, pathLength);
+                        }
+                        case '1' -> {
+                            if (!bs.contains("R11")) {
+                                System.arraycopy(path, 0, path, 1, pathLength);
+                                path[0] = "R11";
+                                pathLength++;
+                            }
+                            return pathToHelper("R10", bs, path, pathLength);
+                        }
+                        case '2' -> {
+                            if (!bs.contains("R12")) {
+                                System.arraycopy(path, 0, path, 1, pathLength);
+                                path[0] = "R12";
+                                pathLength++;
+                            }
+                            return pathToHelper("R7", bs, path, pathLength);
+                        }
+                        case '3' -> {
+                            if (!bs.contains("R13")) {
+                                System.arraycopy(path, 0, path, 1, pathLength);
+                                path[0] = "R13";
+                                pathLength++;
+                            }
+                            return pathToHelper("R12", bs, path, pathLength);
+                        }
+                        case '4' -> {
+                            if (!bs.contains("R14")) {
+                                System.arraycopy(path, 0, path, 1, pathLength);
+                                path[0] = "R14";
+                                pathLength++;
+                            }
+                            return pathToHelper("R13", bs, path, pathLength);
+                        }
+                        case '5' -> {
+                            if (!bs.contains("R15")) {
+                                System.arraycopy(path, 0, path, 1, pathLength);
+                                path[0] = "R15";
+                                pathLength++;
+                            }
+                            return pathToHelper("R14", bs, path, pathLength);
+                        }
+                    }
+                }
+            }
+            case '2' -> {
+                if (!bs.contains("R2")) {
+                    System.arraycopy(path, 0, path, 1, pathLength);
+                    path[0] = "R2";
+                    pathLength++;
+                }
+                return pathToHelper("R0", bs, path, pathLength);
+            }
+            case '3' -> {
+                if (!bs.contains("R3")) {
+                    System.arraycopy(path, 0, path, 1, pathLength);
+                    path[0] = "R3";
+                    pathLength++;
+                }
+                return pathToHelper("R2", bs, path, pathLength);
+            }
+            case '4' -> {
+                if (!bs.contains("R4")) {
+                    System.arraycopy(path, 0, path, 1, pathLength);
+                    path[0] = "R4";
+                    pathLength++;
+                }
+                return pathToHelper("R3", bs, path, pathLength);
+            }
+            case '5' -> {
+                if (!bs.contains("R5")) {
+                    System.arraycopy(path, 0, path, 1, pathLength);
+                    path[0] = "R5";
+                    pathLength++;
+                }
+                return pathToHelper("R3", bs, path, pathLength);
+            }
+            case '6' -> {
+                if (!bs.contains("R6")) {
+                    System.arraycopy(path, 0, path, 1, pathLength);
+                    path[0] = "R6";
+                    pathLength++;
+                }
+                return pathToHelper("R5", bs, path, pathLength);
+            }
+            case '7' -> {
+                if (!bs.contains("R7")) {
+                    System.arraycopy(path, 0, path, 1, pathLength);
+                    path[0] = "R7";
+                    pathLength++;
+                }
+                return pathToHelper("R6", bs, path, pathLength);
+            }
+            case '8' -> {
+                if (!bs.contains("R8")) {
+                    System.arraycopy(path, 0, path, 1, pathLength);
+                    path[0] = "R8";
+                    pathLength++;
+                }
+                return pathToHelper("R7", bs, path, pathLength);
+            }
+            case '9' -> {
+                if (!bs.contains("R9")) {
+                    System.arraycopy(path, 0, path, 1, pathLength);
+                    path[0] = "R9";
+                    pathLength++;
+                }
+                return pathToHelper("R8", bs, path, pathLength);
+            }
         }
+        String[] pathFinal = new String[pathLength];
+        System.arraycopy(path,0,pathFinal,0,pathLength);
+        return pathFinal;
     }
 
 
@@ -943,15 +1262,53 @@ public class CatanDice {
      */
     public static String[] buildPlan(String target_structure,
                                      String board_state,
-                                     int[] resource_state) {
-
-        String[] path = pathTo(target_structure, board_state);
-        System.out.println(path.length);
-        System.out.println(target_structure);
-        System.out.println(board_state);
-        return null; // FIXME: Task #14 - Matthew
-
+                                     int[] resource_state)
+    {
+//       return Task14.buildPlan(target_structure, board_state, resource_state);
+        return null;
     }
+
+
+    public static boolean checkResourcesWithTradeButNoSwap(String structure, int[] resource_state)
+    {
+        int[] availableResources = new int[6];
+        int[] missingResources = new int[6];
+        // creating available resources array and missing resources array
+        for (int i = 0; i < 6; i++)
+        {
+            int n = 0;
+            switch (structure.charAt(0))
+            {
+                case 'R' ->
+                {
+                    n = resource_state[i] - roadResources[i];
+                    if (n < 0) missingResources[i] = n;
+                    else availableResources[i] = n;
+                }
+                case 'J' ->
+                {
+                    n = resource_state[i] - knightResources[i];
+                    if (n < 0) missingResources[i] = n;
+                    else availableResources[i] = n;
+                }
+                case 'C' ->
+                {
+                    n = resource_state[i] - cityResources[i];
+                    if (n < 0) missingResources[i] = n;
+                    else availableResources[i] = n;
+
+                }
+                case 'S' ->
+                {
+                    n = resource_state[i] - settlementResources[i];
+                    if (n < 0) missingResources[i] = n;
+                    else availableResources[i] = n;
+                }
+            }
+        }
+        return (Math.abs(intSumArray(missingResources)) * 2 <= availableResources[5]);
+    }
+
 
     public static void main(String[] args){
 
