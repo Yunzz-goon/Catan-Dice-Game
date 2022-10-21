@@ -14,8 +14,8 @@ contributions:
     contribution: 33
   - uid: u7601226
     contribution: 33
-  - uid:
-    contribution:
+  - uid: u7503889
+    contribution: 33
 
 # Sign *your* name and uids here. (Remove entries if you have fewer
 # than three members)
@@ -24,5 +24,5 @@ signatures:
     uid: u7543705
   - name: Matthew Britton
     uid: u7501226
-  - name:
-    uid:
+  - name: Jingru Lin
+    uid: u7503889

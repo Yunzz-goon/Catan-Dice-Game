@@ -18,9 +18,7 @@ declaration: >-
 #
 # Add as many "name+comment" entries as necessary
 # (or remove it altogether if you haven't collaborated with anyone)
-collaboration:
-  - name:
-    comment: >-
+
 
 # Use this to list any code that you used that you did not write,
 # aside from code provided by the lecturer.  Provide a comment
@@ -36,16 +34,13 @@ code:
 
 # I wish to submit the following classes as entirely my own (remove this if
 # you want to just submit methods):
-class:
-   - 
-   - 
 
 # I wish to submit the following methods as entirely my own (remove this if
 # you want to just submit classes):
 method:
-   - 
-   - 
+   - pathTo: https://gitlab.cecs.anu.edu.au/u7501226/comp1110-ass2/-/blob/main/src/comp1110/ass2/Main/CatanDice.java#L865-918
+
 
 # sign *your* name and uid here
-name:
-uid:
+name: Jingru Lin
+uid: u7503889
