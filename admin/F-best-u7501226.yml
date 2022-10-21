@@ -25,10 +25,10 @@ declaration: >-
 # I wish to submit the following methods as entirely my own (remove this if
 # you want to just submit classes):
 method:
-   - checkResourcesWithTradeAndSwap https://gitlab.cecs.anu.edu.au/u7501226/comp1110-ass2/-/blob/main/src/comp1110/ass2/Main
-   - canDoSquence
-   - canDoAction
-   - reRoll
+   - checkResourcesWithTradeAndSwap https://gitlab.cecs.anu.edu.au/u7501226/comp1110-ass2/-/blob/main/src/comp1110/ass2/Main/CatanDice.java#L438-618
+   - canDoSquence  https://gitlab.cecs.anu.edu.au/u7501226/comp1110-ass2/-/blob/main/src/comp1110/ass2/Main/CatanDice.java#L715-834
+   - canDoAction  https://gitlab.cecs.anu.edu.au/u7501226/comp1110-ass2/-/blob/main/src/comp1110/ass2/Main/CatanDice.java#L639-704
+   - reRoll https://gitlab.cecs.anu.edu.au/u7501226/comp1110-ass2/-/blob/main/src/comp1110/ass2/gui/Game.java#L72-178
 
 # sign *your* name and uid here
 name: Matthew Britton

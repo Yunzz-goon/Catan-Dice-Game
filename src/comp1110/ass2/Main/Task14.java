@@ -1,4 +1,4 @@
-package comp1110.ass2.Main;
+package comp1110.ass2;
 
 import java.util.Arrays;
 
@@ -7,8 +7,9 @@ import static comp1110.ass2.Main.Constants.*;
 import static java.lang.Character.getNumericValue;
 
 
-public class Task14 {
 
+
+public class Task14 {
 
     public static int[] updateResourceState(String actionThisIteration, int[] resource_state)
     {
@@ -103,7 +104,7 @@ public class Task14 {
         return greatestCurrentKnight1;
     }
 
-    private static String[] stringToArrayOfString(String board_state5) {
+    static String[] stringToArrayOfString(String board_state5) {
         return board_state5.split(",");
     }
 
@@ -167,7 +168,7 @@ public class Task14 {
         }
         String[] tempPath = pathTo(target_Structure, boardState);
         String structureToBuildFirstPath = "";
-        String structureToBuildSecondPath = "";
+        String structureToBuildSecondPath;
         if (tempPath.length >= 1) structureToBuildFirstPath = tempPath[0];
         if (tempPath.length >= 2) {
             structureToBuildSecondPath = tempPath[1];
@@ -193,16 +194,6 @@ public class Task14 {
                             "build " + target_Structure
                     };
                 }
-                if (target_Structure.charAt(0) == 'J' && checkBuildConstraints(structureToBuildFirstPath, boardState)
-                        && checkResources(structureToBuildFirstPath, resources)
-                        && checkResources(target_Structure,
-                        updateResourceState("build " + structureToBuildFirstPath, resources))) {
-                    System.out.println("here too for joker");
-                    return new String[]{
-                            "build " + pathTo(target_Structure, boardState)[0],
-                            "build " + target_Structure
-                    };
-                }
 
                 if (target_Structure.charAt(0) == 'R'
                         && checkBuildConstraints(target_Structure,
@@ -213,147 +204,158 @@ public class Task14 {
                                         resources)))
                         && checkResources(structureToBuildFirstPath,
                         updateResourceState("build " +
-                                structureToBuildSecondPath,resources))
+                                structureToBuildSecondPath, resources))
 
-                        && checkResources(structureToBuildSecondPath,resources)
+                        && checkResources(structureToBuildSecondPath, resources)
                         && checkBuildConstraints(structureToBuildFirstPath, boardState + "," + structureToBuildSecondPath)
-                        && checkBuildConstraints(structureToBuildSecondPath, boardState))
-                {
+                        && checkBuildConstraints(structureToBuildSecondPath, boardState)) {
                     return new String[]
                             {
-                                    "build" +  structureToBuildSecondPath + "," + "build " + structureToBuildFirstPath + "," + "build " + target_Structure
+                                    "build" + structureToBuildSecondPath + "," + "build " + structureToBuildFirstPath + "," + "build " + target_Structure
                             };
                 }
             }
-            int[] resourceCostArray = resourcesRequired(target_Structure, resources);
-            int knightsToResourcesWeHaveComparison = intSumArray(resourceCostArray) - intSumArray(knightsOnBoard(boardState));
-            String actionPlanner = "";
-            if (checkResourcesWithTradeAndSwap(target_Structure, boardState, resources)) {
-                // case where knight swaps and no gold trades are mandatory
-                if (knightsToResourcesWeHaveComparison == 0) {
-                    String[] boardArray = stringToArrayOfString(boardState);
-                    String[] knightsAvailable = new String[6];
-                    // finding available knights
-                    for (String s : boardArray) {
-                        if (s.charAt(0) == 'J') {
-                            knightsAvailable[Integer.parseInt(s.substring(1)) - 1] = s;
+        }
+        if (target_Structure.charAt(0) == 'J' && checkBuildConstraints("J" + ((Integer.parseInt(String.valueOf(target_Structure.charAt(1)))) - 1), boardState)
+                && checkResources(("J" + (Integer.parseInt(String.valueOf(target_Structure.charAt(1)))-1)), resources)
+                && checkBuildConstraints(target_Structure, boardState + "," + "J" + ((Integer.parseInt(String.valueOf(target_Structure.charAt(1)))) - 1))
+                && checkResources(target_Structure, updateResourceState("build " + "J" + ((Integer.parseInt(String.valueOf(target_Structure.charAt(1)))) - 1) , resources))) {
+            System.out.println("here too for joker");
+            return new String[]{
+                    "build " + "J" + ((Integer.parseInt(String.valueOf(target_Structure.charAt(1)))) - 1),
+                    "build " + target_Structure
+            };
+        }
+        int[] resourceCostArray = resourcesRequired(target_Structure, resources);
+        int knightsToResourcesWeHaveComparison = intSumArray(resourceCostArray) - intSumArray(knightsOnBoard(boardState));
+        String actionPlanner = "";
+        if (checkResourcesWithTradeAndSwap(target_Structure, boardState, resources)) {
+            // case where knight swaps and no gold trades are mandatory
+            if (knightsToResourcesWeHaveComparison == 0) {
+                String[] boardArray = stringToArrayOfString(boardState);
+                String[] knightsAvailable = new String[6];
+                // finding available knights
+                for (String s : boardArray) {
+                    if (s.charAt(0) == 'J') {
+                        knightsAvailable[Integer.parseInt(s.substring(1)) - 1] = s;
+                    }
+                }
+                int[] availableResources = new int[6];
+                int[] missingResources = new int[6];
+
+                // creating available resources array and missing resources array
+                for (int i = 0; i < 6; i++) {
+                    int n = 0;
+                    switch (target_Structure.charAt(0)) {
+                        case 'R' -> {
+                            n = resources[i] - costFinder("R1")[i];
+                            if (n < 0) missingResources[i] = n;
+                            else availableResources[i] = n;
+                        }
+                        case 'J' -> {
+                            n = resources[i] - costFinder("J")[i];
+                            if (n < 0) missingResources[i] = n;
+                            else availableResources[i] = n;
+                        }
+                        case 'C' -> {
+                            n = resources[i] - costFinder("C7")[i];
+                            if (n < 0) missingResources[i] = n;
+                            else availableResources[i] = n;
+
+                        }
+                        case 'S' -> {
+                            n = resources[i] - costFinder("S1")[i];
+                            if (n < 0) missingResources[i] = n;
+                            else availableResources[i] = n;
                         }
                     }
-                    int[] availableResources = new int[6];
-                    int[] missingResources = new int[6];
+                }
+                System.out.println(Arrays.toString(knightsAvailable));
+                System.out.println(Arrays.toString(availableResources));
+                System.out.println(Arrays.toString(missingResources));
+                int[] availableClone = availableResources.clone();
+                int[] missingClone = missingResources.clone();
 
-                    // creating available resources array and missing resources array
-                    for (int i = 0; i < 6; i++) {
-                        int n = 0;
-                        switch (target_Structure.charAt(0)) {
-                            case 'R' -> {
-                                n = resources[i] - costFinder("R1")[i];
-                                if (n < 0) missingResources[i] = n;
-                                else availableResources[i] = n;
-                            }
-                            case 'J' -> {
-                                n = resources[i] - costFinder("J")[i];
-                                if (n < 0) missingResources[i] = n;
-                                else availableResources[i] = n;
-                            }
-                            case 'C' -> {
-                                n = resources[i] - costFinder("C7")[i];
-                                if (n < 0) missingResources[i] = n;
-                                else availableResources[i] = n;
-
-                            }
-                            case 'S' -> {
-                                n = resources[i] - costFinder("S1")[i];
-                                if (n < 0) missingResources[i] = n;
-                                else availableResources[i] = n;
-                            }
-                        }
-                    }
-                    System.out.println(Arrays.toString(knightsAvailable));
-                    System.out.println(Arrays.toString(availableResources));
-                    System.out.println(Arrays.toString(missingResources));
-                    int[] availableClone = availableResources.clone();
-                    int[] missingClone = missingResources.clone();
-
-                    // iterate through the first 5 resources (the ones we need for building), and find all
-                    // possible ways to get them above zero
-                    for (int i = 0; i < 5; i++) {
-                        if (missingResources[i] < 0) {
-                            if (knightsAvailable[i] != null) {
-                                // we can perform a swap with the knight, so we want to update the arrays accordingly
-                                // find the first available resource that we can swap with
-                                for (int j = 0; j < 6; j++) {
-                                    if (availableResources[j] > 0) {
-                                        // we can swap with this resource
-                                        availableResources[j]--;
-                                        missingResources[i]++;
-                                        knightsAvailable[i] = null;
-                                        if (missingResources[i] < 0)
-                                            i--; // we want to redo this iteration of the loop and see if
-                                        // there are other ways to get the resources we need
-                                        break;
-                                    }
-                                }
-                            } else if (knightsAvailable[5] != null) {
-                                // we can perform the swap with the wildcard knight
-                                // find the first available resource that we can swap with
-                                for (int j = 0; j < 6; j++) {
-                                    if (availableResources[j] > 0) {
-                                        // we can swap with this resource
-                                        availableResources[j]--;
-                                        missingResources[i]++;
-                                        knightsAvailable[5] = null;
-                                        if (missingResources[i] < 0)
-                                            i--; // we want to redo this iteration of the loop and see if
-                                        // there are other ways to get the resources we need
-
-                                        break;
-                                    }
+                // iterate through the first 5 resources (the ones we need for building), and find all
+                // possible ways to get them above zero
+                for (int i = 0; i < 5; i++) {
+                    if (missingResources[i] < 0) {
+                        if (knightsAvailable[i] != null) {
+                            // we can perform a swap with the knight, so we want to update the arrays accordingly
+                            // find the first available resource that we can swap with
+                            for (int j = 0; j < 6; j++) {
+                                if (availableResources[j] > 0) {
+                                    System.out.println("checking in here for j");
+                                    // we can swap with this resource
+                                    availableResources[j]--;
+                                    missingResources[i]++;
+                                    knightsAvailable[i] = null;
+                                    if (missingResources[i] < 0)
+                                        i--; // we want to redo this iteration of the loop and see if
+                                    // there are other ways to get the resources we need
+                                    break;
                                 }
                             }
-                        }
-                    }
-                    System.out.println("Matt is really really dumb");
-                    for (int i = 0; i < intSumArray(knightsOnBoard(boardState)); i++) {
-                        int resourceUsed = -1;
-                        int resourceGained = -1;
-                        for (int j = 0; j < availableClone.length; j++) {
-                            if (availableClone[j] > 0) {
-                                resourceUsed = j;
-                                availableClone[j]--;
-                                break;
+                        } else if (knightsAvailable[5] != null) {
+                            System.out.println("checking in here for  if it made it");
+                            // we can perform the swap with the wildcard knight
+                            // find the first available resource that we can swap with
+                            for (int j = 0; j < 6; j++) {
+                                if (availableResources[j] > 0) {
+                                    // we can swap with this resource
+                                    availableResources[j]--;
+                                    missingResources[i]++;
+                                    knightsAvailable[5] = null;
+                                    if (missingResources[i] < 0)
+                                        i--; // we want to redo this iteration of the loop and see if
+                                    // there are other ways to get the resources we need
+
+                                    break;
+                                }
                             }
                         }
-
-                        for (int k = 0; k < missingClone.length; k++) {
-                            if (missingClone[k] < 0) {
-                                resourceGained = k;
-                                missingClone[k]++;
-                                break;
-                            }
-
+                    }
+                }
+                System.out.println("Matt is really really dumb");
+                for (int i = 0; i < intSumArray(knightsOnBoard(boardState)); i++) {
+                    int resourceUsed = -1;
+                    int resourceGained = -1;
+                    for (int j = 0; j < availableClone.length; j++) {
+                        if (availableClone[j] > 0) {
+                            resourceUsed = j;
+                            availableClone[j]--;
+                            break;
                         }
-
-                        actionPlanner += "swap " + resourceUsed + " " + resourceGained + ",";
                     }
 
-                    return stringToArrayOfString(actionPlanner);
+                    for (int k = 0; k < missingClone.length; k++) {
+                        if (missingClone[k] < 0) {
+                            resourceGained = k;
+                            missingClone[k]++;
+                            break;
+                        }
+
+                    }
+
+                    actionPlanner += "swap " + resourceUsed + " " + resourceGained + ",";
+                }
+
+                return stringToArrayOfString(actionPlanner);
 
 
-                    // case where knight swaps and gold trades are mandatory
+                // case where knight swaps and gold trades are mandatory
 
-                    // case where both are required in a specific arrangement s.t. gold is left for knights
+                // case where both are required in a specific arrangement s.t. gold is left for knights
 //                return null;
 
 
-                }
-
-
             }
-            System.out.println("Matt is really really really dumb");
-            return null; // this is a placeholder
+
+
         }
-        return null;
+        System.out.println("Matt is really really really dumb");
+        return null; // this is a placeholder
+
     }
 
     public static int[] resourcesRequired(String structure9, int[] resources9) {
@@ -370,6 +372,39 @@ public class Task14 {
                 resources9[3] - costs[3],
                 resources9[4] - costs[4],
                 resources9[5] - costs[5]};
+    }
+
+    public static boolean checkResourcesWithToTradeButNoSwap(String structure, String boardState, int[] resources) {
+        int[] availableResources = new int[6];
+        int[] missingResources = new int[6];
+        // creating available resources array and missing resources array
+        for (int i = 0; i < 6; i++) {
+            int n = 0;
+            switch (structure.charAt(0)) {
+                case 'R' -> {
+                    n = resources[i] - costFinder("R1")[i];
+                    if (n < 0) missingResources[i] = n;
+                    else availableResources[i] = n;
+                }
+                case 'J' -> {
+                    n = resources[i] - costFinder("J1")[i];
+                    if (n < 0) missingResources[i] = n;
+                    else availableResources[i] = n;
+                }
+                case 'C' -> {
+                    n = resources[i] - costFinder("C1")[i];
+                    if (n < 0) missingResources[i] = n;
+                    else availableResources[i] = n;
+
+                }
+                case 'S' -> {
+                    n = resources[i] - costFinder("S4")[i];
+                    if (n < 0) missingResources[i] = n;
+                    else availableResources[i] = n;
+                }
+            }
+        }
+        return (Math.abs(intSumArray(missingResources)) * 2 <= availableResources[5]);
     }
 
     public static int[] costFinder(String structure) {
@@ -471,11 +506,8 @@ public class Task14 {
                 resources1110[3] + usedGoldPermanent4,
                 resources1110[4] + usedGoldPermanent5,
                 resources1110[5] - 2 * (usedGoldPermanent1 + usedGoldPermanent2 + usedGoldPermanent3 + usedGoldPermanent4 + usedGoldPermanent5)};
-
         return stringOfSwaps;
     }
-
-
 
     public static int intSumArray(int[] array) {
         int sum = 0;
@@ -533,12 +565,34 @@ public class Task14 {
                     updateResourceState(("build " + pathToTarget[0]),
                             resources100));
 
-            if (!checkResourcesWithTradeAndSwap(target_Structure1, boardState111, resources100)) {
-                return false;
-            }
+            return checkResourcesWithTradeAndSwap(target_Structure1, boardState111, resources100);
         }
 
         return true;
+    }
+
+    public String settlementPrevious (String settlement) {
+        switch (settlement) {
+            case "S3" -> {
+                return "";
+            }
+            case "S4" -> {
+                return "S3";
+            }
+            case "S5" -> {
+                return "S4";
+            }
+            case "S7" -> {
+                return "S5";
+            }
+            case "S9" -> {
+                return "S7";
+            }
+            case "S11" -> {
+                return "S9";
+            }
+        }
+        return "";
     }
 }
 
