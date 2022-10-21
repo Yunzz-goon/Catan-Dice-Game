@@ -335,6 +335,87 @@ public class CatanDice {
             }
         }
         return false;
+//        BuildBuilding buildings = new BuildBuilding();
+//
+//        // deploy the status of the building
+//        if (Objects.equals(board_state, "")) {
+//            return true;
+//        }
+//        String[] states = board_state.split(",");
+//        for (String state : states) {
+//            char build_type = state.charAt(0);
+//            int length = state.length() - 1;
+//            char[] build_no = new char[length];
+//            state.getChars(1, length + 1, build_no, 0);
+//            String build_no_str = new String(build_no);
+//            Integer build_no_int = Integer.valueOf(build_no_str);
+//
+////            if (build_type == 'R'){
+////                buildings.roads.get(build_no_int).setStatus(true);
+////            } else if (build_type == 'S') {
+////                buildings.settlements.get(build_no_int).setStatus(true);
+////            } else if (build_type == 'C') {
+////                buildings.cities.get(build_no_int).setStatus(true);
+////            } else if (build_type == 'J') {
+////                buildings.knights.get(build_no_int).setStatus(true);
+////            } else if (build_type == 'K') {
+////                buildings.knights.get(build_no_int).setStatus(true);
+////                buildings.knights.get(build_no_int).setDisposableStatus(true);
+////            } else{
+////                System.out.println("Unexpected type");
+////            }
+//            switch (build_type) {
+//                case 'R' -> buildings.roads.get(build_no_int).setStatus(true);
+//                case 'S' -> buildings.settlements.get(build_no_int).setStatus(true);
+//                case 'C' -> buildings.cities.get(build_no_int).setStatus(true);
+//                case 'J' -> buildings.knights.get(build_no_int).setStatus(true);
+//                case 'K' -> {
+//                    buildings.knights.get(build_no_int).setStatus(true);
+//                    buildings.knights.get(build_no_int).setDisposableStatus(true);
+//                }
+//                default -> System.out.println("Unexpected type");
+//            }
+//        }
+//        char build_type = structure.charAt(0);
+//        int length = structure.length() - 1;
+//        char[] build_no = new char[length];
+//        structure.getChars(1, length + 1, build_no, 0);
+//        String build_no_str = new String(build_no);
+//        Integer build_no_int = Integer.valueOf(build_no_str);
+////        if (build_type == 'R') {
+////            return buildings.roads.get(build_no_int).isBuildingAssess();
+////        } else if (build_type == 'S') {
+////            return buildings.settlements.get(build_no_int).isBuildingAssess();
+////        } else if (build_type == 'C') {
+////            return buildings.cities.get(build_no_int).isBuildingAssess();
+////        } else if (build_type == 'J') {
+////            return buildings.knights.get(build_no_int).isBuildingAssess();
+////        } else if (build_type == 'K') {
+////            return buildings.knights.get(build_no_int).isBuildingAssess();
+////        } else {
+////            System.out.println("Unexpected type");
+////        }
+//        switch (build_type)
+//        {
+//            case 'R' ->
+//            {
+//                return buildings.roads.get(build_no_int).isBuildingAssess();
+//            }
+//            case 'S' ->
+//            {
+//                return buildings.settlements.get(build_no_int).isBuildingAssess();
+//            }
+//            case 'C' ->
+//            {
+//                return buildings.cities.get(build_no_int).isBuildingAssess();
+//            }
+//            case 'J', 'K' ->
+//            {
+//                return buildings.knights.get(build_no_int).isBuildingAssess();
+//            }
+//            default -> System.out.println("Unexpected type");
+//        }
+//        return false;
     }
 
 
@@ -618,6 +699,7 @@ public class CatanDice {
                 }
             }
         }
+
         return true;
     }
 
@@ -812,7 +894,7 @@ public class CatanDice {
      * an empty array.
      *
      * Note that on the Island One map, there is a unique path to every
-     * structure.
+     * structure. 
      *
      * @param target_structure: The string representation of the structure
      *        to reach.
@@ -1178,7 +1260,6 @@ public class CatanDice {
      *         there exists no valid build plan for the target structure,
      *         the method should return null.
      */
-    // FIXME - Task 14 - Matthew
     public static String[] buildPlan(String target_structure,
                                      String board_state,
                                      int[] resource_state)
