@@ -944,9 +944,11 @@ public class CatanDice {
     public static String[] buildPlan(String target_structure,
                                      String board_state,
                                      int[] resource_state) {
+
+        String[] path = pathTo(target_structure, board_state);
+        System.out.println(path.length);
         System.out.println(target_structure);
         System.out.println(board_state);
-        String[] path = pathTo(target_structure, board_state);
         return null; // FIXME: Task #14 - Matthew
 
     }
