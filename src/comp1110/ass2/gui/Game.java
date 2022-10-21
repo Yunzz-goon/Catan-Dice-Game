@@ -16,6 +16,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Random;
 
 
@@ -66,30 +67,106 @@ public class Game extends Viewer {
         seed += 1;
 
     }
-
-
-    /**
-     *
-     * @param resource_reroll: Some number in 0-5 Each represents Grain, Wool, Lumber,
-     *                      Brick, Gold respectively.
-     * @param resource_state
-     */
-    public void rollDiceDisplay(String resource_reroll, int[] resource_state){
-        int seed = 0;
-
-        int n_dice;
-        if (resource_reroll.equals("") == false) {
-            n_dice = resource_reroll.length();
-            int resource_int;
-            for (int i = 0; i < n_dice; i++) {
-                resource_int = Integer.valueOf(resource_reroll.charAt(i)) - 48;
-                resource_state[resource_int] -= 1;
-                assert (resource_state[resource_int] < 0) : "Lack one of the selected resource";
-            }
-        } else{
-            n_dice = 6;
+    // String input will be "roll ore, gold, etc., u need to distinguish between gold and grain 'G'
+    // accepts inputs of the form "roll Ore, Grain, Wool, Lumber, Brick, Gold
+    public void reRoll(int[] resource_state, String action)
+    {
+//     if (inputActionWellFormed(action))
+        if (Objects.equals(action, "") && noResources(resource_state))
+        {
+            rollDiceReal(6, resource_state);
         }
-        rollDiceReal(n_dice, resource_state);
+        else {
+            Random r = new Random(256);
+            String[] splitactionArray1 = action.split(" ");
+            String[] splitactionArray = new String[splitactionArray1.length - 1];
+            System.arraycopy(splitactionArray1, 1, splitactionArray, 0, splitactionArray1.length - 1);
+            for (String s : splitactionArray)
+            {
+                if (s.charAt(0) == 'O')
+                {
+                    if (resource_state[0] > 0)
+                    {
+                        resource_state[0] -= 1;
+                        resource_state[r.nextInt(5) + 1] += 1;
+                    }
+                    else
+                    {
+                        System.out.println("You don't have any ore");
+                    }
+                }
+                if (s.charAt(0) == 'G' && s.charAt(1) == 'r')
+                {
+                    if (resource_state[1] > 0)
+                    {
+                        resource_state[1] = resource_state[1] - 1;
+                        int resource_index = r.nextInt(6);
+                        resource_state[resource_index] += 1;
+                    }
+                    else
+                    {
+                        System.out.println("You don't have any grain");
+                    }
+                }
+
+                if (s.charAt(0) == 'W')
+                {
+                    if (resource_state[2] > 0)
+                    {
+                        resource_state[2] = resource_state[2] - 1;
+                        int resource_index = r.nextInt(6);
+                        resource_state[resource_index] += 1;
+                    }
+                    else
+                    {
+                        System.out.println("You don't have any wool");
+                    }
+                }
+                if (s.charAt(0) == 'L')
+                {
+                    if (resource_state[3] > 0)
+                    {
+                        resource_state[3] = resource_state[3] - 1;
+                        int resource_index = r.nextInt(6);
+                        resource_state[resource_index] += 1;
+                    }
+                    else
+                    {
+                        System.out.println("You don't have any lumber");
+                    }
+
+                }
+                if (s.charAt(0) == 'B')
+                {
+                    if (resource_state[4] > 0)
+                    {
+                        resource_state[4] = resource_state[4] - 1;
+                        int resource_index = r.nextInt(6);
+                        resource_state[resource_index] += 1;
+                    }
+                    else
+                    {
+                        System.out.println("You don't have any bricks");
+                    }
+                }
+                if (s.charAt(1) == 'G' && s.charAt(1) == 'o')
+                {
+                    if (resource_state[5] > 0)
+                    {
+                        resource_state[5] = resource_state[5] - 1;
+                        int resource_index = r.nextInt(6);
+                        resource_state[resource_index] += 1;
+                    }
+                    else
+                    {
+                        System.out.println("You don't have any gold");
+                    }
+
+                }
+            }
+
+        }
+
         text_resource.setText("You' ve got " + resource_state[0] + " Ore, "
                 + resource_state[1] + " Grain, "
                 + resource_state[2] + " Wool, "
@@ -97,7 +174,79 @@ public class Game extends Viewer {
                 + resource_state[4] + " Brick, "
                 + resource_state[5] + " Gold. ");
         text_resource.setFont(Font.font(15));
+
     }
+
+    private boolean inputActionWellFormed(String action)
+    {
+        if (Objects.equals(action, "") || action == null) return false;
+        String[] splitactionArray1 = action.split(" ");
+        if (splitactionArray1.length == 1) return false;
+        if (!Objects.equals(splitactionArray1[0], "Roll")) return false;
+        String[] splitactionArray = new String[splitactionArray1.length - 1];
+        System.arraycopy(splitactionArray1, 1, splitactionArray, 0, splitactionArray1.length - 1);
+        for (String s : splitactionArray)
+        {
+            if (s.charAt(0) == 'O' || s.charAt(0) == 'W' || s.charAt(0) == 'L' || s.charAt(0) == 'B')
+            {
+                if (s.length() != 3) return false;
+                if (s.charAt(1) != 'r' || s.charAt(2) != 'e') return false;
+            }
+            else if (s.charAt(0) == 'G' && s.charAt(1) == 'r')
+            {
+                if (s.length() != 5) return false;
+                if (s.charAt(2) != 'a' || s.charAt(3) != 'i' || s.charAt(4) != 'n') return false;
+            }
+            else if (s.charAt(0) == 'G' && s.charAt(1) == 'o')
+            {
+                if (s.length() != 4) return false;
+                if (s.charAt(2) != 'l' || s.charAt(3) != 'd') return false;
+            }
+            else return true;
+        }
+        return true;
+
+    }
+
+    private boolean noResources(int[] resource_state)
+    {
+        return resource_state[0] == 0 &&
+                resource_state[1] == 0 &&
+                resource_state[2] == 0 &&
+                resource_state[3] == 0 &&
+                resource_state[4] == 0 &&
+                resource_state[5] == 0;
+    }
+
+
+//    /**
+//     *
+//     * @param resource_reroll: Some number in 0-5 Each represents Grain, Wool, Lumber,
+//     *                      Brick, Gold respectively.
+//     * @param resource_state
+//     */
+//    public void rollDiceDisplay(String resource_reroll, int[] resource_state){
+//               int n_dice;
+//        if (!resource_reroll.equals("")) {
+//            n_dice = resource_reroll.length();
+//            int resource_int;
+//            for (int i = 0; i < n_dice; i++) {
+//                resource_int = resource_reroll.charAt(i) - 48;
+//                resource_state[resource_int] -= 1;
+//                assert (resource_state[resource_int] < 0) : "Lack one of the selected resource";
+//            }
+//        } else{
+//            n_dice = 6;
+//        }
+//        rollDiceReal(n_dice, resource_state);
+//        text_resource.setText("You' ve got " + resource_state[0] + " Ore, "
+//                + resource_state[1] + " Grain, "
+//                + resource_state[2] + " Wool, "
+//                + resource_state[3] + " Lumber, "
+//                + resource_state[4] + " Brick, "
+//                + resource_state[5] + " Gold. ");
+//        text_resource.setFont(Font.font(15));
+//    }
 
     @Override
     void displayState(String structure) {
@@ -348,12 +497,7 @@ public class Game extends Viewer {
         boardTextField_roll = new TextField();
         boardTextField_roll.setPrefWidth(input_width);
         Button button_roll = new Button("Roll it!");
-        button_roll.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                rollDiceDisplay(boardTextField_roll.getText(), resource_state);
-            }
-        });
+        button_roll.setOnAction(e -> reRoll(resource_state, boardTextField_roll.getText()));
         HBox hb_roll = new HBox();
         hb_roll.getChildren().addAll(rollLabel, boardTextField_roll, button_roll);
         hb_roll.setSpacing(10);

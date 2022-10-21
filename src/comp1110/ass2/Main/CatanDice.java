@@ -1264,12 +1264,10 @@ public class CatanDice {
                                      String board_state,
                                      int[] resource_state)
     {
-        String[] path = pathTo(target_structure, board_state);
-        if (path == null) {
-            return null;
-        }
-        return new String[]{};
+//       return Task14.buildPlan(target_structure, board_state, resource_state);
+        return null;
     }
+
 
     public static boolean checkResourcesWithTradeButNoSwap(String structure, int[] resource_state)
     {
