@@ -13,6 +13,11 @@ public class Task14 {
 
     public static int[] updateResourceState(String actionThisIteration, int[] resource_state)
     {
+        return getInts(actionThisIteration, resource_state, ORE_ID, WOOL_ID, GRAIN_ID, BRICK_ID, LUMBER_ID, GOLD_ID);
+    }
+
+    public static int[] getInts(String actionThisIteration, int[] resource_state, int oreId, int woolId, int grainId, int brickId, int lumberId, int goldId)
+    {
         assert isActionWellFormed(actionThisIteration);
         int[] output = resource_state.clone();
         String actionType = actionThisIteration.split(" ")[0].charAt(0) + "";
@@ -26,26 +31,26 @@ public class Task14 {
                 {
                     case "J" ->
                     {
-                        output[ORE_ID]--;
-                        output[WOOL_ID]--;
-                        output[GRAIN_ID]--;
+                        output[oreId]--;
+                        output[woolId]--;
+                        output[grainId]--;
                     }
                     case "C" ->
                     {
-                        output[ORE_ID] -= 3;
-                        output[GRAIN_ID] -= 2;
+                        output[oreId] -= 3;
+                        output[grainId] -= 2;
                     }
                     case "R" ->
                     {
-                        output[BRICK_ID]--;
-                        output[LUMBER_ID]--;
+                        output[brickId]--;
+                        output[lumberId]--;
                     }
                     case "S" ->
                     {
-                        output[BRICK_ID]--;
-                        output[LUMBER_ID]--;
-                        output[WOOL_ID]--;
-                        output[GRAIN_ID]--;
+                        output[brickId]--;
+                        output[lumberId]--;
+                        output[woolId]--;
+                        output[grainId]--;
                     }
                 }
 
@@ -53,11 +58,11 @@ public class Task14 {
             case "t" ->
             {
                 // remove the gold used and add the resource gained
-                assert resource_state[GOLD_ID] >= 2;
+                assert resource_state[goldId] >= 2;
                 try
                 {
                     int resourceGained = Integer.parseInt(actionThisIteration.split(" ")[1]);
-                    output[GOLD_ID] -= 2;
+                    output[goldId] -= 2;
                     output[resourceGained]++;
                 }
                 catch (NumberFormatException e)
@@ -216,8 +221,9 @@ public class Task14 {
                 }
             }
         }
-        if (target_Structure.charAt(0) == 'J' && checkBuildConstraints("J" + ((Integer.parseInt(String.valueOf(target_Structure.charAt(1)))) - 1), boardState)
-                && checkResources(("J" + (Integer.parseInt(String.valueOf(target_Structure.charAt(1)))-1)), resources)
+        String s1 = "J" + (Integer.parseInt(String.valueOf(target_Structure.charAt(1))) - 1);
+        if (target_Structure.charAt(0) == 'J' && checkBuildConstraints(s1, boardState)
+                && checkResources(s1, resources)
                 && checkBuildConstraints(target_Structure, boardState + "," + "J" + ((Integer.parseInt(String.valueOf(target_Structure.charAt(1)))) - 1))
                 && checkResources(target_Structure, updateResourceState("build " + "J" + ((Integer.parseInt(String.valueOf(target_Structure.charAt(1)))) - 1) , resources))) {
             System.out.println("here too for joker");

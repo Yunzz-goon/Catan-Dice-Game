@@ -9,6 +9,8 @@ import static comp1110.ass2.Building.Knight.knightResources;
 import static comp1110.ass2.Building.Road.roadResources;
 import static comp1110.ass2.Building.Settlement.settlementResources;
 import static comp1110.ass2.Resource.Resource.*;
+import static comp1110.ass2.Task14.getInts;
+
 public class CatanDice {
     public static int seed = 100;
 
@@ -491,7 +493,8 @@ public class CatanDice {
     {
         if (checkResources(structure, resource_state)) return true;
         String[] boardArray = board_state.split(",");
-        String[] knightsAvailable = new String[6];
+        String[] knightsAvailable;
+        knightsAvailable = new String[6];
         // finding available knights
         for (String s : boardArray)
         {
@@ -757,80 +760,7 @@ public class CatanDice {
 
     private static int[] updateResourceState(String actionThisIteration, int[] resource_state)
     {
-        assert isActionWellFormed(actionThisIteration);
-        int[] output = resource_state.clone();
-        String actionType = actionThisIteration.split(" ")[0].charAt(0) + "";
-        switch (actionType)
-        {
-            case "b" ->
-            {
-                // remove the resources used in the build action
-                String buildingType = actionThisIteration.split(" ")[1].charAt(0) + "";
-                switch (buildingType)
-                {
-                    case "J" ->
-                    {
-                        output[ORE_ID]--;
-                        output[WOOL_ID]--;
-                        output[GRAIN_ID]--;
-                    }
-                    case "C" ->
-                    {
-                        output[ORE_ID] -= 3;
-                        output[GRAIN_ID] -= 2;
-                    }
-                    case "R" ->
-                    {
-                        output[BRICK_ID]--;
-                        output[LUMBER_ID]--;
-                    }
-                    case "S" ->
-                    {
-                        output[BRICK_ID]--;
-                        output[LUMBER_ID]--;
-                        output[WOOL_ID]--;
-                        output[GRAIN_ID]--;
-                    }
-                }
-
-            }
-            case "t" ->
-            {
-                // remove the gold used and add the resource gained
-                assert resource_state[GOLD_ID] >= 2;
-                try
-                {
-                    int resourceGained = Integer.parseInt(actionThisIteration.split(" ")[1]);
-                    output[GOLD_ID] -= 2;
-                    output[resourceGained]++;
-                }
-                catch (NumberFormatException e)
-                {
-                    System.out.println("Error: the resource gained in the trade action is not a number");
-                    System.exit(1);
-                }
-
-            }
-            case "s" ->
-            {
-                // add the resource gained and remove the resource lost -
-                // the joker lost will need to be updated by updateBoardState
-                try
-                {
-                    int resourceLost = Integer.parseInt(actionThisIteration.split(" ")[1]);
-                    int resourceGained = Integer.parseInt(actionThisIteration.split(" ")[2]);
-                    output[resourceLost]--;
-                    output[resourceGained]++;
-                }
-                catch (NumberFormatException e)
-                {
-                    System.out.println("Error: the resource gained or lost in the swap action is not a number");
-                    System.exit(1);
-                }
-
-            }
-        }
-        return output;
+        return getInts(actionThisIteration, resource_state, ORE_ID, WOOL_ID, GRAIN_ID, BRICK_ID, LUMBER_ID, GOLD_ID);
     }
 
     private static String updateBoardState(String actionThisIteration, String board_state)
