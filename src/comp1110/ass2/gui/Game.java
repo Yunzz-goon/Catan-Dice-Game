@@ -33,7 +33,7 @@ public class Game extends Viewer {
     private TextField boardTextField_build;
     private TextField boardTextField_trade;
     private TextField boardTextField_swap;
-    private static int seed = 6710;
+    private static int seed = 256;
     int[] resource_state = new int[6];
     Text text_resource = new Text();
 
@@ -77,7 +77,7 @@ public class Game extends Viewer {
             rollDiceReal(6, resource_state);
         }
         else {
-            Random r = new Random(256);
+            Random r = new Random(seed);
             String[] splitactionArray1 = action.split(" ");
             String[] splitactionArray = new String[splitactionArray1.length - 1];
             System.arraycopy(splitactionArray1, 1, splitactionArray, 0, splitactionArray1.length - 1);
@@ -95,7 +95,7 @@ public class Game extends Viewer {
                         System.out.println("You don't have any ore");
                     }
                 }
-                if (s.charAt(0) == 'G' && s.charAt(1) == 'r')
+                else if (s.charAt(0) == 'G' && s.charAt(1) == 'r')
                 {
                     if (resource_state[1] > 0)
                     {
@@ -109,7 +109,7 @@ public class Game extends Viewer {
                     }
                 }
 
-                if (s.charAt(0) == 'W')
+                else if (s.charAt(0) == 'W')
                 {
                     if (resource_state[2] > 0)
                     {
@@ -122,7 +122,7 @@ public class Game extends Viewer {
                         System.out.println("You don't have any wool");
                     }
                 }
-                if (s.charAt(0) == 'L')
+                else if (s.charAt(0) == 'L')
                 {
                     if (resource_state[3] > 0)
                     {
@@ -136,7 +136,7 @@ public class Game extends Viewer {
                     }
 
                 }
-                if (s.charAt(0) == 'B')
+                else if (s.charAt(0) == 'B')
                 {
                     if (resource_state[4] > 0)
                     {
@@ -149,7 +149,7 @@ public class Game extends Viewer {
                         System.out.println("You don't have any bricks");
                     }
                 }
-                if (s.charAt(1) == 'G' && s.charAt(1) == 'o')
+                else if (s.charAt(0) == 'G' && s.charAt(1) == 'o')
                 {
                     if (resource_state[5] > 0)
                     {
@@ -162,6 +162,8 @@ public class Game extends Viewer {
                         System.out.println("You don't have any gold");
                     }
 
+                }else{
+                    System.out.println("Give me some feedback");
                 }
             }
 
