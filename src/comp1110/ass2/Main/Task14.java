@@ -2,7 +2,7 @@ package comp1110.ass2;
 
 import java.util.Arrays;
 
-import static comp1110.ass2.Main.CatanDice.*;
+import static comp1110.ass2.CatanDice.*;
 import static comp1110.ass2.Main.Constants.*;
 import static java.lang.Character.getNumericValue;
 

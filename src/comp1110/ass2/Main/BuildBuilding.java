@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static comp1110.ass2.Building.Knight.ExchangingResource.*;
-import static comp1110.ass2.Main.CatanDice.checkBuildConstraints;
-import static comp1110.ass2.Main.CatanDice.checkResources;
+import static comp1110.ass2.CatanDice.checkBuildConstraints;
+import static comp1110.ass2.CatanDice.checkResources;
 
 
 public class BuildBuilding
